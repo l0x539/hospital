@@ -1,3 +1,6 @@
+import { fogDefines } from "@/shaders/defines";
+import { towerFragmentShader } from "@/shaders/fregmantShaders";
+import { towerVertexShader } from "@/shaders/vertexShaders";
 import { useGLTF, useKTX2 } from "@react-three/drei";
 import { useMemo } from "react";
 import { Color, RepeatWrapping } from "three";
@@ -237,5 +240,12 @@ const MainTower = () => {
     windowsColor2,
     windowsColor3,
   ]);
-  return <></>;
+  return <mesh>
+    <shaderMaterial
+      vertexShader={towerVertexShader}
+      fragmentShader={towerFragmentShader}
+      uniforms={uniforms}
+      defines={fogDefines}
+    />
+  </mesh>;
 };
