@@ -7,7 +7,6 @@ attribute vec4 color_3;
 attribute vec4 color_4;
 
 // Additional UV maps
-attribute vec2 uv2;
 attribute vec2 texcoord_2;
 attribute vec2 texcoord_3;
 attribute vec2 texcoord_4;
@@ -100,3 +99,37 @@ void main()     {
     #include <fogOutputVert>
 
 }`;
+
+export const fogVertexShader = `#define GLSLIFY 1
+varying vec2 vUv;
+varying vec3 vNormal;
+varying vec3 vViewPosition;
+
+uniform float uProgress;
+
+attribute vec2 texcoord_3; // Pillars UV map
+
+#include <fogParamsVert>
+
+void main() {
+    
+    vec3 objectNormal = vec3(normal);
+    vec3 transformedNormal = objectNormal;
+    transformedNormal = normalMatrix * transformedNormal;
+    vNormal = transformedNormal;
+    #ifdef IS_PILLARS
+        vUv = texcoord_3;
+    #else
+        vUv = uv;
+    #endif
+    
+    vec3 transformedPosition = position;
+
+    vec4 mvPosition = vec4( transformedPosition, 1.0 );
+    mvPosition = modelViewMatrix * mvPosition;
+    gl_Position = projectionMatrix * mvPosition;
+    vViewPosition = -mvPosition.xyz;
+
+    #include <fogOutputVert>
+
+}`

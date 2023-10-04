@@ -3455,7 +3455,7 @@
             , Se = 35044
             , Me = "300 es"
             , Pe = 1035;
-          class Ie {
+          class EventDispatcher {
               addEventListener(t, e) {
                   void 0 === this._listeners && (this._listeners = {});
                   const n = this._listeners;
@@ -4743,7 +4743,7 @@
               {})
           }
           let un = 0;
-          class dn extends Ie {
+          class dn extends EventDispatcher {
               constructor(t=dn.DEFAULT_IMAGE, e=dn.DEFAULT_MAPPING, n=lt, i=lt, r=pt, s=mt, o=It, a=gt, l=dn.DEFAULT_ANISOTROPY, h=Ae) {
                   super(),
                   this.isTexture = !0,
@@ -5263,7 +5263,7 @@
                   yield this.w
               }
           }
-          class fn extends Ie {
+          class fn extends EventDispatcher {
               constructor(t=1, e=1, n={}) {
                   super(),
                   this.isWebGLRenderTarget = !0,
@@ -7504,7 +7504,7 @@
           }
           Euler.DefaultOrder = "XYZ",
           Euler.RotationOrders = ["XYZ", "YZX", "ZXY", "XZY", "YXZ", "ZYX"];
-          class si {
+          class Layers {
               constructor() {
                   this.mask = 1
               }
@@ -7550,7 +7550,7 @@
             , Ai = {
               type: "removed"
           };
-          class Object3D extends Ie {
+          class Object3D extends EventDispatcher {
               constructor() {
                   super(),
                   this.isObject3D = !0,
@@ -7608,7 +7608,7 @@
                   this.matrixAutoUpdate = Object3D.DefaultMatrixAutoUpdate,
                   this.matrixWorldNeedsUpdate = !1,
                   this.matrixWorldAutoUpdate = Object3D.DefaultMatrixWorldAutoUpdate,
-                  this.layers = new si,
+                  this.layers = new Layers,
                   this.visible = !0,
                   this.castShadow = !1,
                   this.receiveShadow = !1,
@@ -8133,7 +8133,7 @@
               }
           }
           let Di = 0;
-          class Bi extends Ie {
+          class Bi extends EventDispatcher {
               constructor() {
                   super(),
                   this.isMaterial = !0,
@@ -8400,7 +8400,7 @@
                   !0 === t && this.version++
               }
           }
-          class Li extends Bi {
+          class MeshBasicMaterial extends Bi {
               constructor(t) {
                   super(),
                   this.isMeshBasicMaterial = !0,
@@ -8655,7 +8655,7 @@
             , Hi = new xn
             , ji = new xn
             , Wi = new Vector3;
-          class qi extends Ie {
+          class BufferGeometry extends EventDispatcher {
               constructor() {
                   super(),
                   this.isBufferGeometry = !0,
@@ -9010,7 +9010,7 @@
                   if (null === this.index)
                       return console.warn("THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed."),
                       this;
-                  const e = new qi
+                  const e = new BufferGeometry
                     , n = this.index.array
                     , i = this.attributes;
                   for (const r in i) {
@@ -9152,7 +9152,7 @@
             , sr = new Vector3
             , or = new Vector3;
           class Mesh extends Object3D {
-              constructor(t=new qi, e=new Li) {
+              constructor(t=new BufferGeometry, e=new MeshBasicMaterial) {
                   super(),
                   this.isMesh = !0,
                   this.type = "Mesh",
@@ -9311,7 +9311,7 @@
               }
               return h
           }
-          class hr extends qi {
+          class BoxGeometry extends BufferGeometry {
               constructor(t=1, e=1, n=1, i=1, r=1, s=1) {
                   super(),
                   this.type = "BoxGeometry",
@@ -9387,7 +9387,7 @@
                   this.setAttribute("uv", new Ui(c,2))
               }
               static fromJSON(t) {
-                  return new hr(t.width,t.height,t.depth,t.widthSegments,t.heightSegments,t.depthSegments)
+                  return new BoxGeometry(t.width,t.height,t.depth,t.widthSegments,t.heightSegments,t.depthSegments)
               }
           }
           function cr(t) {
@@ -9759,7 +9759,7 @@
                       vertexShader: "\n\n\t\t\t\tvarying vec3 vWorldDirection;\n\n\t\t\t\tvec3 transformDirection( in vec3 dir, in mat4 matrix ) {\n\n\t\t\t\t\treturn normalize( ( matrix * vec4( dir, 0.0 ) ).xyz );\n\n\t\t\t\t}\n\n\t\t\t\tvoid main() {\n\n\t\t\t\t\tvWorldDirection = transformDirection( position, modelMatrix );\n\n\t\t\t\t\t#include <begin_vertex>\n\t\t\t\t\t#include <project_vertex>\n\n\t\t\t\t}\n\t\t\t",
                       fragmentShader: "\n\n\t\t\t\tuniform sampler2D tEquirect;\n\n\t\t\t\tvarying vec3 vWorldDirection;\n\n\t\t\t\t#include <common>\n\n\t\t\t\tvoid main() {\n\n\t\t\t\t\tvec3 direction = normalize( vWorldDirection );\n\n\t\t\t\t\tvec2 sampleUV = equirectUv( direction );\n\n\t\t\t\t\tgl_FragColor = texture2D( tEquirect, sampleUV );\n\n\t\t\t\t}\n\t\t\t"
                   }
-                    , i = new hr(5,5,5)
+                    , i = new BoxGeometry(5,5,5)
                     , r = new ShaderMaterial({
                       name: "CubemapFromEquirect",
                       uniforms: cr(n.uniforms),
@@ -10076,7 +10076,7 @@
                   }
               }
           }
-          class Tr extends qi {
+          class Tr extends BufferGeometry {
               constructor(t=1, e=1, n=1, i=1) {
                   super(),
                   this.type = "PlaneGeometry",
@@ -10876,7 +10876,7 @@
                       null === v ? g(a, c) : v && v.isColor && (g(v, 1),
                       o = !0),
                       (t.autoClear || o) && t.clear(t.autoClearColor, t.autoClearDepth, t.autoClearStencil),
-                      v && (v.isCubeTexture || v.mapping === ot) ? (void 0 === h && (h = new Mesh(new hr(1,1,1),new ShaderMaterial({
+                      v && (v.isCubeTexture || v.mapping === ot) ? (void 0 === h && (h = new Mesh(new BoxGeometry(1,1,1),new ShaderMaterial({
                           name: "BackgroundCubeMaterial",
                           uniforms: cr(Lr.backgroundCube.uniforms),
                           vertexShader: Lr.backgroundCube.vertexShader,
@@ -11620,7 +11620,7 @@
                                   const r = [t, t, t, t, t, t];
                                   b.set(r, g * p * t)
                               }
-                              const y = new qi;
+                              const y = new BufferGeometry;
                               y.setAttribute("position", new BufferAttribute(v,f)),
                               y.setAttribute("uv", new BufferAttribute(A,m)),
                               y.setAttribute("faceIndex", new BufferAttribute(b,g)),
@@ -11692,13 +11692,13 @@
                   a.getClearColor(Wr),
                   a.toneMapping = K,
                   a.autoClear = !1;
-                  const c = new Li({
+                  const c = new MeshBasicMaterial({
                       name: "PMREM.Background",
                       side: f,
                       depthWrite: !1,
                       depthTest: !1
                   })
-                    , u = new Mesh(new hr,c);
+                    , u = new Mesh(new BoxGeometry,c);
                   let d = !1;
                   const p = t.background;
                   p ? p.isColor && (c.color.copy(p),
@@ -13129,7 +13129,7 @@
               }
           }
           function Ro(t, e, n, i, r, s, o) {
-              const a = new si
+              const a = new Layers
                 , l = new Fo
                 , h = []
                 , c = r.isWebGL2
@@ -14005,7 +14005,7 @@
               })
                 , b = A.clone();
               b.defines.HORIZONTAL_PASS = 1;
-              const y = new qi;
+              const y = new BufferGeometry;
               y.setAttribute("position", new BufferAttribute(new Float32Array([-1, -1, .5, 3, -1, .5, -1, 3, .5]),3));
               const x = new Mesh(y,A)
                 , _ = this;
@@ -15537,7 +15537,7 @@
                   this.cameras = t
               }
           }
-          class ia extends Object3D {
+          class Group extends Object3D {
               constructor() {
                   super(),
                   this.isGroup = !0,
@@ -15554,7 +15554,7 @@
                   this._hand = null
               }
               getHandSpace() {
-                  return null === this._hand && (this._hand = new ia,
+                  return null === this._hand && (this._hand = new Group,
                   this._hand.matrixAutoUpdate = !1,
                   this._hand.visible = !1,
                   this._hand.joints = {},
@@ -15564,7 +15564,7 @@
                   this._hand
               }
               getTargetRaySpace() {
-                  return null === this._targetRay && (this._targetRay = new ia,
+                  return null === this._targetRay && (this._targetRay = new Group,
                   this._targetRay.matrixAutoUpdate = !1,
                   this._targetRay.visible = !1,
                   this._targetRay.hasLinearVelocity = !1,
@@ -15574,7 +15574,7 @@
                   this._targetRay
               }
               getGripSpace() {
-                  return null === this._grip && (this._grip = new ia,
+                  return null === this._grip && (this._grip = new Group,
                   this._grip.matrixAutoUpdate = !1,
                   this._grip.visible = !1,
                   this._grip.hasLinearVelocity = !1,
@@ -15671,7 +15671,7 @@
               }
               _getHandJoint(t, e) {
                   if (void 0 === t.joints[e.jointName]) {
-                      const n = new ia;
+                      const n = new Group;
                       n.matrixAutoUpdate = !1,
                       n.visible = !1,
                       t.joints[e.jointName] = n,
@@ -15698,7 +15698,7 @@
                   this.generateMipmaps = !1
               }
           }
-          class aa extends Ie {
+          class aa extends EventDispatcher {
               constructor(t, e) {
                   super();
                   const n = this;
@@ -17905,7 +17905,7 @@
             , Oa = new qn
             , Na = new Un;
           class Ua extends Object3D {
-              constructor(t=new qi, e=new La) {
+              constructor(t=new BufferGeometry, e=new La) {
                   super(),
                   this.isLine = !0,
                   this.type = "Line",
@@ -18071,7 +18071,7 @@
             , qa = new Un
             , Ya = new Vector3;
           class Xa extends Object3D {
-              constructor(t=new qi, e=new Ha) {
+              constructor(t=new BufferGeometry, e=new Ha) {
                   super(),
                   this.isPoints = !0,
                   this.type = "Points",
@@ -18449,7 +18449,7 @@
             , al = new Vector3
             , ll = new Vector3
             , hl = new Ti;
-          class cl extends qi {
+          class cl extends BufferGeometry {
               constructor(t=null, e=1) {
                   if (super(),
                   this.type = "EdgesGeometry",
@@ -18513,7 +18513,7 @@
                   }
               }
           }
-          class ul extends qi {
+          class SphereGeometry extends BufferGeometry {
               constructor(t=1, e=32, n=16, i=0, r=2 * Math.PI, s=0, o=Math.PI) {
                   super(),
                   this.type = "SphereGeometry",
@@ -18570,10 +18570,10 @@
                   this.setAttribute("uv", new Ui(m,2))
               }
               static fromJSON(t) {
-                  return new ul(t.radius,t.widthSegments,t.heightSegments,t.phiStart,t.phiLength,t.thetaStart,t.thetaLength)
+                  return new SphereGeometry(t.radius,t.widthSegments,t.heightSegments,t.phiStart,t.phiLength,t.thetaStart,t.thetaLength)
               }
           }
-          class dl extends qi {
+          class dl extends BufferGeometry {
               constructor(t=null) {
                   if (super(),
                   this.type = "WireframeGeometry",
@@ -20109,7 +20109,7 @@
                   /^(https?:)?\/\//i.test(t) || /^data:.*,.*$/i.test(t) || /^blob:.*$/i.test(t) ? t : e + t)
               }
           }
-          class ah extends qi {
+          class ah extends BufferGeometry {
               constructor() {
                   super(),
                   this.isInstancedBufferGeometry = !0,
@@ -20560,7 +20560,7 @@
             , wh = new Camera;
           class CameraHelper extends Qa {
               constructor(t) {
-                  const e = new qi
+                  const e = new BufferGeometry
                     , n = new La({
                       color: 16777215,
                       vertexColors: !0,
@@ -22420,7 +22420,7 @@
                   this.name = Tc.KHR_MATERIALS_UNLIT
               }
               getMaterialType() {
-                  return Li
+                  return MeshBasicMaterial
               }
               extendParams(t, e, n) {
                   const i = [];
@@ -23541,16 +23541,16 @@
                   if (l === uu ? (o.transparent = !0,
                   o.depthWrite = !1) : (o.transparent = !1,
                   l === cu && (o.alphaTest = void 0 !== r.alphaCutoff ? r.alphaCutoff : .5)),
-                  void 0 !== r.normalTexture && s !== Li && (a.push(e.assignTexture(o, "normalMap", r.normalTexture)),
+                  void 0 !== r.normalTexture && s !== MeshBasicMaterial && (a.push(e.assignTexture(o, "normalMap", r.normalTexture)),
                   o.normalScale = new Vector2(1,1),
                   void 0 !== r.normalTexture.scale)) {
                       const t = r.normalTexture.scale;
                       o.normalScale.set(t, t)
                   }
-                  return void 0 !== r.occlusionTexture && s !== Li && (a.push(e.assignTexture(o, "aoMap", r.occlusionTexture)),
+                  return void 0 !== r.occlusionTexture && s !== MeshBasicMaterial && (a.push(e.assignTexture(o, "aoMap", r.occlusionTexture)),
                   void 0 !== r.occlusionTexture.strength && (o.aoMapIntensity = r.occlusionTexture.strength)),
-                  void 0 !== r.emissiveFactor && s !== Li && (o.emissive = (new Color).fromArray(r.emissiveFactor)),
-                  void 0 !== r.emissiveTexture && s !== Li && a.push(e.assignTexture(o, "emissiveMap", r.emissiveTexture, be)),
+                  void 0 !== r.emissiveFactor && s !== MeshBasicMaterial && (o.emissive = (new Color).fromArray(r.emissiveFactor)),
+                  void 0 !== r.emissiveTexture && s !== MeshBasicMaterial && a.push(e.assignTexture(o, "emissiveMap", r.emissiveTexture, be)),
                   Promise.all(a).then((function() {
                       const n = new s(o);
                       return r.name && (n.name = r.name),
@@ -23590,7 +23590,7 @@
                           s.push(l.promise);
                       else {
                           let t;
-                          t = o.extensions && o.extensions[Tc.KHR_DRACO_MESH_COMPRESSION] ? r(o) : yu(new qi, o, e),
+                          t = o.extensions && o.extensions[Tc.KHR_DRACO_MESH_COMPRESSION] ? r(o) : yu(new BufferGeometry, o, e),
                           i[a] = {
                               primitive: o,
                               promise: t
@@ -23660,7 +23660,7 @@
                           });
                       if (1 === l.length)
                           return l[0];
-                      const h = new ia;
+                      const h = new Group;
                       e.associations.set(h, {
                           meshes: t
                       });
@@ -23834,7 +23834,7 @@
                         , a = e[1]
                         , l = e[2];
                       let h;
-                      if (h = !0 === r.isBone ? new xa : o.length > 1 ? new ia : 1 === o.length ? o[0] : new Object3D,
+                      if (h = !0 === r.isBone ? new xa : o.length > 1 ? new Group : 1 === o.length ? o[0] : new Object3D,
                       h !== o[0])
                           for (let t = 0, e = o.length; t < e; t++)
                               h.add(o[t]);
@@ -23866,7 +23866,7 @@
                   const e = this.extensions
                     , n = this.json.scenes[t]
                     , i = this
-                    , r = new ia;
+                    , r = new Group;
                   n.name && (r.name = i.createUniqueName(n.name)),
                   pu(r, n),
                   n.extensions && du(e, r, n);
@@ -24137,7 +24137,7 @@
                   o
               }
               _createGeometry(t) {
-                  const e = new qi;
+                  const e = new BufferGeometry;
                   t.index && e.setIndex(new BufferAttribute(t.index.array,1));
                   for (let n = 0; n < t.attributes.length; n++) {
                       const i = t.attributes[n]
@@ -24536,19 +24536,19 @@
                   }
                   )))
               }
-              loadKtxTexture(t, e) {
-                  return this.ktxTextures[t] || (this.ktxTextures[t] = this.add(new Promise(((n,i)=>{
-                      this.ktxLoader.load(t, (t=>{
+              loadKtxTexture(args, e) {
+                  return this.ktxTextures[args] || (this.ktxTextures[args] = this.add(new Promise(((n,i)=>{
+                      this.ktxLoader.load(args, (t=>{
                           n(GLOBAL_VARS.WebGL.generateTexture(t, e))
                       }
                       ), void 0, (e=>{
-                          console.error(e, null == e ? void 0 : e.name, null == e ? void 0 : e.stack, null == e ? void 0 : e.message, null == e ? void 0 : e.cause, t),
+                          console.error(e, null == e ? void 0 : e.name, null == e ? void 0 : e.stack, null == e ? void 0 : e.message, null == e ? void 0 : e.cause, args),
                           i(e)
                       }
                       ))
                   }
                   )))),
-                  this.ktxTextures[t]
+                  this.ktxTextures[args]
               }
           }
           function Mu(t) {
@@ -33934,7 +33934,7 @@
                   for (const n in GLOBAL_VARS.MainScene.paths)
                       if (GLOBAL_VARS.MainScene.paths[n]instanceof sl) {
                           const i = GLOBAL_VARS.MainScene.paths[n].getPoints(500);
-                          GLOBAL_VARS.MainScene.debugPaths[n] = new Ua((new qi).setFromPoints(i),new La({
+                          GLOBAL_VARS.MainScene.debugPaths[n] = new Ua((new BufferGeometry).setFromPoints(i),new La({
                               color: t[e % t.length]
                           })),
                           GLOBAL_VARS.MainScene.debugPaths[n].visible = !1,
@@ -33943,7 +33943,7 @@
                       } else
                           for (const i in GLOBAL_VARS.MainScene.paths[n]) {
                               const r = GLOBAL_VARS.MainScene.paths[n][i].getPoints(500);
-                              GLOBAL_VARS.MainScene.debugPaths[i] = new Ua((new qi).setFromPoints(r),new La({
+                              GLOBAL_VARS.MainScene.debugPaths[i] = new Ua((new BufferGeometry).setFromPoints(r),new La({
                                   color: t[e % t.length]
                               })),
                               GLOBAL_VARS.MainScene.debugPaths[i].visible = !1,
@@ -36542,7 +36542,7 @@
             , V_ = {
               type: "end"
           };
-          class OrbitControls extends Ie {
+          class OrbitControls extends EventDispatcher {
               constructor(t, e) {
                   super(),
                   this.object = t,
@@ -37469,7 +37469,7 @@
               }) : t[e] = n,
               t
           }
-          class Cars extends ia {
+          class Cars extends Group {
               constructor() {
                   super(),
                   $_(this, "onRaf", (()=>{
@@ -37731,7 +37731,7 @@
               }
           }
           const aw = new Quaternion;
-          function lw(t, e) {
+          function applyObjectDataToObjectProps(t, e) {
               e ? t.isBufferGeometry ? (e[1] && t.applyQuaternion(aw.set(e[1][0], e[1][1], e[1][2], e[1][3])),
               e[0] && t.translate(e[0][0], e[0][1], e[0][2]),
               e[2] && t.scale(e[2][0], e[2][1], e[2][2])) : (e[0] && t.position.set(e[0][0], e[0][1], e[0][2]),
@@ -37851,7 +37851,7 @@
                       },
                       additiveBlending: this.options.additiveBlending
                   }),
-                  lw(this, t.objects.logo[0]),
+                  applyObjectDataToObjectProps(this, t.objects.logo[0]),
                   this.glowPlane = new Mesh(new Tr,new ow),
                   this.glowPlane.scale.setScalar(9.68),
                   this.glowPlane.origScale = this.glowPlane.scale.x,
@@ -38121,7 +38121,7 @@
                   e
               }
           }
-          class MainTower extends ia {
+          class MainTower extends Group {
               constructor() {
                   super(),
                   this.globalUniforms = {
@@ -38246,13 +38246,13 @@
                   this.meshes.walls.mb1.renderOrder = 3,
                   this.meshes.walls.mb2.renderOrder = 2,
                   this.meshes.walls.mb3.renderOrder = 1;
-                  for (const e in this.meshes)
-                      for (const n in this.meshes[e]) {
-                          lw(this.meshes[e][n], t.objects[n][0]),
-                          "walls" !== e && (this.meshes[e][n].position.y -= .05);
-                          const i = this.meshes[e][n]
-                            , r = this.meshes[e][n].name;
-                          i.material && (i.material = new WallMaterial({
+                  for (const meshType in this.meshes)
+                      for (const meshKey in this.meshes[meshType]) {
+                          applyObjectDataToObjectProps(this.meshes[meshType][meshKey], t.objects[meshKey][0]),
+                          "walls" !== meshType && (this.meshes[meshType][meshKey].position.y -= .05);
+                          const mesh = this.meshes[meshType][meshKey]
+                            , meshName = this.meshes[meshType][meshKey].name;
+                          mesh.material && (mesh.material = new WallMaterial({
                               uniforms: {
                                   tRecText: {
                                       value: GLOBAL_VARS.MainScene.assets.textures.recursiveMask2
@@ -38273,25 +38273,25 @@
                                       value: this.assets.textures.repeatPillars
                                   },
                                   tWallsTex: {
-                                      value: this.assets.textures[`wallsColor ${r}`] || this.assets.textures.wallsColor0
+                                      value: this.assets.textures[`wallsColor ${meshName}`] || this.assets.textures.wallsColor0
                                   },
                                   tRailsMaskTex: {
                                       value: this.assets.textures.railsMask
                                   },
                                   tWindowsTex: {
-                                      value: this.assets.textures[`windowsColor ${r}`] || this.assets.textures.windowsColor0
+                                      value: this.assets.textures[`windowsColor ${meshName}`] || this.assets.textures.windowsColor0
                                   },
                                   tPillarsTex: {
-                                      value: this.assets.textures[`pillarsColor ${r}`] || this.assets.textures.pillarsColor0
+                                      value: this.assets.textures[`pillarsColor ${meshName}`] || this.assets.textures.pillarsColor0
                                   },
                                   uFloorIndex: {
-                                      value: r
+                                      value: meshName
                                   }
                               },
                               globalUniforms: this.globalUniforms,
                               defines: {
                                   USE_MATCAP: !0,
-                                  IS_WALL: "walls" === e
+                                  IS_WALL: "walls" === meshType
                               }
                           }))
                       }
@@ -38309,7 +38309,7 @@
                           IS_PILLARS: !0
                       }
                   })),
-                  lw(this.pillars, t.objects.pilars[0]),
+                  applyObjectDataToObjectProps(this.pillars, t.objects.pilars[0]),
                   this.add(this.pillars),
                   this.baseSides = new Mesh(this.assets.models.baseSides.geometry,new PillarsClass({
                       uniforms: {
@@ -38321,7 +38321,7 @@
                           USE_TEXTURE: !0
                       }
                   })),
-                  lw(this.baseSides, t.objects["base-sides"][0]),
+                  applyObjectDataToObjectProps(this.baseSides, t.objects["base-sides"][0]),
                   this.add(this.baseSides)
               }
               hideFloors() {
@@ -38423,7 +38423,7 @@
                 , s = {}
                 , o = {}
                 , a = t[0].morphTargetsRelative
-                , l = new qi;
+                , l = new BufferGeometry;
               let h = 0;
               for (let c = 0; c < t.length; ++c) {
                   const u = t[c];
@@ -38612,7 +38612,7 @@
                   this.uniforms = Object.assign(this.uniforms, this.globalUniforms)
               }
           }
-          class People extends ia {
+          class People extends Group {
               constructor() {
                   super(),
                   this.meshes = [],
@@ -38630,7 +38630,7 @@
                       const n = [];
                       for (const i in this.assets.models) {
                           const r = this.assets.models[`${i}`].geometry.clone();
-                          lw(r, t[i][e]),
+                          applyObjectDataToObjectProps(r, t[i][e]),
                           n.push(r)
                       }
                       this.meshes[e] = new Mesh(mergeGeometries(n, !1),new PersonMesh({
@@ -39308,7 +39308,7 @@
                   e
               }
           }
-          class Pipes extends ia {
+          class Pipes extends Group {
               constructor() {
                   super(),
                   this._v = new Vector3,
@@ -39605,7 +39605,7 @@
               }) : t[e] = n,
               t
           }
-          class aE extends Mesh {
+          class ReflectiveMesh extends Mesh {
               constructor(t, e, n) {
                   super(t, e),
                   oE(this, "onResize", (()=>{
@@ -39732,7 +39732,7 @@
                   ec.off(MainStaticFunctions.RESIZE, this.onResize)
               }
           }
-          class lE extends aE {
+          class ReflectiveSurface extends ReflectiveMesh {
               constructor(t, e, n, i, r, s, o, a, l, h) {
                   super(t.clone(), new iE(h), a),
                   this.startPos = l.start,
@@ -39744,7 +39744,7 @@
                   s && (this.material.uniforms.uMaskTexture.value = s),
                   this.geometry.computeBoundingBox(),
                   this.geometry.computeBoundingSphere(),
-                  lw(this, o),
+                  applyObjectDataToObjectProps(this, o),
                   this.updateMatrix(),
                   this.updateMatrixWorld(),
                   this.updateCameraScene(GLOBAL_VARS.MainScene.camera, GLOBAL_VARS.MainScene)
@@ -39753,7 +39753,7 @@
                   GLOBAL_VARS.MainScene.options.scrollPosition < this.startPos || GLOBAL_VARS.MainScene.options.scrollPosition > this.stopPos || super.onBeforeRender()
               }
           }
-          class ReflectiveFloors extends ia {
+          class ReflectiveFloors extends Group {
               constructor() {
                   super(),
                   this.load()
@@ -39761,7 +39761,7 @@
               build(t) {
                   this.assets.models.baseTop.geometry.attributes.uv2 = this.assets.models.baseTop.geometry.getAttribute("uv"),
                   this.floors = {
-                      "base-top": new lE(this.assets.models.baseTop.geometry,this.assets.textures.baseLightmap,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.baseMask,t.objects["base-top"][0],"base-top",{
+                      "base-top": new ReflectiveSurface(this.assets.models.baseTop.geometry,this.assets.textures.baseLightmap,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.baseMask,t.objects["base-top"][0],"base-top",{
                           start: 0,
                           stop: .14
                       },{
@@ -39786,7 +39786,7 @@
                               }
                           }
                       }),
-                      mb0: new lE(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor0,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb0[0],"mb0",{
+                      mb0: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor0,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb0[0],"mb0",{
                           start: .1401,
                           stop: .372
                       },{
@@ -39811,7 +39811,7 @@
                               }
                           }
                       }),
-                      mb1: new lE(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor1,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb1[0],"mb1",{
+                      mb1: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor1,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb1[0],"mb1",{
                           start: .3721,
                           stop: .624
                       },{
@@ -39836,7 +39836,7 @@
                               }
                           }
                       }),
-                      mb2: new lE(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor2,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb2[0],"mb2",{
+                      mb2: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor2,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb2[0],"mb2",{
                           start: 0,
                           stop: .92
                       },{
@@ -40139,7 +40139,7 @@
               }) : t[e] = n,
               t
           }
-          class vE extends ia {
+          class ShapeBuilder extends Group {
               constructor(t) {
                   let {geometry: e, objectData: n, particlesCount: i=20, planeParticleSize: r, renderOrder: s=0, linesUniforms: o, particlesUniforms: a, globalUniforms: l={}, randomSpread: h, rotationOrientation: c, labels: u, domLabels: d, rotationDirection: p=1, globalOptions: f} = t;
                   super(),
@@ -40261,7 +40261,7 @@
                   this.panelMaxHeight = 0,
                   this.calculatePanelMaxSize(),
                   ec.on(MainStaticFunctions.RESIZE, this.calculatePanelMaxSize),
-                  lw(this, n),
+                  applyObjectDataToObjectProps(this, n),
                   this.initialPosY = this.position.y,
                   this.build(),
                   GLOBAL_VARS.isTouch || (this.shape.onBeforeRender = ()=>this.onShapeBeforeRender(this.particlesMesh))
@@ -40353,7 +40353,7 @@
                   this.add(this.particlesMesh)
               }
               addLabels() {
-                  this.labelsGroup = new ia;
+                  this.labelsGroup = new Group;
                   const t = Sh(".js-panels");
                   for (let e = 0; e < this.labelPoints.length; e++) {
                       const {x: n, y: i, z: r} = this.labels[e];
@@ -40428,7 +40428,7 @@
               }) : t[e] = n,
               t
           }
-          class Shape extends ia {
+          class Shape extends Group {
               constructor() {
                   super(),
                   this.shapes = [],
@@ -40580,7 +40580,7 @@
               }
               build(t) {
                   this.domLabels = Mh(".js-labels"),
-                  this.shape1 = new vE(bE(bE({}, this.options.k0), {}, {
+                  this.shape1 = new ShapeBuilder(bE(bE({}, this.options.k0), {}, {
                       geometry: this.assets.models.k0.geometry,
                       objectData: t.objects.k0[0],
                       renderOrder: 10,
@@ -40592,7 +40592,7 @@
                       rotationDirection: -1,
                       globalOptions: this.globalOptions
                   })),
-                  this.shape2 = new vE(bE(bE({}, this.options.k1), {}, {
+                  this.shape2 = new ShapeBuilder(bE(bE({}, this.options.k1), {}, {
                       geometry: this.assets.models.k1.geometry,
                       objectData: t.objects.k1[0],
                       renderOrder: 11,
@@ -40603,7 +40603,7 @@
                       labels: this.getLabelsVector3(t, ["k1-e0", "k1-e1"]),
                       globalOptions: this.globalOptions
                   })),
-                  this.shape3 = new vE(bE(bE({}, this.options.k2), {}, {
+                  this.shape3 = new ShapeBuilder(bE(bE({}, this.options.k2), {}, {
                       geometry: this.assets.models.k2.geometry,
                       objectData: t.objects.k2[0],
                       renderOrder: 12,
@@ -40855,7 +40855,7 @@
                   e
               }
           }
-          class Signs extends ia {
+          class Signs extends Group {
               constructor() {
                   super(),
                   this.globalUniforms = {
@@ -40912,7 +40912,7 @@
                                   globalUniforms: this.globalUniforms
                               }));
                               this.meshes.main[t][o] = a,
-                              lw(this.meshes.main[t][o], e[t][o]),
+                              applyObjectDataToObjectProps(this.meshes.main[t][o], e[t][o]),
                               this.add(this.meshes.main[t][o])
                           } else {
                               const r = .2 * MathUtils.seededRandom(a)
@@ -40949,7 +40949,7 @@
                                   globalUniforms: this.globalUniforms
                               }));
                               this.meshes.city[l].push(h),
-                              lw(h, e[t][o]),
+                              applyObjectDataToObjectProps(h, e[t][o]),
                               this.add(h)
                           }
                       }
@@ -41080,7 +41080,7 @@
                   e
               }
           }
-          class Towers extends ia {
+          class Towers extends Group {
               constructor() {
                   super(),
                   this.globalUniforms = {
@@ -41203,7 +41203,7 @@
                     , l = []
                     , h = [];
                   for (let t = 0; t < s; t++) {
-                      lw(this.instanceDummy, r[t]),
+                      applyObjectDataToObjectProps(this.instanceDummy, r[t]),
                       this.instanceDummy.updateMatrix(),
                       this.meshes[e].setMatrixAt(t, this.instanceDummy.matrix),
                       this.meshes[e].geometry.computeBoundingBox(),
@@ -41286,7 +41286,7 @@
                           USE_TEXTURE: !0
                       }
                   }),
-                  lw(this, t.objects.floor[0])
+                  applyObjectDataToObjectProps(this, t.objects.floor[0])
               }
               load() {
                   this.assets = {
@@ -41332,7 +41332,7 @@
               dispose() {}
           }
           const UE = new Vr(-1,1,1,-1,0,1)
-            , zE = new qi;
+            , zE = new BufferGeometry;
           zE.setAttribute("position", new Ui([-1, 3, 0, -1, -1, 0, 3, -1, 0],3)),
           zE.setAttribute("uv", new Ui([0, 2, 0, 0, 2, 0],2));
           class VE {
@@ -41673,7 +41673,7 @@
                   this.needsSwap = !1,
                   this._oldClearColor = new Color,
                   this.oldClearAlpha = 1,
-                  this.basic = new Li,
+                  this.basic = new MeshBasicMaterial,
                   this.fsQuad = new VE(null)
               }
               dispose() {
@@ -41919,7 +41919,7 @@
                   e
               }
           }
-          class Bridges extends ia {
+          class Bridges extends Group {
               constructor() {
                   super(),
                   this.globalUniforms = {
@@ -41958,7 +41958,7 @@
                       globalUniforms: this.globalUniforms
                   }));
                   this.meshes.bridges = e,
-                  lw(this.meshes.bridges, t.objects.bridges[0]),
+                  applyObjectDataToObjectProps(this.meshes.bridges, t.objects.bridges[0]),
                   this.add(this.meshes.bridges)
               }
               animateUp() {
@@ -42122,7 +42122,7 @@
                   e
               }
           }
-          class CityPipes extends ia {
+          class CityPipes extends Group {
               constructor() {
                   super(),
                   this.instanceDummy = new Object3D,
@@ -42169,7 +42169,7 @@
                           const n = Object.keys(t[e]).length;
                           this.paths.pipes[e] = [];
                           for (let i = 0; i < n; i++) {
-                              lw(this.instanceDummy, t[e][i]);
+                              applyObjectDataToObjectProps(this.instanceDummy, t[e][i]);
                               const n = t[e][i][3].section;
                               this.instanceDummy.updateMatrix();
                               const r = .2 * MathUtils.seededRandom(n)
@@ -42418,14 +42418,14 @@
                   this.fogDefines = {
                       NUM_V_LIGHTS: this.lightCount
                   },
-                  this.helpers = new ia;
+                  this.helpers = new Group;
                   for (let t = 0; t < this.lightCount; t++)
                       this.addLightHelper(t);
                   this.helpers.visible = GLOBAL_VARS.MainScene.options.lightHelpersEnabled,
                   GLOBAL_VARS.MainScene.add(this.helpers)
               }
               buildSky() {
-                  this.fogBox = new Mesh(new hr,new PillarsClass({
+                  this.fogBox = new Mesh(new BoxGeometry,new PillarsClass({
                       uniforms: {
                           uColor: {
                               value: new Color(0)
@@ -42569,12 +42569,12 @@
                   }, .5)
               }
               addLightHelper(t) {
-                  const e = new Mesh(new ul(5,6,6),new Li({
+                  const e = new Mesh(new SphereGeometry(5,6,6),new MeshBasicMaterial({
                       wireframe: !0,
                       color: this.globalUniforms.volumetricLights.value[t].color
                   }));
                   e.position.copy(this.globalUniforms.volumetricLights.value[t].position),
-                  e.add(new Mesh(new ul(5,6,6),new Li({
+                  e.add(new Mesh(new SphereGeometry(5,6,6),new MeshBasicMaterial({
                       wireframe: !0,
                       color: this.globalUniforms.volumetricLights.value[t].color
                   }))),

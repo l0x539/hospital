@@ -9,6 +9,10 @@ export function makeStore() {
     reducer: {
       gl: glReducer,
     },
+    middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   })
 }
 

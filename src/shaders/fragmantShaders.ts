@@ -380,3 +380,45 @@ void main() {
   #include <fogOutputFrag>
 
 }`
+
+export const fogFragmentShader = `#define GLSLIFY 1
+float blendSoftLight(float base, float blend) {
+        return (blend<0.5)?(2.0*base*blend+base*base*(1.0-2.0*blend)):(sqrt(base)*(2.0*blend-1.0)+2.0*base*(1.0-blend));
+}
+
+vec3 blendSoftLight(vec3 base, vec3 blend) {
+        return vec3(blendSoftLight(base.r,blend.r),blendSoftLight(base.g,blend.g),blendSoftLight(base.b,blend.b));
+}
+
+vec3 blendSoftLight(vec3 base, vec3 blend, float opacity) {
+        return (blendSoftLight(base, blend) * opacity + base * (1.0 - opacity));
+}
+
+varying vec2 vUv;
+varying vec3 vNormal;
+varying vec3 vViewPosition;
+
+uniform float uProgress;
+uniform vec3 uColor;
+uniform sampler2D uTexture; 
+uniform sampler2D uRepeatTexture; 
+
+#include <fogParamsFrag>
+
+void main() {
+
+    #ifdef USE_TEXTURE
+        #ifdef IS_PILLARS
+            vec4 diffuse = texture2D(uTexture, vUv);
+            gl_FragColor = vec4(blendSoftLight(diffuse.rgb, texture2D(uRepeatTexture, vUv * 15.).rgb, 1.), diffuse.a );
+        #else
+            gl_FragColor = texture2D(uTexture, vUv);
+        #endif
+    #else 
+        gl_FragColor = vec4(uColor, 1.0);
+    #endif
+    
+    #include <tonemapping_fragment>
+    // Add fog
+    #include <fogOutputFrag>
+}`;
