@@ -1,7 +1,7 @@
 'use client'
 import { selectGl, selectGlobalVars, updateGlobalUniforms } from "@/features/gl/glSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Color, ShaderChunk, Uniform, Vector2 } from "three";
 import { useSearchParams } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
@@ -11,6 +11,15 @@ import { defaultFragDef, defaultVertDef, fogOutputFragDef, fogOutputVertDef, fog
 import Fog from "./Fog";
 import WorldFloor from "./WorldFloor";
 import { OrbitControls } from "@react-three/drei";
+import Pipes from "./Pipes";
+import People from "./People";
+import Towers from "./Towers";
+import Particles from "./Particles";
+import CityPipes from "./CityPipes";
+import Cars from "./Cars";
+import Signs from "./Signs";
+import Bridges from "./Bridges";
+import ReflectiveFloor from "./ReflectiveFloor";
 
 (ShaderChunk as any).defaultVert = glslifyStrip(defaultVertDef);
 (ShaderChunk as any).defaultFrag = glslifyStrip(defaultFragDef);
@@ -74,6 +83,10 @@ const MainCanva = () => {
       noui: searchParams.has("noui")
     }
   }), [searchParams]);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, [])
   return (
     <Canvas
       gl={{
@@ -87,9 +100,18 @@ const MainCanva = () => {
         position: [0, 100, 100]
       }}
     >
-      <MainTower options={options} />
       <Fog options={options} />
       <WorldFloor options={options} />
+      {ready ? <MainTower options={options} /> : <></>}
+      <Pipes options={options} />
+      <People />
+      <Towers />
+      <Particles options={options} />
+      <CityPipes options={options} />
+      <Cars />
+      <Signs options={options} />
+      <Bridges />
+      <ReflectiveFloor />
       <OrbitControls />
     </Canvas>
   );

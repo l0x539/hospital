@@ -3333,15 +3333,15 @@
             , d = 3
             , p = 0
             , f = 1
-            , m = 2
+            , DoubleSide = 2
             , g = 3
             , v = 0
             , A = 1
             , b = 2
             , y = 3
             , x = 4
-            , _ = 5
-            , w = 100
+            , CustomBlending = 5
+            , AddEquation = 100
             , E = 101
             , C = 102
             , S = 103
@@ -3350,8 +3350,8 @@
             , I = 201
             , T = 202
             , D = 203
-            , B = 204
-            , L = 205
+            , SrcAlphaFactor = 204
+            , OneMinusSrcAlphaFactor = 205
             , F = 206
             , k = 207
             , R = 208
@@ -3379,13 +3379,13 @@
             , rt = 303
             , st = 304
             , ot = 306
-            , at = 1e3
+            , RepeatWrapping = 1e3
             , lt = 1001
             , ht = 1002
-            , ct = 1003
+            , NearestFilter = 1003
             , ut = 1004
             , dt = 1005
-            , pt = 1006
+            , LinearFilter = 1006
             , ft = 1007
             , mt = 1008
             , gt = 1009
@@ -3394,14 +3394,14 @@
             , bt = 1012
             , yt = 1013
             , xt = 1014
-            , _t = 1015
+            , FloatType = 1015
             , wt = 1016
             , Et = 1017
             , Ct = 1018
             , St = 1020
             , Mt = 1021
             , Pt = 1022
-            , It = 1023
+            , RGBAFormat = 1023
             , Tt = 1024
             , Dt = 1025
             , Bt = 1026
@@ -4744,7 +4744,7 @@
           }
           let un = 0;
           class dn extends EventDispatcher {
-              constructor(t=dn.DEFAULT_IMAGE, e=dn.DEFAULT_MAPPING, n=lt, i=lt, r=pt, s=mt, o=It, a=gt, l=dn.DEFAULT_ANISOTROPY, h=Ae) {
+              constructor(t=dn.DEFAULT_IMAGE, e=dn.DEFAULT_MAPPING, n=lt, i=lt, r=LinearFilter, s=mt, o=RGBAFormat, a=gt, l=dn.DEFAULT_ANISOTROPY, h=Ae) {
                   super(),
                   this.isTexture = !0,
                   Object.defineProperty(this, "id", {
@@ -4865,7 +4865,7 @@
                   if (t.applyMatrix3(this.matrix),
                   t.x < 0 || t.x > 1)
                       switch (this.wrapS) {
-                      case at:
+                      case RepeatWrapping:
                           t.x = t.x - Math.floor(t.x);
                           break;
                       case lt:
@@ -4876,7 +4876,7 @@
                       }
                   if (t.y < 0 || t.y > 1)
                       switch (this.wrapT) {
-                      case at:
+                      case RepeatWrapping:
                           t.y = t.y - Math.floor(t.y);
                           break;
                       case lt:
@@ -4896,9 +4896,9 @@
           dn.DEFAULT_IMAGE = null,
           dn.DEFAULT_MAPPING = 300,
           dn.DEFAULT_ANISOTROPY = 1;
-          class pn {
+          class Vector4 {
               constructor(t=0, e=0, n=0, i=1) {
-                  pn.prototype.isVector4 = !0,
+                  Vector4.prototype.isVector4 = !0,
                   this.x = t,
                   this.y = e,
                   this.z = n,
@@ -5263,16 +5263,16 @@
                   yield this.w
               }
           }
-          class fn extends EventDispatcher {
+          class WebGLRenderTarget extends EventDispatcher {
               constructor(t=1, e=1, n={}) {
                   super(),
                   this.isWebGLRenderTarget = !0,
                   this.width = t,
                   this.height = e,
                   this.depth = 1,
-                  this.scissor = new pn(0,0,t,e),
+                  this.scissor = new Vector4(0,0,t,e),
                   this.scissorTest = !1,
-                  this.viewport = new pn(0,0,t,e);
+                  this.viewport = new Vector4(0,0,t,e);
                   const i = {
                       width: t,
                       height: e,
@@ -5283,7 +5283,7 @@
                   this.texture.flipY = !1,
                   this.texture.generateMipmaps = void 0 !== n.generateMipmaps && n.generateMipmaps,
                   this.texture.internalFormat = void 0 !== n.internalFormat ? n.internalFormat : null,
-                  this.texture.minFilter = void 0 !== n.minFilter ? n.minFilter : pt,
+                  this.texture.minFilter = void 0 !== n.minFilter ? n.minFilter : LinearFilter,
                   this.depthBuffer = void 0 === n.depthBuffer || n.depthBuffer,
                   this.stencilBuffer = void 0 !== n.stencilBuffer && n.stencilBuffer,
                   this.depthTexture = void 0 !== n.depthTexture ? n.depthTexture : null,
@@ -5334,8 +5334,8 @@
                       height: n,
                       depth: i
                   },
-                  this.magFilter = ct,
-                  this.minFilter = ct,
+                  this.magFilter = NearestFilter,
+                  this.minFilter = NearestFilter,
                   this.wrapR = lt,
                   this.generateMipmaps = !1,
                   this.flipY = !1,
@@ -5352,8 +5352,8 @@
                       height: n,
                       depth: i
                   },
-                  this.magFilter = ct,
-                  this.minFilter = ct,
+                  this.magFilter = NearestFilter,
+                  this.minFilter = NearestFilter,
                   this.wrapR = lt,
                   this.generateMipmaps = !1,
                   this.flipY = !1,
@@ -6430,7 +6430,7 @@
           const Rn = new xn
             , On = new Vector3
             , Nn = new Vector3;
-          class Un {
+          class Sphere {
               constructor(t=new Vector3, e=-1) {
                   this.center = t,
                   this.radius = e
@@ -8148,9 +8148,9 @@
                   this.vertexColors = !1,
                   this.opacity = 1,
                   this.transparent = !1,
-                  this.blendSrc = B,
-                  this.blendDst = L,
-                  this.blendEquation = w,
+                  this.blendSrc = SrcAlphaFactor,
+                  this.blendDst = OneMinusSrcAlphaFactor,
+                  this.blendEquation = AddEquation,
                   this.blendSrcAlpha = null,
                   this.blendDstAlpha = null,
                   this.blendEquationAlpha = null,
@@ -8805,7 +8805,7 @@
                   (isNaN(this.boundingBox.min.x) || isNaN(this.boundingBox.min.y) || isNaN(this.boundingBox.min.z)) && console.error('THREE.BufferGeometry.computeBoundingBox(): Computed min/max have NaN values. The "position" attribute is likely to have NaN values.', this)
               }
               computeBoundingSphere() {
-                  null === this.boundingSphere && (this.boundingSphere = new Un);
+                  null === this.boundingSphere && (this.boundingSphere = new Sphere);
                   const t = this.attributes.position
                     , e = this.morphAttributes.position;
                   if (t && t.isGLBufferAttribute)
@@ -9140,7 +9140,7 @@
           }
           const Yi = new Matrix4
             , Xi = new qn
-            , Ki = new Un
+            , Ki = new Sphere
             , Ji = new Vector3
             , Zi = new Vector3
             , $i = new Vector3
@@ -9729,7 +9729,7 @@
                   this.image = t
               }
           }
-          class yr extends fn {
+          class yr extends WebGLRenderTarget {
               constructor(t=1, e={}) {
                   super(t, t, e),
                   this.isWebGLCubeRenderTarget = !0;
@@ -9742,7 +9742,7 @@
                   this.texture = new br(i,e.mapping,e.wrapS,e.wrapT,e.magFilter,e.minFilter,e.format,e.type,e.anisotropy,e.encoding),
                   this.texture.isRenderTargetTexture = !0,
                   this.texture.generateMipmaps = void 0 !== e.generateMipmaps && e.generateMipmaps,
-                  this.texture.minFilter = void 0 !== e.minFilter ? e.minFilter : pt
+                  this.texture.minFilter = void 0 !== e.minFilter ? e.minFilter : LinearFilter
               }
               fromEquirectangularTexture(t, e) {
                   this.texture.type = e.type,
@@ -9771,7 +9771,7 @@
                   r.uniforms.tEquirect.value = e;
                   const s = new Mesh(i,r)
                     , o = e.minFilter;
-                  e.minFilter === mt && (e.minFilter = pt);
+                  e.minFilter === mt && (e.minFilter = LinearFilter);
                   return new Ar(1,10,this).update(t, s),
                   e.minFilter = o,
                   s.geometry.dispose(),
@@ -9789,7 +9789,7 @@
           const xr = new Vector3
             , _r = new Vector3
             , wr = new je;
-          class Er {
+          class Plane {
               constructor(t=new Vector3(1,0,0), e=0) {
                   this.isPlane = !0,
                   this.normal = t,
@@ -9880,10 +9880,10 @@
                   return (new this.constructor).copy(this)
               }
           }
-          const Cr = new Un
+          const Cr = new Sphere
             , Sr = new Vector3;
           class Mr {
-              constructor(t=new Er, e=new Er, n=new Er, i=new Er, r=new Er, s=new Er) {
+              constructor(t=new Plane, e=new Plane, n=new Plane, i=new Plane, r=new Plane, s=new Plane) {
                   this.planes = [t, e, n, i, r, s]
               }
               set(t, e, n, i, r, s) {
@@ -10076,7 +10076,7 @@
                   }
               }
           }
-          class Tr extends BufferGeometry {
+          class PlaneGeometry extends BufferGeometry {
               constructor(t=1, e=1, n=1, i=1) {
                   super(),
                   this.type = "PlaneGeometry",
@@ -10123,7 +10123,7 @@
                   this.setAttribute("uv", new Ui(m,2))
               }
               static fromJSON(t) {
-                  return new Tr(t.width,t.height,t.widthSegments,t.heightSegments)
+                  return new PlaneGeometry(t.width,t.height,t.widthSegments,t.heightSegments)
               }
           }
           const Dr = {
@@ -10908,7 +10908,7 @@
                       d = v.version,
                       m = t.toneMapping),
                       h.layers.enableAll(),
-                      i.unshift(h, h.geometry, h.material, 0, 0, null)) : v && v.isTexture && (void 0 === l && (l = new Mesh(new Tr(2,2),new ShaderMaterial({
+                      i.unshift(h, h.geometry, h.material, 0, 0, null)) : v && v.isTexture && (void 0 === l && (l = new Mesh(new PlaneGeometry(2,2),new ShaderMaterial({
                           name: "BackgroundMaterial",
                           uniforms: cr(Lr.background.uniforms),
                           vertexShader: Lr.background.vertexShader,
@@ -11292,7 +11292,7 @@
                 , i = 0
                 , r = !1
                 , s = !1;
-              const o = new Er
+              const o = new Plane
                 , a = new je
                 , l = {
                   value: null,
@@ -11410,7 +11410,7 @@
                   }
               }
           }
-          class Vr extends Camera {
+          class OrthographicCamera extends Camera {
               constructor(t=-1, e=1, n=1, i=-1, r=.1, s=2e3) {
                   super(),
                   this.isOrthographicCamera = !0,
@@ -11496,7 +11496,7 @@
           const Qr = 4
             , Gr = [.125, .215, .35, .446, .526, .582]
             , Hr = 20
-            , jr = new Vr
+            , jr = new OrthographicCamera
             , Wr = new Color;
           let qr = null;
           const Yr = (1 + Math.sqrt(5)) / 2
@@ -11574,11 +11574,11 @@
                   const t = 3 * Math.max(this._cubeSize, 112)
                     , e = 4 * this._cubeSize
                     , n = {
-                      magFilter: pt,
-                      minFilter: pt,
+                      magFilter: LinearFilter,
+                      minFilter: LinearFilter,
                       generateMipmaps: !1,
                       type: wt,
-                      format: It,
+                      format: RGBAFormat,
                       encoding: Ae,
                       depthBuffer: !1
                   }
@@ -11788,7 +11788,7 @@
               }
           }
           function Zr(t, e, n) {
-              const i = new fn(t,e,n);
+              const i = new WebGLRenderTarget(t,e,n);
               return i.texture.mapping = ot,
               i.texture.name = "PMREM.cubeUv",
               i.scissorTest = !0,
@@ -12103,7 +12103,7 @@
               const i = {}
                 , r = new Float32Array(8)
                 , s = new WeakMap
-                , o = new pn
+                , o = new Vector4
                 , a = [];
               for (let t = 0; t < 8; t++)
                   a[t] = [t, 0];
@@ -12132,7 +12132,7 @@
                               C = e.maxTextureSize);
                               const M = new Float32Array(C * S * 4 * f)
                                 , P = new mn(M,C,S,f);
-                              P.type = _t,
+                              P.type = FloatType,
                               P.needsUpdate = !0;
                               const I = 4 * E;
                               for (let D = 0; D < f; D++) {
@@ -13271,7 +13271,7 @@
                           toneMapping: s.toneMapped ? t.toneMapping : K,
                           physicallyCorrectLights: t.physicallyCorrectLights,
                           premultipliedAlpha: s.premultipliedAlpha,
-                          doubleSided: s.side === m,
+                          doubleSided: s.side === DoubleSide,
                           flipSided: s.side === f,
                           useDepthPacking: !!s.depthPacking,
                           depthPacking: s.depthPacking || 0,
@@ -13973,7 +13973,7 @@
               let i = new Mr;
               const r = new Vector2
                 , s = new Vector2
-                , o = new pn
+                , o = new Vector4
                 , a = new Yo({
                   depthPacking: ye
               })
@@ -13983,7 +13983,7 @@
                 , g = {
                   0: f,
                   1: p,
-                  2: m
+                  2: DoubleSide
               }
                 , A = new ShaderMaterial({
                   defines: {
@@ -14015,7 +14015,7 @@
                   b.defines.VSM_SAMPLES = n.blurSamples,
                   A.needsUpdate = !0,
                   b.needsUpdate = !0),
-                  null === n.mapPass && (n.mapPass = new fn(r.x,r.y)),
+                  null === n.mapPass && (n.mapPass = new WebGLRenderTarget(r.x,r.y)),
                   A.uniforms.shadow_pass.value = n.map.texture,
                   A.uniforms.resolution.value = n.mapSize,
                   A.uniforms.radius.value = n.radius,
@@ -14131,10 +14131,10 @@
                       c.mapSize.y = s.y)),
                       null === c.map) {
                           const t = this.type !== d ? {
-                              minFilter: ct,
-                              magFilter: ct
+                              minFilter: NearestFilter,
+                              magFilter: NearestFilter
                           } : {};
-                          c.map = new fn(r.x,r.y,t),
+                          c.map = new WebGLRenderTarget(r.x,r.y,t),
                           c.map.texture.name = h.name + ".shadowMap",
                           c.camera.updateProjectionMatrix()
                       }
@@ -14160,9 +14160,9 @@
               const i = n.isWebGL2;
               const r = new function() {
                   let e = !1;
-                  const n = new pn;
+                  const n = new Vector4;
                   let i = null;
-                  const r = new pn(0,0,0,0);
+                  const r = new Vector4(0,0,0,0);
                   return {
                       setMask: function(n) {
                           i === n || e || (t.colorMask(n, n, n, n),
@@ -14329,8 +14329,8 @@
                 , ft = {};
               const mt = t.getParameter(3088)
                 , gt = t.getParameter(2978)
-                , vt = (new pn).fromArray(mt)
-                , At = (new pn).fromArray(gt);
+                , vt = (new Vector4).fromArray(mt)
+                , At = (new Vector4).fromArray(gt);
               function bt(e, n, i) {
                   const r = new Uint8Array(4)
                     , s = t.createTexture();
@@ -14362,7 +14362,7 @@
               xt(2884),
               Ct(v);
               const wt = {
-                  [w]: 32774,
+                  [AddEquation]: 32774,
                   [E]: 32778,
                   [C]: 32779
               };
@@ -14378,12 +14378,12 @@
                   [P]: 0,
                   [I]: 1,
                   [T]: 768,
-                  [B]: 770,
+                  [SrcAlphaFactor]: 770,
                   [N]: 776,
                   [R]: 774,
                   [F]: 772,
                   [D]: 769,
-                  [L]: 771,
+                  [OneMinusSrcAlphaFactor]: 771,
                   [O]: 775,
                   [k]: 773
               };
@@ -14391,7 +14391,7 @@
                   if (e !== v) {
                       if (!1 === X && (xt(3042),
                       X = !0),
-                      e === _)
+                      e === CustomBlending)
                           s = s || n,
                           o = o || i,
                           a = a || r,
@@ -14406,9 +14406,9 @@
                           K = e,
                           it = !1;
                       else if (e !== K || l !== it) {
-                          if (J === w && tt === w || (t.blendEquation(32774),
-                          J = w,
-                          tt = w),
+                          if (J === AddEquation && tt === AddEquation || (t.blendEquation(32774),
+                          J = AddEquation,
+                          tt = AddEquation),
                           l)
                               switch (e) {
                               case A:
@@ -14514,7 +14514,7 @@
                   },
                   setBlending: Ct,
                   setMaterial: function(t, e) {
-                      t.side === m ? _t(2884) : xt(2884);
+                      t.side === DoubleSide ? _t(2884) : xt(2884);
                       let n = t.side === f;
                       e && (n = !n),
                       St(n),
@@ -14760,7 +14760,7 @@
                   return Ne(t.width) && Ne(t.height)
               }
               function x(t, e) {
-                  return t.generateMipmaps && e && t.minFilter !== ct && t.minFilter !== pt
+                  return t.generateMipmaps && e && t.minFilter !== NearestFilter && t.minFilter !== LinearFilter
               }
               function _(e) {
                   t.generateMipmap(e)
@@ -14789,10 +14789,10 @@
                   l
               }
               function E(t, e, n) {
-                  return !0 === x(t, n) || t.isFramebufferTexture && t.minFilter !== ct && t.minFilter !== pt ? Math.log2(Math.max(e.width, e.height)) + 1 : void 0 !== t.mipmaps && t.mipmaps.length > 0 ? t.mipmaps.length : t.isCompressedTexture && Array.isArray(t.image) ? e.mipmaps.length : 1
+                  return !0 === x(t, n) || t.isFramebufferTexture && t.minFilter !== NearestFilter && t.minFilter !== LinearFilter ? Math.log2(Math.max(e.width, e.height)) + 1 : void 0 !== t.mipmaps && t.mipmaps.length > 0 ? t.mipmaps.length : t.isCompressedTexture && Array.isArray(t.image) ? e.mipmaps.length : 1
               }
               function C(t) {
-                  return t === ct || t === ut || t === dt ? 9728 : 9729
+                  return t === NearestFilter || t === ut || t === dt ? 9728 : 9729
               }
               function S(t) {
                   const e = t.target;
@@ -14875,15 +14875,15 @@
                   n.bindTexture(3553, r.__webglTexture, 33984 + e)
               }
               const D = {
-                  [at]: 10497,
+                  [RepeatWrapping]: 10497,
                   [lt]: 33071,
                   [ht]: 33648
               }
                 , B = {
-                  [ct]: 9728,
+                  [NearestFilter]: 9728,
                   [ut]: 9984,
                   [dt]: 9986,
-                  [pt]: 9729,
+                  [LinearFilter]: 9729,
                   [ft]: 9985,
                   [mt]: 9987
               };
@@ -14898,14 +14898,14 @@
                   s.wrapS === lt && s.wrapT === lt || console.warn("THREE.WebGLRenderer: Texture is not power of two. Texture.wrapS and Texture.wrapT should be set to THREE.ClampToEdgeWrapping."),
                   t.texParameteri(n, 10240, C(s.magFilter)),
                   t.texParameteri(n, 10241, C(s.minFilter)),
-                  s.minFilter !== ct && s.minFilter !== pt && console.warn("THREE.WebGLRenderer: Texture is not power of two. Texture.minFilter should be set to THREE.NearestFilter or THREE.LinearFilter.")),
+                  s.minFilter !== NearestFilter && s.minFilter !== LinearFilter && console.warn("THREE.WebGLRenderer: Texture is not power of two. Texture.minFilter should be set to THREE.NearestFilter or THREE.LinearFilter.")),
                   !0 === e.has("EXT_texture_filter_anisotropic")) {
                       const o = e.get("EXT_texture_filter_anisotropic");
-                      if (s.magFilter === ct)
+                      if (s.magFilter === NearestFilter)
                           return;
                       if (s.minFilter !== dt && s.minFilter !== mt)
                           return;
-                      if (s.type === _t && !1 === e.has("OES_texture_float_linear"))
+                      if (s.type === FloatType && !1 === e.has("OES_texture_float_linear"))
                           return;
                       if (!1 === a && s.type === wt && !1 === e.has("OES_texture_half_float_linear"))
                           return;
@@ -14970,7 +14970,7 @@
                       t.pixelStorei(3317, r.unpackAlignment),
                       t.pixelStorei(37443, 0);
                       const e = function(t) {
-                          return !a && (t.wrapS !== lt || t.wrapT !== lt || t.minFilter !== ct && t.minFilter !== pt)
+                          return !a && (t.wrapS !== lt || t.wrapT !== lt || t.minFilter !== NearestFilter && t.minFilter !== LinearFilter)
                       }(r) && !1 === y(r.image);
                       let i = b(r.image, e, !1, c);
                       i = V(r, i);
@@ -14984,7 +14984,7 @@
                         , M = E(r, i, p);
                       if (r.isDepthTexture)
                           v = 6402,
-                          a ? v = r.type === _t ? 36012 : r.type === xt ? 33190 : r.type === St ? 35056 : 33189 : r.type === _t && console.error("WebGLRenderer: Floating point depth texture requires WebGL2."),
+                          a ? v = r.type === FloatType ? 36012 : r.type === xt ? 33190 : r.type === St ? 35056 : 33189 : r.type === FloatType && console.error("WebGLRenderer: Floating point depth texture requires WebGL2."),
                           r.format === Bt && 6402 === v && r.type !== bt && r.type !== xt && (console.warn("THREE.WebGLRenderer: Use UnsignedShortType or UnsignedIntType for DepthFormat DepthTexture."),
                           r.type = xt,
                           g = s.convert(r.type)),
@@ -15008,12 +15008,12 @@
                               C && S && n.texStorage3D(35866, M, v, A[0].width, A[0].height, i.depth);
                               for (let t = 0, e = A.length; t < e; t++)
                                   m = A[t],
-                                  r.format !== It ? null !== f ? C ? n.compressedTexSubImage3D(35866, t, 0, 0, 0, m.width, m.height, i.depth, f, m.data, 0, 0) : n.compressedTexImage3D(35866, t, v, m.width, m.height, i.depth, 0, m.data, 0, 0) : console.warn("THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()") : C ? n.texSubImage3D(35866, t, 0, 0, 0, m.width, m.height, i.depth, f, g, m.data) : n.texImage3D(35866, t, v, m.width, m.height, i.depth, 0, f, g, m.data)
+                                  r.format !== RGBAFormat ? null !== f ? C ? n.compressedTexSubImage3D(35866, t, 0, 0, 0, m.width, m.height, i.depth, f, m.data, 0, 0) : n.compressedTexImage3D(35866, t, v, m.width, m.height, i.depth, 0, m.data, 0, 0) : console.warn("THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()") : C ? n.texSubImage3D(35866, t, 0, 0, 0, m.width, m.height, i.depth, f, g, m.data) : n.texImage3D(35866, t, v, m.width, m.height, i.depth, 0, f, g, m.data)
                           } else {
                               C && S && n.texStorage2D(3553, M, v, A[0].width, A[0].height);
                               for (let t = 0, e = A.length; t < e; t++)
                                   m = A[t],
-                                  r.format !== It ? null !== f ? C ? n.compressedTexSubImage2D(3553, t, 0, 0, m.width, m.height, f, m.data) : n.compressedTexImage2D(3553, t, v, m.width, m.height, 0, m.data) : console.warn("THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()") : C ? n.texSubImage2D(3553, t, 0, 0, m.width, m.height, f, g, m.data) : n.texImage2D(3553, t, v, m.width, m.height, 0, f, g, m.data)
+                                  r.format !== RGBAFormat ? null !== f ? C ? n.compressedTexSubImage2D(3553, t, 0, 0, m.width, m.height, f, m.data) : n.compressedTexImage2D(3553, t, v, m.width, m.height, 0, m.data) : console.warn("THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .uploadTexture()") : C ? n.texSubImage2D(3553, t, 0, 0, m.width, m.height, f, g, m.data) : n.texImage2D(3553, t, v, m.width, m.height, 0, f, g, m.data)
                           }
                       else if (r.isDataArrayTexture)
                           C ? (S && n.texStorage3D(35866, M, v, i.width, i.height, i.depth),
@@ -15063,7 +15063,7 @@
                       let r = 33189;
                       if (i || z(n)) {
                           const e = n.depthTexture;
-                          e && e.isDepthTexture && (e.type === _t ? r = 36012 : e.type === xt && (r = 33190));
+                          e && e.isDepthTexture && (e.type === FloatType ? r = 36012 : e.type === xt && (r = 33190));
                           const i = U(n);
                           z(n) ? d.renderbufferStorageMultisampleEXT(36161, i, r, n.width, n.height) : t.renderbufferStorageMultisample(36161, i, r, n.width, n.height)
                       } else
@@ -15135,9 +15135,9 @@
                   const i = t.encoding
                     , r = t.format
                     , s = t.type;
-                  return !0 === t.isCompressedTexture || !0 === t.isVideoTexture || t.format === Pe || i !== Ae && (i === be ? !1 === a ? !0 === e.has("EXT_sRGB") && r === It ? (t.format = Pe,
-                  t.minFilter = pt,
-                  t.generateMipmaps = !1) : n = ln.sRGBToLinear(n) : r === It && s === gt || console.warn("THREE.WebGLTextures: sRGB encoded textures have to use RGBAFormat and UnsignedByteType.") : console.error("THREE.WebGLTextures: Unsupported texture encoding:", i)),
+                  return !0 === t.isCompressedTexture || !0 === t.isVideoTexture || t.format === Pe || i !== Ae && (i === be ? !1 === a ? !0 === e.has("EXT_sRGB") && r === RGBAFormat ? (t.format = Pe,
+                  t.minFilter = LinearFilter,
+                  t.generateMipmaps = !1) : n = ln.sRGBToLinear(n) : r === RGBAFormat && s === gt || console.warn("THREE.WebGLTextures: sRGB encoded textures have to use RGBAFormat and UnsignedByteType.") : console.error("THREE.WebGLTextures: Unsupported texture encoding:", i)),
                   n
               }
               this.allocateTextureUnit = function() {
@@ -15198,7 +15198,7 @@
                                   S = d[t].mipmaps;
                                   for (let e = 0; e < S.length; e++) {
                                       const i = S[e];
-                                      r.format !== It ? null !== m ? A ? n.compressedTexSubImage2D(34069 + t, e, 0, 0, i.width, i.height, m, i.data) : n.compressedTexImage2D(34069 + t, e, v, i.width, i.height, 0, i.data) : console.warn("THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .setTextureCube()") : A ? n.texSubImage2D(34069 + t, e, 0, 0, i.width, i.height, m, g, i.data) : n.texImage2D(34069 + t, e, v, i.width, i.height, 0, m, g, i.data)
+                                      r.format !== RGBAFormat ? null !== m ? A ? n.compressedTexSubImage2D(34069 + t, e, 0, 0, i.width, i.height, m, i.data) : n.compressedTexImage2D(34069 + t, e, v, i.width, i.height, 0, i.data) : console.warn("THREE.WebGLRenderer: Attempt to load unsupported compressed texture format in .setTextureCube()") : A ? n.texSubImage2D(34069 + t, e, 0, 0, i.width, i.height, m, g, i.data) : n.texImage2D(34069 + t, e, v, i.width, i.height, 0, m, g, i.data)
                                   }
                               }
                           } else {
@@ -15401,14 +15401,14 @@
                           return 5124;
                       if (n === xt)
                           return 5125;
-                      if (n === _t)
+                      if (n === FloatType)
                           return 5126;
                       if (n === wt)
                           return i ? 5131 : (s = e.get("OES_texture_half_float"),
                           null !== s ? s.HALF_FLOAT_OES : null);
                       if (n === Mt)
                           return 6406;
-                      if (n === It)
+                      if (n === RGBAFormat)
                           return 6408;
                       if (n === Tt)
                           return 6409;
@@ -15692,8 +15692,8 @@
                       width: t,
                       height: e
                   },
-                  this.magFilter = void 0 !== o ? o : ct,
-                  this.minFilter = void 0 !== a ? a : ct,
+                  this.magFilter = void 0 !== o ? o : NearestFilter,
+                  this.minFilter = void 0 !== a ? a : NearestFilter,
                   this.flipY = !1,
                   this.generateMipmaps = !1
               }
@@ -15721,10 +15721,10 @@
                     , b = new Map
                     , y = new PerspectiveCamera;
                   y.layers.enable(1),
-                  y.viewport = new pn;
+                  y.viewport = new Vector4;
                   const x = new PerspectiveCamera;
                   x.layers.enable(2),
-                  x.viewport = new pn;
+                  x.viewport = new Vector4;
                   const _ = [y, x]
                     , w = new na;
                   w.layers.enable(1),
@@ -15882,8 +15882,8 @@
                               i.updateRenderState({
                                   baseLayer: u
                               }),
-                              m = new fn(u.framebufferWidth,u.framebufferHeight,{
-                                  format: It,
+                              m = new WebGLRenderTarget(u.framebufferWidth,u.framebufferHeight,{
+                                  format: RGBAFormat,
                                   type: gt,
                                   encoding: t.outputEncoding,
                                   stencilBuffer: p.stencil
@@ -15905,8 +15905,8 @@
                               i.updateRenderState({
                                   layers: [c]
                               }),
-                              m = new fn(c.textureWidth,c.textureHeight,{
-                                  format: It,
+                              m = new WebGLRenderTarget(c.textureWidth,c.textureHeight,{
+                                  format: RGBAFormat,
                                   type: gt,
                                   depthTexture: new oa(c.textureWidth,c.textureHeight,s,void 0,void 0,void 0,void 0,void 0,void 0,n),
                                   stencilBuffer: p.stencil,
@@ -16030,7 +16030,7 @@
                               let o = _[i];
                               void 0 === o && (o = new PerspectiveCamera,
                               o.layers.enable(i),
-                              o.viewport = new pn,
+                              o.viewport = new Vector4,
                               _[i] = o),
                               o.matrix.fromArray(r.transform.matrix),
                               o.projectionMatrix.fromArray(r.projectionMatrix),
@@ -16436,16 +16436,16 @@
                 , w = null
                 , E = -1
                 , C = null;
-              const S = new pn
-                , M = new pn;
+              const S = new Vector4
+                , M = new Vector4;
               let P = null
                 , I = e.width
                 , T = e.height
                 , D = 1
                 , B = null
                 , L = null;
-              const F = new pn(0,0,I,T)
-                , k = new pn(0,0,I,T);
+              const F = new Vector4(0,0,I,T)
+                , k = new Vector4(0,0,I,T);
               let R = !1;
               const O = new Mr;
               let N = !1
@@ -16964,7 +16964,7 @@
                   m.setupLightsView(n),
                   s.length > 0 && function(t, e, n) {
                       const i = q.isWebGL2;
-                      null === z && (z = new fn(1,1,{
+                      null === z && (z = new WebGLRenderTarget(1,1,{
                           generateMipmaps: !0,
                           type: W.has("EXT_color_buffer_half_float") ? wt : gt,
                           minFilter: mt,
@@ -17232,10 +17232,10 @@
                           const o = t.texture
                             , a = o.format
                             , l = o.type;
-                          if (a !== It && ft.convert(a) !== bt.getParameter(35739))
+                          if (a !== RGBAFormat && ft.convert(a) !== bt.getParameter(35739))
                               return void console.error("THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not in RGBA or implementation defined format.");
                           const h = l === wt && (W.has("EXT_color_buffer_half_float") || q.isWebGL2 && W.has("EXT_color_buffer_float"));
-                          if (!(l === gt || ft.convert(l) === bt.getParameter(35738) || l === _t && (q.isWebGL2 || W.has("OES_texture_float") || W.has("WEBGL_color_buffer_float")) || h))
+                          if (!(l === gt || ft.convert(l) === bt.getParameter(35738) || l === FloatType && (q.isWebGL2 || W.has("OES_texture_float") || W.has("WEBGL_color_buffer_float")) || h))
                               return void console.error("THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not in UnsignedByteType or implementation defined type.");
                           e >= 0 && e <= t.width - i && n >= 0 && n <= t.height - r && bt.readPixels(e, n, i, r, ft.convert(a), ft.convert(l), s)
                       } finally {
@@ -17591,8 +17591,8 @@
               }
           }
           const ma = new Vector3
-            , ga = new pn
-            , va = new pn
+            , ga = new Vector4
+            , va = new Vector4
             , Aa = new Vector3
             , ba = new Matrix4;
           class ya extends Mesh {
@@ -17624,7 +17624,7 @@
                   this.skeleton.pose()
               }
               normalizeSkinWeights() {
-                  const t = new pn
+                  const t = new Vector4
                     , e = this.geometry.attributes.skinWeight;
                   for (let n = 0, i = e.count; n < i; n++) {
                       t.fromBufferAttribute(e, n);
@@ -17662,8 +17662,8 @@
                   this.type = "Bone"
               }
           }
-          class _a extends dn {
-              constructor(t=null, e=1, n=1, i, r, s, o, a, l=ct, h=ct, c, u) {
+          class DataTexture extends dn {
+              constructor(t=null, e=1, n=1, i, r, s, o, a, l=NearestFilter, h=NearestFilter, c, u) {
                   super(null, s, o, a, l, h, i, r, c, u),
                   this.isDataTexture = !0,
                   this.image = {
@@ -17743,7 +17743,7 @@
                   t = Math.max(t, 4);
                   const e = new Float32Array(t * t * 4);
                   e.set(this.boneMatrices);
-                  const n = new _a(e,t,t,It,_t);
+                  const n = new DataTexture(e,t,t,RGBAFormat,FloatType);
                   return n.needsUpdate = !0,
                   this.boneMatrices = e,
                   this.boneTexture = n,
@@ -17819,7 +17819,7 @@
             , Ia = []
             , Ta = new Matrix4
             , Da = new Mesh;
-          class Ba extends Mesh {
+          class InstancedMesh extends Mesh {
               constructor(t, e, n) {
                   super(t, e),
                   this.isInstancedMesh = !0,
@@ -17903,7 +17903,7 @@
             , ka = new Vector3
             , Ra = new Matrix4
             , Oa = new qn
-            , Na = new Un;
+            , Na = new Sphere;
           class Ua extends Object3D {
               constructor(t=new BufferGeometry, e=new La) {
                   super(),
@@ -18068,9 +18068,9 @@
           }
           const ja = new Matrix4
             , Wa = new qn
-            , qa = new Un
+            , qa = new Sphere
             , Ya = new Vector3;
-          class Xa extends Object3D {
+          class Points extends Object3D {
               constructor(t=new BufferGeometry, e=new Ha) {
                   super(),
                   this.isPoints = !0,
@@ -18366,7 +18366,7 @@
             , nl = new tl
             , il = new tl
             , rl = new tl;
-          class sl extends $a {
+          class CatmullRomCurve3 extends $a {
               constructor(t=[], e=!1, n="centripetal", i=.5) {
                   super(),
                   this.isCatmullRomCurve3 = !0,
@@ -18630,7 +18630,7 @@
               n.add(r),
               !0)
           }
-          class fl extends ShaderMaterial {
+          class RawShaderMaterial extends ShaderMaterial {
               constructor(t) {
                   super(t),
                   this.isRawShaderMaterial = !0,
@@ -19894,7 +19894,7 @@
                   this._frustum = new Mr,
                   this._frameExtents = new Vector2(1,1),
                   this._viewportCount = 1,
-                  this._viewports = [new pn(0,0,1,1)]
+                  this._viewports = [new Vector4(0,0,1,1)]
               }
               getViewportCount() {
                   return this._viewportCount
@@ -20013,7 +20013,7 @@
                   this.isPointLightShadow = !0,
                   this._frameExtents = new Vector2(4,2),
                   this._viewportCount = 6,
-                  this._viewports = [new pn(2,1,1,1), new pn(0,1,1,1), new pn(3,1,1,1), new pn(1,1,1,1), new pn(3,0,1,1), new pn(1,0,1,1)],
+                  this._viewports = [new Vector4(2,1,1,1), new Vector4(0,1,1,1), new Vector4(3,1,1,1), new Vector4(1,1,1,1), new Vector4(3,0,1,1), new Vector4(1,0,1,1)],
                   this._cubeDirections = [new Vector3(1,0,0), new Vector3(-1,0,0), new Vector3(0,0,1), new Vector3(0,0,-1), new Vector3(0,1,0), new Vector3(0,-1,0)],
                   this._cubeUps = [new Vector3(0,1,0), new Vector3(0,1,0), new Vector3(0,1,0), new Vector3(0,1,0), new Vector3(0,0,1), new Vector3(0,0,-1)]
               }
@@ -20063,7 +20063,7 @@
           }
           class rh extends Kl {
               constructor() {
-                  super(new Vr(-5,5,5,-5,.5,500)),
+                  super(new OrthographicCamera(-5,5,5,-5,.5,500)),
                   this.isDirectionalLightShadow = !0
               }
           }
@@ -20109,7 +20109,7 @@
                   /^(https?:)?\/\//i.test(t) || /^data:.*,.*$/i.test(t) || /^blob:.*$/i.test(t) ? t : e + t)
               }
           }
-          class ah extends BufferGeometry {
+          class InstancedBufferGeometry extends BufferGeometry {
               constructor() {
                   super(),
                   this.isInstancedBufferGeometry = !0,
@@ -21692,8 +21692,8 @@
                   if ("error" === o)
                       return Promise.reject(a);
                   const c = e.layerCount > 1 ? new Za(n,i,r,e.layerCount,s,gt) : new Ja(n,i,r,s,gt);
-                  return c.minFilter = 1 === n.length ? pt : mt,
-                  c.magFilter = pt,
+                  return c.minFilter = 1 === n.length ? LinearFilter : mt,
+                  c.magFilter = LinearFilter,
                   c.generateMipmaps = !1,
                   c.needsUpdate = !0,
                   c.encoding = 2 === l ? be : Ae,
@@ -21826,8 +21826,8 @@
                               ))),
                               o = (await _c).decode(s.levelData, s.uncompressedByteLength)
                           }
-                          a = Sc[e] === _t ? new Float32Array(o.buffer,o.byteOffset,o.byteLength / Float32Array.BYTES_PER_ELEMENT) : Sc[e] === wt ? new Uint16Array(o.buffer,o.byteOffset,o.byteLength / Uint16Array.BYTES_PER_ELEMENT) : o;
-                          const l = 0 === r ? new _a(a,n,i) : new gn(a,n,i,r);
+                          a = Sc[e] === FloatType ? new Float32Array(o.buffer,o.byteOffset,o.byteLength / Float32Array.BYTES_PER_ELEMENT) : Sc[e] === wt ? new Uint16Array(o.buffer,o.byteOffset,o.byteLength / Uint16Array.BYTES_PER_ELEMENT) : o;
+                          const l = 0 === r ? new DataTexture(a,n,i) : new gn(a,n,i,r);
                           return l.type = Sc[e],
                           l.format = Cc[e],
                           l.encoding = Mc[e] || Ae,
@@ -21876,7 +21876,7 @@
               RGBA4444: 16
           },
           Ec.EngineFormat = {
-              RGBAFormat: It,
+              RGBAFormat: RGBAFormat,
               RGBA_ASTC_4x4_Format: Kt,
               RGBA_BPTC_Format: ce,
               RGBA_ETC2_EAC_Format: Xt,
@@ -22091,10 +22091,10 @@
           }
           ;
           const Cc = {
-              109: It,
-              97: It,
-              37: It,
-              43: It,
+              109: RGBAFormat,
+              97: RGBAFormat,
+              37: RGBAFormat,
+              43: RGBAFormat,
               103: Rt,
               83: Rt,
               16: Rt,
@@ -22105,15 +22105,15 @@
               9: Ft
           }
             , Sc = {
-              109: _t,
+              109: FloatType,
               97: wt,
               37: gt,
               43: gt,
-              103: _t,
+              103: FloatType,
               83: wt,
               16: gt,
               22: gt,
-              100: _t,
+              100: FloatType,
               76: wt,
               15: gt,
               9: gt
@@ -22750,7 +22750,7 @@
                             , n = new Vector3
                             , s = new Quaternion
                             , a = new Vector3(1,1,1)
-                            , l = new Ba(t.geometry,t.material,i);
+                            , l = new InstancedMesh(t.geometry,t.material,i);
                           for (let t = 0; t < i; t++)
                               o.TRANSLATION && n.fromBufferAttribute(o.TRANSLATION, t),
                               o.ROTATION && s.fromBufferAttribute(o.ROTATION, t),
@@ -22951,8 +22951,8 @@
               5126: Float32Array
           }
             , iu = {
-              9728: ct,
-              9729: pt,
+              9728: NearestFilter,
+              9729: LinearFilter,
               9984: ut,
               9985: ft,
               9986: dt,
@@ -22961,7 +22961,7 @@
             , ru = {
               33071: lt,
               33648: ht,
-              10497: at
+              10497: RepeatWrapping
           }
             , su = {
               SCALAR: 1,
@@ -23370,10 +23370,10 @@
                       e.flipY = !1,
                       e.name = s.name || o.name || "";
                       const n = (r.samplers || {})[s.sampler] || {};
-                      return e.magFilter = iu[n.magFilter] || pt,
+                      return e.magFilter = iu[n.magFilter] || LinearFilter,
                       e.minFilter = iu[n.minFilter] || mt,
-                      e.wrapS = ru[n.wrapS] || at,
-                      e.wrapT = ru[n.wrapT] || at,
+                      e.wrapS = ru[n.wrapS] || RepeatWrapping,
+                      e.wrapT = ru[n.wrapT] || RepeatWrapping,
                       i.associations.set(e, {
                           textures: t
                       }),
@@ -23536,7 +23536,7 @@
                       }
                       ))))
                   }
-                  !0 === r.doubleSided && (o.side = m);
+                  !0 === r.doubleSided && (o.side = DoubleSide);
                   const l = r.alphaMode || hu;
                   if (l === uu ? (o.transparent = !0,
                   o.depthWrite = !1) : (o.transparent = !1,
@@ -23644,7 +23644,7 @@
                           else {
                               if (c.mode !== eu.POINTS)
                                   throw new Error("THREE.GLTFLoader: Primitive mode unsupported: " + c.mode);
-                              u = new Xa(h,d)
+                              u = new Points(h,d)
                           }
                           Object.keys(u.geometry.morphAttributes).length > 0 && fu(u, r),
                           u.name = e.createUniqueName(r.name || "mesh_" + t),
@@ -23675,7 +23675,7 @@
                   const n = this.json.cameras[t]
                     , i = n[n.type];
                   if (i)
-                      return "perspective" === n.type ? e = new PerspectiveCamera(MathUtils.radToDeg(i.yfov),i.aspectRatio || 1,i.znear || 1,i.zfar || 2e6) : "orthographic" === n.type && (e = new Vr(-i.xmag,i.xmag,i.ymag,-i.ymag,i.znear,i.zfar)),
+                      return "perspective" === n.type ? e = new PerspectiveCamera(MathUtils.radToDeg(i.yfov),i.aspectRatio || 1,i.znear || 1,i.zfar || 2e6) : "orthographic" === n.type && (e = new OrthographicCamera(-i.xmag,i.xmag,i.ymag,-i.ymag,i.znear,i.zfar)),
                       n.name && (e.name = this.createUniqueName(n.name)),
                       pu(e, n),
                       Promise.resolve(e);
@@ -23959,7 +23959,7 @@
                       r.expandByVector(t)
                   }
                   t.boundingBox = r;
-                  const o = new Un;
+                  const o = new Sphere;
                   r.getCenter(o.center),
                   o.radius = r.min.distanceTo(r.max) / 2,
                   t.boundingSphere = o
@@ -33674,10 +33674,10 @@
                           step: .01
                       }),
                       this.addImage(i, n.material.uniforms.uRoughnessTexture, "value", "roughness texture", {
-                          wrapping: at
+                          wrapping: RepeatWrapping
                       }),
                       this.addImage(i, n.material.uniforms.uNormalTexture, "value", "normal texture", {
-                          wrapping: at
+                          wrapping: RepeatWrapping
                       }),
                       i.addInput(n.material.uniforms.uConcreteScale, "value", {
                           label: "concrete tex scale",
@@ -33900,7 +33900,7 @@
                       expanded: !1
                   });
                   this.addImage(t, GLOBAL_VARS.MainScene.assets.textures, "hexTexture", "reveal hex texture", {
-                      wrapping: at,
+                      wrapping: RepeatWrapping,
                       encoding: be
                   }, (t=>{
                       for (const e in GLOBAL_VARS.MainScene.components.mainTower.meshes.walls)
@@ -33920,7 +33920,7 @@
                   }
                   )),
                   this.addImage(t, GLOBAL_VARS.MainScene.components.logo.assets.textures, "hex", "logo hex texture", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }, (t=>{
                       GLOBAL_VARS.MainScene.components.logo.material.uniforms.uDiffuse.value = t,
                       GLOBAL_VARS.MainScene.components.logo.material.uniforms.uDiffuse.value.needsUpdate = !0
@@ -33932,7 +33932,7 @@
                   const t = [16711680, 65280, 255, 65535, 16711935, 16776960, 15790320, 986895];
                   let e = 0;
                   for (const n in GLOBAL_VARS.MainScene.paths)
-                      if (GLOBAL_VARS.MainScene.paths[n]instanceof sl) {
+                      if (GLOBAL_VARS.MainScene.paths[n]instanceof CatmullRomCurve3) {
                           const i = GLOBAL_VARS.MainScene.paths[n].getPoints(500);
                           GLOBAL_VARS.MainScene.debugPaths[n] = new Ua((new BufferGeometry).setFromPoints(i),new La({
                               color: t[e % t.length]
@@ -36522,7 +36522,7 @@
                   let e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
                   return t instanceof HTMLImageElement && (t = new dn(t)),
                   t.minFilter = e.minFilter || mt,
-                  t.magFilter = e.magFilter || pt,
+                  t.magFilter = e.magFilter || LinearFilter,
                   t.wrapS = t.wrapT = e.wrapping || lt,
                   t.flipY = void 0 === e.flipY || e.flipY,
                   t.encoding = e.encoding || Ae,
@@ -37086,7 +37086,7 @@
           n(3105),
           n(3462),
           n(3824);
-          class G_ {
+          class CurveModifier {
               constructor() {
                   this.CHANNELS = 4,
                   this.TEXTURE_WIDTH = 2048,
@@ -37094,35 +37094,35 @@
                   this.texture = this.initSplineTexture(1)
               }
               initSplineTexture() {
-                  let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : 1;
-                  const e = new Float32Array(this.TEXTURE_WIDTH * this.TEXTURE_HEIGHT * t * this.CHANNELS)
-                    , n = new _a(e,this.TEXTURE_WIDTH,this.TEXTURE_HEIGHT * t,It,_t);
-                  return n.wrapS = at,
-                  n.wrapY = at,
-                  n.magFilter = ct,
-                  n.needsUpdate = !0,
-                  n
+                  let multiply = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : 1;
+                  const data = new Float32Array(this.TEXTURE_WIDTH * this.TEXTURE_HEIGHT * multiply * this.CHANNELS);
+                  const dataTexture = new DataTexture(data,this.TEXTURE_WIDTH,this.TEXTURE_HEIGHT * multiply,RGBAFormat,FloatType);
+                  dataTexture.wrapS = RepeatWrapping,
+                  dataTexture.wrapY = RepeatWrapping,
+                  dataTexture.magFilter = NearestFilter,
+                  dataTexture.needsUpdate = !0;
+                  return dataTexture;
               }
-              updateSplineTexture(t, e) {
-                  let n = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0;
-                  const i = Math.floor(this.TEXTURE_WIDTH * (this.TEXTURE_HEIGHT / 4));
-                  e.arcLengthDivisions = i / 2,
-                  e.updateArcLengths();
-                  const r = e.getSpacedPoints(i)
-                    , s = e.computeFrenetFrames(i, !0);
-                  for (let e = 0; e < i; e++) {
-                      const i = Math.floor(e / this.TEXTURE_WIDTH)
-                        , o = e % this.TEXTURE_WIDTH;
-                      let a = r[e];
-                      this.setTextureValue(t, o, a.x, a.y, a.z, 0 + i + this.TEXTURE_HEIGHT * n),
-                      a = s.tangents[e],
-                      this.setTextureValue(t, o, a.x, a.y, a.z, 1 + i + this.TEXTURE_HEIGHT * n),
-                      a = s.normals[e].negate(),
-                      this.setTextureValue(t, o, a.x, a.y, a.z, 2 + i + this.TEXTURE_HEIGHT * n),
-                      a = s.binormals[e].negate(),
-                      this.setTextureValue(t, o, a.x, a.y, a.z, 3 + i + this.TEXTURE_HEIGHT * n)
+              updateSplineTexture(dataTexture, curve) {
+                  let zeroN = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0;
+                  const aspectRatio = Math.floor(this.TEXTURE_WIDTH * (this.TEXTURE_HEIGHT / 4));
+                  curve.arcLengthDivisions = aspectRatio / 2,
+                  curve.updateArcLengths();
+                  const spacedPoints = curve.getSpacedPoints(aspectRatio);
+                  const frenetFrames = curve.computeFrenetFrames(aspectRatio, !0);
+                  for (let index = 0; index < aspectRatio; index++) {
+                      const textureIdx = Math.floor(index / this.TEXTURE_WIDTH);
+                      const idx = index % this.TEXTURE_WIDTH;
+                      let spacedPoint = spacedPoints[index];
+                      this.setTextureValue(dataTexture, idx, spacedPoint.x, spacedPoint.y, spacedPoint.z, 0 + textureIdx + this.TEXTURE_HEIGHT * zeroN),
+                      spacedPoint = frenetFrames.tangents[index],
+                      this.setTextureValue(dataTexture, idx, spacedPoint.x, spacedPoint.y, spacedPoint.z, 1 + textureIdx + this.TEXTURE_HEIGHT * zeroN),
+                      spacedPoint = frenetFrames.normals[index].negate(),
+                      this.setTextureValue(dataTexture, idx, spacedPoint.x, spacedPoint.y, spacedPoint.z, 2 + textureIdx + this.TEXTURE_HEIGHT * zeroN),
+                      spacedPoint = frenetFrames.binormals[index].negate(),
+                      this.setTextureValue(dataTexture, idx, spacedPoint.x, spacedPoint.y, spacedPoint.z, 3 + textureIdx + this.TEXTURE_HEIGHT * zeroN)
                   }
-                  t.needsUpdate = !0
+                  dataTexture.needsUpdate = !0
               }
               setTextureValue(t, e, n, i, r, s) {
                   const o = t.image
@@ -37211,15 +37211,15 @@
           }
           class CarMaterial extends ShaderMaterial {
               constructor() {
-                  let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+                  let arg0 = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   super({
                       vertexShader: "#define GLSLIFY 1\n#define PI 3.14159265359\n#define TWO_PI 6.28318530718\n\nvarying vec3 vNormal;\nvarying vec3 vViewPosition;\nvarying vec2 vUv;\nvarying vec3 testCol;\n\nuniform float uStartOffset; // Start offset for the whole car component\nuniform float uPartStartOffset; // Start offset for only the part of the component (trail or car mesh)\n\nuniform sampler2D spineTexture;\nuniform float pathOffset;\nuniform float pathSegment;\nuniform float spineOffset;\nuniform float spineLength;\nuniform int flow;\n\nuniform float uTime;\nuniform float uJitterAmplitude;\nuniform float uJitterFrequency;\nuniform float uNumberOfCurves;\nuniform float uTextureHeight;\n\n#include <fogParamsVert>\n\nvoid main() {\n\n    vec3 objectNormal = vec3(normal);\n    vec3 transformedNormal = objectNormal;\n    #ifdef USE_INSTANCING\n        mat3 m = mat3( instanceMatrix );\n        transformedNormal /= vec3( dot( m[ 0 ], m[ 0 ] ), dot( m[ 1 ], m[ 1 ] ), dot( m[ 2 ], m[ 2 ] ) );\n        transformedNormal = m * transformedNormal;\n    #endif\n    transformedNormal = normalMatrix * transformedNormal;\n    vNormal = transformedNormal;\n\n    vUv = uv;\n\n    vec4 worldPos = modelMatrix * vec4(position, 1.);\n\n    float textureLayers = uTextureHeight * uNumberOfCurves;\n    float textureStacks = uTextureHeight / 4.;\n    \n    bool bend = flow > 0;\n    float xWeight = bend ? 0. : 1.;\n\n    #ifdef USE_INSTANCING\n    float pathOffsetFromInstanceMatrix = instanceMatrix[3][2];\n    float spineLengthFromInstanceMatrix = instanceMatrix[3][0];\n    float spinePortion = bend ? (worldPos.x + spineOffset) / spineLengthFromInstanceMatrix : 0.;\n    float mt = (spinePortion * pathSegment + pathOffset + pathOffsetFromInstanceMatrix + uStartOffset)*textureStacks;\n    #else\n    float spinePortion = bend ? (worldPos.x + spineOffset) / spineLength : 0.;\n    float mt = (spinePortion * pathSegment + pathOffset + uStartOffset + uPartStartOffset)*textureStacks;\n    #endif\n\n    mt = mod(mt, textureStacks);\n    float rowOffset = floor(mt);\n\n    #ifdef USE_INSTANCING\n    rowOffset += instanceMatrix[3][1] * uTextureHeight;\n    #endif\n\n    vec3 spinePos = texture2D(spineTexture, vec2(mt, (0. + rowOffset + 0.5) / textureLayers)).xyz;\n    vec3 a =        texture2D(spineTexture, vec2(mt, (1. + rowOffset + 0.5) / textureLayers)).xyz; // tangent\n    vec3 b =        texture2D(spineTexture, vec2(mt, (2. + rowOffset + 0.5) / textureLayers)).xyz; // normal (y direction)\n    vec3 c =        texture2D(spineTexture, vec2(mt, (3. + rowOffset + 0.5) / textureLayers)).xyz; // binormal\n    mat3 basis = mat3(a, b, c);\n\n    vec3 transformedPosition = basis\n        * vec3(worldPos.x * xWeight, worldPos.y * 1., worldPos.z * 1.)\n        + spinePos;\n\n    // Additional displacement along the curve binormal (side to side) and normal (up and down)\n    float amplitude = uJitterAmplitude;\n    float frequency = uJitterFrequency;\n    float verticalDisplacement = sin(TWO_PI * uTime * frequency) * sin(TWO_PI * uTime * frequency * 1.5) * amplitude;\n    float horizontalDisplacement = cos(TWO_PI * uTime * frequency/0.33) * sin(TWO_PI * uTime * frequency * 0.75) * amplitude * 0.25;\n\n    transformedPosition += c * verticalDisplacement + b * horizontalDisplacement;\n\n    vec4 mvPosition = vec4( transformedPosition, 1.0 );    \n    #ifdef USE_INSTANCING\n        mvPosition = instanceMatrix * mvPosition;\n    #endif\n    mvPosition = modelViewMatrix * mvPosition;\n    gl_Position = projectionMatrix * mvPosition;\n\n    vViewPosition = -mvPosition.xyz;\n    \n    #include <fogOutputVert>\n}",
                       fragmentShader: "#define GLSLIFY 1\nfloat blendSoftLight(float base, float blend) {\n\treturn (blend<0.5)?(2.0*base*blend+base*base*(1.0-2.0*blend)):(sqrt(base)*(2.0*blend-1.0)+2.0*base*(1.0-blend));\n}\n\nvec3 blendSoftLight(vec3 base, vec3 blend) {\n\treturn vec3(blendSoftLight(base.r,blend.r),blendSoftLight(base.g,blend.g),blendSoftLight(base.b,blend.b));\n}\n\nvec3 blendSoftLight(vec3 base, vec3 blend, float opacity) {\n\treturn (blendSoftLight(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nvarying vec3 vNormal;\nvarying vec3 vViewPosition;\nvarying vec2 vUv;\n\nuniform sampler2D uMatcapTexture;\nuniform sampler2D uDiffuseTexture;\n\n#include <fogParamsFrag>\n\nvoid main() {\n\tvec3 diffuseColor = texture2D(uDiffuseTexture, vUv).rgb;\n\n    // matcap UVs\n    vec3 normal = normalize( vNormal );\n\tvec3 viewDir = normalize( vViewPosition );\n\tvec3 x = normalize( vec3( viewDir.z, 0.0, - viewDir.x ) );\n\tvec3 y = cross( viewDir, x );\n\tvec2 uv = vec2( dot( x, normal ), dot( y, normal ) ) * 0.495 + 0.5;\n\n    vec3 matcapColor = texture2D(uMatcapTexture, uv).rgb;\n\tvec3 finalColor = blendSoftLight(diffuseColor, matcapColor, 1.);\n\n    gl_FragColor = vec4(finalColor, 1.);\n\n\t#include <tonemapping_fragment>\n\t#include <fogOutputFrag>\n\n}",
                       uniforms: j_(j_({
                           uTime: GLOBAL_VARS.WebGL.globalUniforms.uTime
-                      }, GLOBAL_VARS.MainScene.components.fog.globalUniforms), t.uniforms),
+                      }, GLOBAL_VARS.MainScene.components.fog.globalUniforms), arg0.uniforms),
                       defines: j_({}, GLOBAL_VARS.MainScene.components.fog.fogDefines),
-                      side: m
+                      side: DoubleSide
                   })
               }
           }
@@ -37271,7 +37271,7 @@
               }) : t[e] = n,
               t
           }
-          class J_ extends ShaderMaterial {
+          class TrailMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   super({
@@ -37281,51 +37281,51 @@
                           uTime: GLOBAL_VARS.WebGL.globalUniforms.uTime
                       }, GLOBAL_VARS.MainScene.components.fog.globalUniforms), t.uniforms),
                       defines: X_({}, GLOBAL_VARS.MainScene.components.fog.fogDefines),
-                      side: m,
+                      side: DoubleSide,
                       transparent: !1,
-                      blending: _,
-                      blendEquation: w,
-                      blendSrc: B,
-                      blendDst: L
+                      blending: CustomBlending,
+                      blendEquation: AddEquation,
+                      blendSrc: SrcAlphaFactor,
+                      blendDst: OneMinusSrcAlphaFactor
                   })
               }
           }
           class CarClass {
-              constructor(t) {
-                  let e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
-                    , n = arguments.length > 2 ? arguments[2] : void 0
-                    , i = arguments.length > 3 ? arguments[3] : void 0;
-                  this.trailColorBegin = e.trailColorBegin,
-                  this.trailColorEnd = e.trailColorEnd,
-                  this.carMeshColor = e.bodyColor,
-                  this.uTrailLength = e.uTrailLength,
-                  this.uTrailFallOffEnd = e.uTrailFallOffEnd,
-                  this.uColorFallOff = e.uColorFallOff,
-                  this.uColorOffset = e.uColorOffset,
+              constructor(pathPoints) {
+                  let options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
+                    , geometry = arguments.length > 2 ? arguments[2] : void 0
+                    , texture = arguments.length > 3 ? arguments[3] : void 0;
+                  this.trailColorBegin = options.trailColorBegin,
+                  this.trailColorEnd = options.trailColorEnd,
+                  this.carMeshColor = options.bodyColor,
+                  this.uTrailLength = options.uTrailLength,
+                  this.uTrailFallOffEnd = options.uTrailFallOffEnd,
+                  this.uColorFallOff = options.uColorFallOff,
+                  this.uColorOffset = options.uColorOffset,
                   this.jitter = {
-                      uJitterAmplitude: e.uJitterAmplitude,
-                      uJitterFrequency: e.uJitterFrequency,
-                      uJitterFollow: e.uJitterFollow
+                      uJitterAmplitude: options.uJitterAmplitude,
+                      uJitterFrequency: options.uJitterFrequency,
+                      uJitterFollow: options.uJitterFollow
                   },
-                  this.pathPoints = t,
-                  this.startOffset = e.startOffset,
+                  this.pathPoints = pathPoints,
+                  this.startOffset = options.startOffset,
                   this.trailOffset = 0,
                   this.carMeshOffset = 0,
-                  this.speed = e.speed,
+                  this.speed = options.speed,
                   this.curveArray = new Array(1),
                   this.curveLengthArray = new Array(1),
                   this.buildCurve(),
                   this.initDataTexture(),
-                  this.buildCarMesh(n, i),
+                  this.buildCarMesh(geometry, texture),
                   this.buildTrail(),
                   this.updateCurve(0, this.curve)
               }
               buildCurve() {
-                  this.curve = new sl(this.pathPoints,!1);
+                  this.curve = new CatmullRomCurve3(this.pathPoints,!1);
                   this.carMeshOffset = 30 / this.curve.getLength()
               }
               initDataTexture() {
-                  this.dataTextHelper = new G_,
+                  this.dataTextHelper = new CurveModifier,
                   this.dataTexture = this.dataTextHelper.texture,
                   this.dataTextureOptions = {
                       uTextureHeight: {
@@ -37365,7 +37365,7 @@
                   this.dataTextHelper.updateSplineTexture(this.dataTexture, e, t)
               }
               buildCarMesh(carGeometry, texture) {
-                  const n = {
+                  const uniforms = {
                       uTime: GLOBAL_VARS.WebGL.globalUniforms.uTime,
                       uDiffuseTexture: {
                           value: texture
@@ -37387,22 +37387,22 @@
                           value: 0
                       }
                   };
-                  Object.assign(n, this.jitter),
-                  Object.assign(n, this.dataTextureOptions);
+                  Object.assign(uniforms, this.jitter),
+                  Object.assign(uniforms, this.dataTextureOptions);
                   const carGeo = carGeometry.clone();
                   carGeo.rotateY(MathUtils.degToRad(-90)),
                   this.carMesh = new Mesh(carGeo,new CarMaterial({
-                      uniforms: n
+                      uniforms: uniforms
                   })),
                   this.carMesh.geometry.computeBoundingBox(),
                   this.carMesh.geometry.boundingBox.makeEmpty(),
                   this.carMesh.geometry.boundingBox.setFromPoints(this.pathPoints),
-                  this.carMesh.geometry.boundingSphere = new Un,
+                  this.carMesh.geometry.boundingSphere = new Sphere,
                   this.carMesh.geometry.boundingBox.getBoundingSphere(this.carMesh.geometry.boundingSphere),
                   this.carMesh.geometry.boundingSphere.radius *= 1.5
               }
               buildTrail() {
-                  const t = {
+                  const trailUniforms = {
                       uColorBegin: this.trailColorBegin,
                       uColorEnd: this.trailColorEnd,
                       uPartStartOffset: {
@@ -37423,15 +37423,15 @@
                           value: 1
                       }
                   };
-                  Object.assign(t, this.jitter),
-                  Object.assign(t, this.dataTextureOptions),
-                  this.trail = new Mesh(new Tr(25,2,10,1).rotateX(MathUtils.degToRad(90)),new J_({
-                      uniforms: t
+                  Object.assign(trailUniforms, this.jitter),
+                  Object.assign(trailUniforms, this.dataTextureOptions),
+                  this.trail = new Mesh(new PlaneGeometry(25,2,10,1).rotateX(MathUtils.degToRad(90)),new TrailMaterial({
+                      uniforms: trailUniforms
                   })),
                   this.trail.geometry.computeBoundingBox(),
                   this.trail.geometry.boundingBox.makeEmpty(),
                   this.trail.geometry.boundingBox.setFromPoints(this.pathPoints),
-                  this.trail.geometry.boundingSphere = new Un,
+                  this.trail.geometry.boundingSphere = new Sphere,
                   this.trail.geometry.boundingBox.getBoundingSphere(this.trail.geometry.boundingSphere),
                   this.trail.geometry.boundingSphere.radius *= 1.5
               }
@@ -37481,7 +37481,7 @@
                   this.enabled = !1,
                   this.load()
               }
-              build(t) {
+              build(objectData) {
                   this.paths = {
                       cars: {}
                   },
@@ -37521,23 +37521,23 @@
                           }
                       }
                   };
-                  const e = Object.keys(t.paths).filter((t=>t.startsWith("car")));
-                  for (const n in t.paths) {
-                      const i = [];
-                      for (let e = 0; e < t.paths[n][0].length; e++) {
-                          const r = t.paths[n][0][e];
-                          i.push(new Vector3(r[0],r[1],r[2]))
+                  const carData = Object.keys(objectData.paths).filter((t=>t.startsWith("car")));
+                  for (const path in objectData.paths) {
+                      const carVecs = [];
+                      for (let carPath = 0; carPath < objectData.paths[path][0].length; carPath++) {
+                          const vec3 = objectData.paths[path][0][carPath];
+                          carVecs.push(new Vector3(vec3[0],vec3[1],vec3[2]))
                       }
-                      if (n.startsWith("car")) {
-                          const t = e.indexOf(n)
-                            , r = {
-                              startOffset: Number(((0 + .32 * t) % .9).toFixed(2)),
+                      if (path.startsWith("car")) {
+                          const carIndex = carData.indexOf(path)
+                            , options = {
+                              startOffset: Number(((0 + .32 * carIndex) % .9).toFixed(2)),
                               speed: 897e-6
                           };
-                          Object.assign(r, this.carOptions.shared),
-                          this.paths.cars[n] = new CarClass(i,r,t % 2 ? this.assets.models.car0.geometry : this.assets.models.car1.geometry,t % 2 ? this.assets.textures.car0 : this.assets.textures.car1),
-                          this.add(this.paths.cars[n].carMesh),
-                          this.add(this.paths.cars[n].trail)
+                          Object.assign(options, this.carOptions.shared),
+                          this.paths.cars[path] = new CarClass(carVecs,options,carIndex % 2 ? this.assets.models.car0.geometry : this.assets.models.car1.geometry,carIndex % 2 ? this.assets.textures.car0 : this.assets.textures.car1),
+                          this.add(this.paths.cars[path].carMesh),
+                          this.add(this.paths.cars[path].trail)
                       }
                   }
                   this.addEvents()
@@ -37587,7 +37587,7 @@
               )),
               e)), {})
           }
-          class nw extends ShaderMaterial {
+          class LogoMaterial extends ShaderMaterial {
               constructor(t) {
                   super({
                       vertexShader: "#define GLSLIFY 1\nattribute vec4 color;\n\nvarying vec2 vUv;\nvarying vec4 vColor;\nvarying float vDistance;\nvarying vec3 vWorldPosition;\n\nuniform float uTime;\nuniform float uProgress;\nuniform float uRadius;\nuniform float uDistortion;\nuniform vec3 uMousePos;\n\nfloat map(float value, float min1, float max1, float min2, float max2) {\n    return min2 + (value - min1) * (max2 - min2) / (max1 - min1);\n}\n\nvoid main()    {\n    vUv = uv;\n    vColor = color;\n\n    vec3 startPos = vec3(0., 0., 0.);\n    vec3 finalPos = position;\n    float delay = color.r;\n\n    // Map tween progress\n    float mapProgress = map(uProgress, 0., 1., 0., 2.);\n\n    // Stagger using a color channel\n    float stag = mapProgress - color.r;\n    float am = uProgress * clamp(stag, 0., 1.);\n\n    vec3 interactPos = (modelMatrix * vec4(position.xyz, 1.0)).xyz;\n\n    // Mouse interaction (magic here)\n    vec3 mouseDir = normalize(uMousePos - cameraPosition);\n    vec3 camToWorld = interactPos - cameraPosition;\n    float distFromCam = dot(camToWorld, mouseDir);\n    vec3 p = interactPos - (cameraPosition + distFromCam * mouseDir);\n    float dist = length(p);\n    vec3 dir = p / dist;\n\n    // Create the mouse radius\n    dist = clamp(dist, 0., uRadius);\n    vDistance = dist;\n    vWorldPosition = (modelMatrix * vec4(position, 1.)).xyz;\n\n    // Mouse distortion\n    float distortion = map(dist, 0., uRadius, uDistortion, 0.);\n\n    // Create value to mix between start and finish\n    float value = am;\n\n    // Animate using value\n    vec3 transformedPosition = mix(startPos, finalPos, am);\n\n    // Overlay with mouse interaction\n    transformedPosition += dir * distortion;\n    // transformedPosition += (1. - smoothstep(-0.75, 0.75, d + 0.1)) * dir;\n\n    float pulse = map(cos(uTime + color.r * 2.), -1., 1., 0., 1.);\n    transformedPosition.xy = mix(transformedPosition.xy, transformedPosition.xy * 1.07, pulse);\n\n    gl_Position = projectionMatrix * modelViewMatrix * vec4(transformedPosition, 1.0);\n}\n",
@@ -37732,11 +37732,16 @@
           }
           const aw = new Quaternion;
           function applyObjectDataToObjectProps(t, e) {
-              e ? t.isBufferGeometry ? (e[1] && t.applyQuaternion(aw.set(e[1][0], e[1][1], e[1][2], e[1][3])),
+              e ? t.isBufferGeometry ? (
+                e[1] && t.applyQuaternion(aw.set(e[1][0], e[1][1], e[1][2], e[1][3])),
               e[0] && t.translate(e[0][0], e[0][1], e[0][2]),
-              e[2] && t.scale(e[2][0], e[2][1], e[2][2])) : (e[0] && t.position.set(e[0][0], e[0][1], e[0][2]),
+              e[2] && t.scale(e[2][0], e[2][1], e[2][2])) 
+              
+              : (e[0] && t.position.set(e[0][0], e[0][1], e[0][2]),
               e[1] && t.rotation.setFromQuaternion(aw.set(e[1][0], e[1][1], e[1][2], e[1][3])),
-              e[2] && t.scale.set(e[2][0], e[2][1], e[2][2])) : console.error(`Data not found for object: ${t}`)
+              e[2] && t.scale.set(e[2][0], e[2][1], e[2][2])) 
+              
+              : console.error(`Data not found for object: ${t}`)
           }
           function hw(t, e, n) {
               return (e = function(t) {
@@ -37843,7 +37848,7 @@
               }
               build(t) {
                   this.geometry = this.assets.models.logo.geometry,
-                  this.material = new nw({
+                  this.material = new LogoMaterial({
                       uniforms: {
                           uDiffuse: {
                               value: this.assets.textures.hex
@@ -37852,7 +37857,7 @@
                       additiveBlending: this.options.additiveBlending
                   }),
                   applyObjectDataToObjectProps(this, t.objects.logo[0]),
-                  this.glowPlane = new Mesh(new Tr,new ow),
+                  this.glowPlane = new Mesh(new PlaneGeometry,new ow),
                   this.glowPlane.scale.setScalar(9.68),
                   this.glowPlane.origScale = this.glowPlane.scale.x,
                   this.glowPlane.origOpacity = this.glowPlane.material.uniforms.uOpacity.value,
@@ -37900,7 +37905,7 @@
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/logo/logo-hex.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.hex = t
                   }
@@ -38018,11 +38023,11 @@
                       uniforms: t.uniforms,
                       defines: t.defines,
                       transparent: !1,
-                      side: m,
-                      blending: _,
-                      blendEquation: w,
-                      blendSrc: B,
-                      blendDst: L
+                      side: DoubleSide,
+                      blending: CustomBlending,
+                      blendEquation: AddEquation,
+                      blendSrc: SrcAlphaFactor,
+                      blendDst: OneMinusSrcAlphaFactor
                   }),
                   this.globalUniforms = t.globalUniforms,
                   this.uniforms = Object.assign(this.uniforms, this.globalUniforms)
@@ -38358,33 +38363,33 @@
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/rails-mask.ktx2", {
-                      wrapping: at,
+                      wrapping: RepeatWrapping,
                       flipY: !1
                   }).then((t=>{
                       this.assets.textures.railsMask = t
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/walls-2.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.repeatWalls = t
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/windows.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.repeatWindows = t
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/pilars.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.repeatPillars = t
                   }
                   ));
                   for (let t = 0; t < 4; t++)
                       GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/mb ${t}-walls-lightmap.ktx2`, {
-                          wrapping: at,
+                          wrapping: RepeatWrapping,
                           flipY: !1,
                           encoding: be
                       }).then((e=>{
@@ -38392,7 +38397,7 @@
                       }
                       )),
                       GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/mb ${t}-windows-lightmap.ktx2`, {
-                          wrapping: at,
+                          wrapping: RepeatWrapping,
                           flipY: !1,
                           encoding: be
                       }).then((e=>{
@@ -38400,7 +38405,7 @@
                       }
                       )),
                       GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/mb ${t}-pilars-lightmap.ktx2`, {
-                          wrapping: at,
+                          wrapping: RepeatWrapping,
                           flipY: !1,
                           encoding: be
                       }).then((e=>{
@@ -38579,7 +38584,7 @@
               }) : t[e] = n,
               t
           }
-          class PersonMesh extends ShaderMaterial {
+          class PersonMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -38633,7 +38638,7 @@
                           applyObjectDataToObjectProps(r, t[i][e]),
                           n.push(r)
                       }
-                      this.meshes[e] = new Mesh(mergeGeometries(n, !1),new PersonMesh({
+                      this.meshes[e] = new Mesh(mergeGeometries(n, !1),new PersonMaterial({
                           uniforms: {
                               tRecText: {
                                   value: GLOBAL_VARS.MainScene.assets.textures.recursiveMask2
@@ -38665,7 +38670,7 @@
                       ));
                   for (let t = 0; t < 8; t++)
                       GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/people-L ${t}-lightmap.ktx2`, {
-                          wrapping: at,
+                          wrapping: RepeatWrapping,
                           flipY: !1,
                           encoding: be
                       }).then((e=>{
@@ -38673,7 +38678,7 @@
                       }
                       ));
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/people.ktx2", {
-                      wrapping: at,
+                      wrapping: RepeatWrapping,
                       flipY: !1,
                       encoding: be
                   }).then((t=>{
@@ -38684,7 +38689,7 @@
           }
           const Mw = new xn
             , Pw = new Vector3;
-          class Iw extends ah {
+          class LineSegmentsGeometry extends InstancedBufferGeometry {
               constructor() {
                   super(),
                   this.isLineSegmentsGeometry = !0,
@@ -38747,7 +38752,7 @@
                   this.boundingBox.union(Mw))
               }
               computeBoundingSphere() {
-                  null === this.boundingSphere && (this.boundingSphere = new Un),
+                  null === this.boundingSphere && (this.boundingSphere = new Sphere),
                   null === this.boundingBox && this.computeBoundingBox();
                   const t = this.attributes.instanceStart
                     , e = this.attributes.instanceEnd;
@@ -38770,7 +38775,7 @@
                   this.applyMatrix4(t)
               }
           }
-          class Tw extends Iw {
+          class LineGeometry extends LineSegmentsGeometry {
               constructor() {
                   super(),
                   this.isLineGeometry = !0,
@@ -38956,9 +38961,9 @@
           }
           const Bw = new Vector3
             , Lw = new Vector3
-            , Fw = new pn
-            , kw = new pn
-            , Rw = new pn
+            , Fw = new Vector4
+            , kw = new Vector4
+            , Rw = new Vector4
             , Ow = new Vector3
             , Nw = new Matrix4
             , Uw = new class {
@@ -39017,8 +39022,8 @@
           }
             , zw = new Vector3
             , Vw = new xn
-            , Qw = new Un
-            , Gw = new pn;
+            , Qw = new Sphere
+            , Gw = new Vector4;
           let Hw, jw;
           function Ww(t, e, n) {
               return Gw.set(0, 0, -e, 1).applyMatrix4(t.projectionMatrix),
@@ -39030,7 +39035,7 @@
               Math.abs(Math.max(Gw.x, Gw.y))
           }
           class qw extends Mesh {
-              constructor(t=new Iw, e=new Dw({
+              constructor(t=new LineSegmentsGeometry, e=new Dw({
                   color: 16777215 * Math.random()
               })) {
                   super(t, e),
@@ -39183,7 +39188,7 @@
               }
           }
           class Line2 extends qw {
-              constructor(t=new Tw, e=new Dw({
+              constructor(t=new LineGeometry, e=new Dw({
                   color: 16777215 * Math.random()
               })) {
                   super(t, e),
@@ -39293,10 +39298,10 @@
                       uniforms: t.uniforms,
                       defines: t.defines,
                       transparent: !1,
-                      blending: _,
-                      blendEquation: w,
-                      blendSrc: B,
-                      blendDst: L
+                      blending: CustomBlending,
+                      blendEquation: AddEquation,
+                      blendSrc: SrcAlphaFactor,
+                      blendDst: OneMinusSrcAlphaFactor
                   }),
                   this.globalUniforms = t.globalUniforms,
                   this.uniforms = Object.assign(this.uniforms, this.globalUniforms)
@@ -39336,28 +39341,28 @@
                       curves: {},
                       pipes: {}
                   };
-                  const e = Object.keys(t.paths).filter((t=>t.startsWith("pip") && t.indexOf("city") < 0)).sort(((t,e)=>t.replace("pip", "") - e.replace("pip", ""))).reduce(((e,n)=>(e[n] = t.paths[n],
+                  const paths = Object.keys(t.paths).filter((t=>t.startsWith("pip") && t.indexOf("city") < 0)).sort(((t,e)=>t.replace("pip", "") - e.replace("pip", ""))).reduce(((e,n)=>(e[n] = t.paths[n],
                   e)), {});
-                  for (const t in e) {
-                      const n = []
-                        , i = Math.floor(Object.keys(e).indexOf(t) / 4);
-                      for (let i = 0; i < e[t][0].length; i++) {
-                          const r = e[t][0][i];
-                          n.push(r[0], r[1], r[2])
+                  for (const path in paths) {
+                      const bufferArray3 = []
+                        , pathIndex = Math.floor(Object.keys(paths).indexOf(path) / 4);
+                      for (let i = 0; i < paths[path][0].length; i++) {
+                          const r = paths[path][0][i];
+                          bufferArray3.push(r[0], r[1], r[2])
                       }
-                      const r = new Tw;
-                      r.setPositions(n);
-                      const s = new Vector2;
-                      GLOBAL_VARS.WebGL.renderer.getSize(s),
-                      this.paths.pipes[t] = new Line2(r,new PipeMaterial({
+                      const lineGeo = new LineGeometry;
+                      lineGeo.setPositions(bufferArray3);
+                      const v2 = new Vector2;
+                      GLOBAL_VARS.WebGL.renderer.getSize(v2),
+                      this.paths.pipes[path] = new Line2(lineGeo,new PipeMaterial({
                           uniforms: {
                               uColor1: GLOBAL_VARS.MainScene.options.pipes.uColor1,
                               uColor2: GLOBAL_VARS.MainScene.options.pipes.uColor2,
                               uFloorIndex: {
-                                  value: i
+                                  value: pathIndex
                               },
                               resolution: {
-                                  value: s
+                                  value: v2
                               }
                           },
                           globalUniforms: this.globalUniforms,
@@ -39365,8 +39370,8 @@
                               WORLD_UNITS: ""
                           }
                       })),
-                      this.paths.pipes[t].computeLineDistances(),
-                      this.add(this.paths.pipes[t])
+                      this.paths.pipes[path].computeLineDistances(),
+                      this.add(this.paths.pipes[path])
                   }
               }
               load() {
@@ -39424,7 +39429,7 @@
               }) : t[e] = n,
               t
           }
-          class iE extends ShaderMaterial {
+          class ReflectiveMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -39476,7 +39481,7 @@
                   })
               }
           }
-          class rE {
+          class Quad {
               get camera() {
                   return this._camera
               }
@@ -39487,8 +39492,8 @@
                   this._mesh.material = t
               }
               constructor(t) {
-                  const e = new Vr(-1,1,1,-1,0,1)
-                    , n = new Tr(2,2);
+                  const e = new OrthographicCamera(-1,1,1,-1,0,1)
+                    , n = new PlaneGeometry(2,2);
                   this._mesh = new Mesh(n,t),
                   this._camera = e
               }
@@ -39499,7 +39504,7 @@
                   t.render(this._mesh, this._camera)
               }
           }
-          class sE {
+          class MipMapper {
               constructor() {
                   this.material = new ShaderMaterial({
                       vertexShader: "#define GLSLIFY 1\nvarying vec2 vUv;\n\nvoid main() {\n    #include <begin_vertex>\n    #include <project_vertex>\n    vUv = uv;\n}",
@@ -39519,10 +39524,10 @@
                           }
                       }
                   }),
-                  this.swapTarget = new fn,
-                  this.swapTarget.texture.minFilter = ct,
-                  this.swapTarget.texture.magFilter = ct,
-                  this.copyQuad = new rE(new fl({
+                  this.swapTarget = new WebGLRenderTarget,
+                  this.swapTarget.texture.minFilter = NearestFilter,
+                  this.swapTarget.texture.magFilter = NearestFilter,
+                  this.copyQuad = new Quad(new RawShaderMaterial({
                       vertexShader: "precision highp float;\nprecision highp int;\n#define GLSLIFY 1\n\nattribute vec3 position;\nattribute vec2 uv;\n\nvarying vec2 vUv;\n\nvoid main() {\n    vUv = uv;\n    gl_Position = vec4(position, 1.0 );\n}",
                       fragmentShader: "precision highp float;\nprecision highp int;\n#define GLSLIFY 1\n\nuniform sampler2D uTexture;\n\nvarying vec2 vUv;\n\nvoid main () {\n    gl_FragColor = texture2D(uTexture, vUv);\n}\n",
                       uniforms: {
@@ -39534,7 +39539,7 @@
                       depthWrite: !1,
                       blending: v
                   })),
-                  this.mipQuad = new rE(this.material),
+                  this.mipQuad = new Quad(this.material),
                   this.size = new Vector2,
                   this.targetSize = new Vector2,
                   this.maxMipMapLevel = 1
@@ -39606,35 +39611,35 @@
               t
           }
           class ReflectiveMesh extends Mesh {
-              constructor(t, e, n) {
-                  super(t, e),
+              constructor(geometry, material, name) {
+                  super(geometry, material), // diffuse, roughnessTexture, normalTexture, wallTexture, maskTexture
                   oE(this, "onResize", (()=>{
                       this.textureSize.set(.5 * GLOBAL_VARS.window.w, .5 * GLOBAL_VARS.window.fullHeight),
                       this.mipmapper.resize(this.textureSize, this.renderTarget)
                   }
                   )),
-                  this.name = n,
+                  this.name = name,
                   this.ignoreObjects = [],
                   this.renderReflection = !0,
                   this.camera = null,
                   this.scene = null,
                   this.sceneCamera = null,
-                  this.reflectorPlane = new Er,
+                  this.reflectorPlane = new Plane,
                   this.normal = new Vector3,
                   this.reflectorWorldPosition = new Vector3,
                   this.cameraWorldPosition = new Vector3,
                   this.rotationMatrix = new Matrix4,
                   this.lookAtPosition = new Vector3(0,0,-1),
-                  this.clipPlane = new pn,
+                  this.clipPlane = new Vector4,
                   this.view = new Vector3,
                   this.target = new Vector3,
-                  this.q = new pn,
+                  this.q = new Vector4,
                   this.textureSize = new Vector2(.25 * GLOBAL_VARS.window.w,.25 * GLOBAL_VARS.window.fullHeight),
                   this.textureMatrix = new Matrix4,
-                  this.renderTarget = new fn(this.textureSize.x,this.textureSize.y,{
-                      minFilter: pt
+                  this.renderTarget = new WebGLRenderTarget(this.textureSize.x,this.textureSize.y,{
+                      minFilter: LinearFilter
                   }),
-                  this.mipmapper = new sE,
+                  this.mipmapper = new MipMapper,
                   this.mipmapper.resize(this.textureSize, this.renderTarget),
                   this.material.uniforms.uTextureMatrix = {
                       value: this.textureMatrix
@@ -39733,18 +39738,18 @@
               }
           }
           class ReflectiveSurface extends ReflectiveMesh {
-              constructor(t, e, n, i, r, s, o, a, l, h) {
-                  super(t.clone(), new iE(h), a),
-                  this.startPos = l.start,
-                  this.stopPos = l.stop,
-                  this.material.uniforms.uRoughnessTexture.value = n,
-                  this.material.uniforms.uNormalTexture.value = i,
-                  this.material.uniforms.uWallsTexture.value = r,
-                  this.material.uniforms.uDiffuse.value = e,
-                  s && (this.material.uniforms.uMaskTexture.value = s),
+              constructor(geometry, diffuse, roughnessTexture, normalTexture, wallTexture, maskTexture, objectData, name, options, uniforms) {
+                  super(geometry.clone(), new ReflectiveMaterial(uniforms), name),
+                  this.startPos = options.start,
+                  this.stopPos = options.stop,
+                  this.material.uniforms.uRoughnessTexture.value = roughnessTexture,
+                  this.material.uniforms.uNormalTexture.value = normalTexture,
+                  this.material.uniforms.uWallsTexture.value = wallTexture,
+                  this.material.uniforms.uDiffuse.value = diffuse,
+                  maskTexture && (this.material.uniforms.uMaskTexture.value = maskTexture),
                   this.geometry.computeBoundingBox(),
                   this.geometry.computeBoundingSphere(),
-                  applyObjectDataToObjectProps(this, o),
+                  applyObjectDataToObjectProps(this, objectData),
                   this.updateMatrix(),
                   this.updateMatrixWorld(),
                   this.updateCameraScene(GLOBAL_VARS.MainScene.camera, GLOBAL_VARS.MainScene)
@@ -39758,10 +39763,10 @@
                   super(),
                   this.load()
               }
-              build(t) {
+              build(objectData) {
                   this.assets.models.baseTop.geometry.attributes.uv2 = this.assets.models.baseTop.geometry.getAttribute("uv"),
                   this.floors = {
-                      "base-top": new ReflectiveSurface(this.assets.models.baseTop.geometry,this.assets.textures.baseLightmap,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.baseMask,t.objects["base-top"][0],"base-top",{
+                      "base-top": new ReflectiveSurface(this.assets.models.baseTop.geometry,this.assets.textures.baseLightmap,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.baseMask,objectData.objects["base-top"][0],"base-top",{
                           start: 0,
                           stop: .14
                       },{
@@ -39786,7 +39791,7 @@
                               }
                           }
                       }),
-                      mb0: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor0,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb0[0],"mb0",{
+                      mb0: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor0,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,objectData.objects.mb0[0],"mb0",{
                           start: .1401,
                           stop: .372
                       },{
@@ -39811,7 +39816,7 @@
                               }
                           }
                       }),
-                      mb1: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor1,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb1[0],"mb1",{
+                      mb1: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor1,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,objectData.objects.mb1[0],"mb1",{
                           start: .3721,
                           stop: .624
                       },{
@@ -39836,7 +39841,7 @@
                               }
                           }
                       }),
-                      mb2: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor2,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,t.objects.mb2[0],"mb2",{
+                      mb2: new ReflectiveSurface(this.assets.models.buildingFloor.geometry,this.assets.textures.wallsColor2,this.assets.textures.wallsRoughness,this.assets.textures.wallsNormal,this.assets.textures.walls,this.assets.textures.mask,objectData.objects.mb2[0],"mb2",{
                           start: 0,
                           stop: .92
                       },{
@@ -39892,7 +39897,7 @@
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/mb0-walls-lightmap.ktx2", {
-                      wrapping: at,
+                      wrapping: RepeatWrapping,
                       flipY: !1,
                       encoding: be
                   }).then((t=>{
@@ -39900,7 +39905,7 @@
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/mb1-walls-lightmap.ktx2", {
-                      wrapping: at,
+                      wrapping: RepeatWrapping,
                       flipY: !1,
                       encoding: be
                   }).then((t=>{
@@ -39908,7 +39913,7 @@
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/mb2-walls-lightmap.ktx2", {
-                      wrapping: at,
+                      wrapping: RepeatWrapping,
                       flipY: !1,
                       encoding: be
                   }).then((t=>{
@@ -39935,19 +39940,19 @@
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/walls-2.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.walls = t
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/walls-2-Normal.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.wallsNormal = t
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/walls-2-Roughness.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.wallsRoughness = t
                   }
@@ -40268,7 +40273,7 @@
               }
               build() {
                   this.edgeGeom = new cl(this.geometry);
-                  const t = new Iw;
+                  const t = new LineSegmentsGeometry;
                   t.setPositions(this.edgeGeom.attributes.position.array),
                   this.particlesMaterial = new cE(function(t) {
                       for (var e = 1; e < arguments.length; e++) {
@@ -40303,8 +40308,8 @@
                   this.lineMaterial.uniforms.uHeight.value = this.shapeSize.y;
                   const e = this.edgeGeom.attributes.position.array.length / 6
                     , n = new Object3D
-                    , i = new Tr(this.options.planeParticleSize,this.options.planeParticleSize);
-                  this.particlesMesh = new Ba(i,this.particlesMaterial,this.particlesCount * e),
+                    , i = new PlaneGeometry(this.options.planeParticleSize,this.options.planeParticleSize);
+                  this.particlesMesh = new InstancedMesh(i,this.particlesMaterial,this.particlesCount * e),
                   this.particlesMesh.frustumCulled = !0;
                   const r = new xn;
                   null === i.boundingBox && i.computeBoundingBox();
@@ -40697,7 +40702,7 @@
               }) : t[e] = n,
               t
           }
-          class CE extends ShaderMaterial {
+          class SignMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -40733,10 +40738,10 @@
                       uniforms: t.uniforms,
                       defines: t.defines,
                       transparent: !1,
-                      blending: _,
-                      blendEquation: w,
-                      blendSrc: B,
-                      blendDst: L
+                      blending: CustomBlending,
+                      blendEquation: AddEquation,
+                      blendSrc: SrcAlphaFactor,
+                      blendDst: OneMinusSrcAlphaFactor
                   }),
                   this.globalUniforms = t.globalUniforms,
                   this.uniforms = Object.assign(this.uniforms, this.globalUniforms)
@@ -40796,7 +40801,7 @@
               }) : t[e] = n,
               t
           }
-          class IE extends ShaderMaterial {
+          class CitySignMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -40872,7 +40877,7 @@
                   this.load(),
                   this.renderOrder = 100
               }
-              build(t) {
+              build(objectData) {
                   this.meshes = {
                       city: {
                           city0: [],
@@ -40881,63 +40886,63 @@
                       },
                       main: {}
                   };
-                  const e = Object.keys(t).filter((t=>t.startsWith("sign"))).reduce(((e,n)=>(e[n] = t[n],
-                  e)), {})
-                    , n = Object.keys(t).filter((t=>t.startsWith("city"))).reduce(((e,n)=>(e[n] = t[n],
-                  e)), {});
-                  for (const t in e) {
-                      const i = parseInt(t.replace("sign-", ""))
-                        , r = 26;
-                      let s;
-                      this.meshes.main[t] = {};
-                      for (let o = 0; o < e[t].length; o++) {
-                          const a = e[t][o][3].section;
-                          if (0 === a) {
-                              const n = e[t][o][0][1];
-                              n <= r ? s = 0 : n <= 2 * r ? s = 1 : n <= 3 * r ? s = 2 : n <= 4 * r && (s = 3);
-                              const a = new Mesh(this.assets.models.sign.geometry.clone(),new CE({
+                  const signsData = Object.keys(objectData).filter((path=>path.startsWith("sign"))).reduce(((prev,path)=>(prev[path] = objectData[path],
+                  prev)), {})
+                    , cities = Object.keys(objectData).filter((path=>path.startsWith("city"))).reduce(((prev,path)=>(prev[path] = objectData[path],
+                  prev)), {});
+                  for (const path in signsData) {
+                      const signIndex = parseInt(path.replace("sign-", ""))
+                        , limit = 26;
+                      let floorIndex;
+                      this.meshes.main[path] = {};
+                      for (let pathIndex = 0; pathIndex < signsData[path].length; pathIndex++) {
+                          const section = signsData[path][pathIndex][3].section;
+                          if (0 === section) {
+                              const signTest = signsData[path][pathIndex][0][1];
+                              signTest <= limit ? floorIndex = 0 : signTest <= 2 * limit ? floorIndex = 1 : signTest <= 3 * limit ? floorIndex = 2 : signTest <= 4 * limit && (floorIndex = 3);
+                              const mesh = new Mesh(this.assets.models.sign.geometry.clone(),new SignMaterial({
                                   uniforms: {
                                       uTexture: {
-                                          value: this.assets.textures[`sign-${i}`]
+                                          value: this.assets.textures[`sign-${signIndex}`]
                                       },
                                       uColor1: GLOBAL_VARS.MainScene.options.signs.uColor1,
                                       uColor2: GLOBAL_VARS.MainScene.options.signs.uColor2,
                                       uFloorIndex: {
-                                          value: s
+                                          value: floorIndex
                                       },
                                       uIndex: {
-                                          value: o
+                                          value: pathIndex
                                       }
                                   },
                                   globalUniforms: this.globalUniforms
                               }));
-                              this.meshes.main[t][o] = a,
-                              applyObjectDataToObjectProps(this.meshes.main[t][o], e[t][o]),
-                              this.add(this.meshes.main[t][o])
+                              this.meshes.main[path][pathIndex] = mesh,
+                              applyObjectDataToObjectProps(this.meshes.main[path][pathIndex], signsData[path][pathIndex]),
+                              this.add(this.meshes.main[path][pathIndex])
                           } else {
-                              const r = .2 * MathUtils.seededRandom(a)
-                                , s = .5 * (MathUtils.seededRandom(a) + 1);
-                              let l;
-                              for (const t in n)
-                                  n[`${t}`].forEach((e=>{
-                                      e[3].section === a && (l = t)
+                              const startOffset = .2 * MathUtils.seededRandom(section)
+                                , speed = .5 * (MathUtils.seededRandom(section) + 1);
+                              let thisCity;
+                              for (const path in cities)
+                                  cities[`${path}`].forEach((cityPath=>{
+                                      cityPath[3].section === section && (thisCity = path)
                                   }
                                   ));
-                              const h = new Mesh(this.assets.models.sign.geometry.clone(),new IE({
+                              const mesh = new Mesh(this.assets.models.sign.geometry.clone(),new CitySignMaterial({
                                   uniforms: {
                                       uTexture: {
-                                          value: this.assets.textures[`sign-${i}`]
+                                          value: this.assets.textures[`sign-${signIndex}`]
                                       },
                                       uIndex: {
-                                          value: o
+                                          value: pathIndex
                                       },
                                       uColor1: GLOBAL_VARS.MainScene.options.signs.uColor1,
                                       uColor2: GLOBAL_VARS.MainScene.options.signs.uColor2,
                                       uSpeed: {
-                                          value: s
+                                          value: speed
                                       },
                                       uStartOffset: {
-                                          value: r
+                                          value: startOffset
                                       },
                                       uGroundFloorBegin: {
                                           value: -25
@@ -40948,9 +40953,9 @@
                                   },
                                   globalUniforms: this.globalUniforms
                               }));
-                              this.meshes.city[l].push(h),
-                              applyObjectDataToObjectProps(h, e[t][o]),
-                              this.add(h)
+                              this.meshes.city[thisCity].push(mesh),
+                              applyObjectDataToObjectProps(mesh, signsData[path][pathIndex]),
+                              this.add(mesh)
                           }
                       }
                   }
@@ -40971,12 +40976,12 @@
                       this.assets.models.sign = t.scene.children[0]
                   }
                   ));
-                  for (let t = 0; t < 11; ++t)
-                      GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/signs/sign_ ${t}.ktx2`, {
+                  for (let index = 0; index < 11; ++index)
+                      GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/signs/sign_ ${index}.ktx2`, {
                           flipY: !1,
                           encoding: be
                       }).then((e=>{
-                          this.assets.textures[`sign-${t}`] = e
+                          this.assets.textures[`sign-${index}`] = e
                       }
                       ))
               }
@@ -41029,7 +41034,7 @@
               }) : t[e] = n,
               t
           }
-          class FE extends ShaderMaterial {
+          class TowersMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -41065,10 +41070,10 @@
                       uniforms: t.uniforms,
                       defines: t.defines,
                       transparent: !1,
-                      blending: _,
-                      blendEquation: w,
-                      blendSrc: B,
-                      blendDst: L
+                      blending: CustomBlending,
+                      blendEquation: AddEquation,
+                      blendSrc: SrcAlphaFactor,
+                      blendDst: OneMinusSrcAlphaFactor
                   }),
                   this.globalUniforms = t.globalUniforms,
                   this.uniforms = Object.assign(this.uniforms, this.globalUniforms)
@@ -41149,31 +41154,31 @@
                       }
                   },
                   this.instanceDummy = new Object3D,
-                  this._v = new Vector3,
-                  this._q = new Quaternion,
+                  this.v3 = new Vector3,
+                  this.quatrenion = new Quaternion,
                   this.animated = !1,
                   this.load()
               }
-              build(t) {
+              build(objectData) {
                   this.meshes = {};
-                  for (const e in t)
-                      e.startsWith("city") && (this.meshes[e] = {},
-                      this.buildInstancedMesh(t, e, this.assets.models[e].geometry.clone(), new FE({
+                  for (const dataKey in objectData)
+                      dataKey.startsWith("city") && (this.meshes[dataKey] = {},
+                      this.buildInstancedMesh(objectData, dataKey, this.assets.models[dataKey].geometry.clone(), new TowersMaterial({
                           uniforms: {
                               tColorText0: {
-                                  value: this.assets.textures[`${e}-b0`]
+                                  value: this.assets.textures[`${dataKey}-b0`]
                               },
                               tColorText1: {
-                                  value: this.assets.textures[`${e}-b1`]
+                                  value: this.assets.textures[`${dataKey}-b1`]
                               },
                               tColorText2: {
-                                  value: this.assets.textures[`${e}-b2`]
+                                  value: this.assets.textures[`${dataKey}-b2`]
                               },
                               tColorText3: {
-                                  value: this.assets.textures[`${e}-b3`]
+                                  value: this.assets.textures[`${dataKey}-b3`]
                               },
                               tRailsTex: {
-                                  value: this.assets.textures[`rails-${e}`]
+                                  value: this.assets.textures[`rails-${dataKey}`]
                               },
                               tRecText: {
                                   value: GLOBAL_VARS.MainScene.assets.textures.recursiveMask2
@@ -41194,37 +41199,37 @@
                           }
                       })))
               }
-              buildInstancedMesh(t, e, n, i) {
-                  const r = t[e]
-                    , s = Object.keys(r).length;
-                  this.meshes[e] = new Ba(n,i,s);
-                  const o = []
-                    , a = []
-                    , l = []
-                    , h = [];
-                  for (let t = 0; t < s; t++) {
-                      applyObjectDataToObjectProps(this.instanceDummy, r[t]),
+              buildInstancedMesh(objectData, dataKey, geometry, material) {
+                  const towerData = objectData[dataKey]
+                    , dataLength = Object.keys(towerData).length;
+                  this.meshes[dataKey] = new InstancedMesh(geometry,material,dataLength);
+                  const textureNum = []
+                    , objectHeight = []
+                    , startOffset = []
+                    , speed = [];
+                  for (let index = 0; index < dataLength; index++) {
+                      applyObjectDataToObjectProps(this.instanceDummy, towerData[index]),
                       this.instanceDummy.updateMatrix(),
-                      this.meshes[e].setMatrixAt(t, this.instanceDummy.matrix),
-                      this.meshes[e].geometry.computeBoundingBox(),
-                      this.meshes[e].geometry.boundingBox.getSize(this._v);
-                      const n = this._v.clone().y;
-                      let i;
-                      const s = Math.round(MathUtils.radToDeg(this.instanceDummy.rotation.y));
-                      0 === s ? i = 0 : 90 === s ? i = 1 : 180 === s ? i = 2 : -90 === s && (i = 3);
-                      const c = r[t][3].section
-                        , u = .2 * MathUtils.seededRandom(c)
-                        , d = .5 * (MathUtils.seededRandom(c) + 1);
-                      l.push(u),
-                      a.push(n),
-                      o.push(i),
-                      h.push(d)
+                      this.meshes[dataKey].setMatrixAt(index, this.instanceDummy.matrix),
+                      this.meshes[dataKey].geometry.computeBoundingBox(),
+                      this.meshes[dataKey].geometry.boundingBox.getSize(this.v3);
+                      const y = this.v3.clone().y;
+                      let texNum;
+                      const angle = Math.round(MathUtils.radToDeg(this.instanceDummy.rotation.y));
+                      0 === angle ? texNum = 0 : 90 === angle ? texNum = 1 : 180 === angle ? texNum = 2 : -90 === angle && (texNum = 3);
+                      const c = towerData[index][3].section
+                        , startSeed = .2 * MathUtils.seededRandom(c)
+                        , speedSeed = .5 * (MathUtils.seededRandom(c) + 1);
+                      startOffset.push(startSeed),
+                      objectHeight.push(y),
+                      textureNum.push(texNum),
+                      speed.push(speedSeed)
                   }
-                  this.meshes[e].geometry.setAttribute("startOffset", new Sa(new Float32Array(l),1)),
-                  this.meshes[e].geometry.setAttribute("speed", new Sa(new Float32Array(h),1)),
-                  this.meshes[e].geometry.setAttribute("objectHeight", new Sa(new Float32Array(a),1)),
-                  this.meshes[e].geometry.setAttribute("textureNum", new Sa(new Float32Array(o),1)),
-                  this.add(this.meshes[e])
+                  this.meshes[dataKey].geometry.setAttribute("startOffset", new Sa(new Float32Array(startOffset),1)),
+                  this.meshes[dataKey].geometry.setAttribute("speed", new Sa(new Float32Array(speed),1)),
+                  this.meshes[dataKey].geometry.setAttribute("objectHeight", new Sa(new Float32Array(objectHeight),1)),
+                  this.meshes[dataKey].geometry.setAttribute("textureNum", new Sa(new Float32Array(textureNum),1)),
+                  this.add(this.meshes[dataKey])
               }
               updateProgress(t) {
                   for (const e in this.meshes)
@@ -41242,7 +41247,7 @@
                       ));
                       for (let e = 0; e < 4; e++)
                           GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/city ${t}-b ${e}-lightmap.ktx2`, {
-                              wrapping: at,
+                              wrapping: RepeatWrapping,
                               flipY: !1,
                               encoding: be
                           }).then((n=>{
@@ -41250,7 +41255,7 @@
                           }
                           ));
                       GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + `webgl/images/rails-city ${t}.ktx2`, {
-                          wrapping: at,
+                          wrapping: RepeatWrapping,
                           flipY: !1,
                           encoding: be
                       }).then((e=>{
@@ -41259,7 +41264,7 @@
                       ))
                   }
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/walls-2.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.repeatWalls = t
                   }
@@ -41331,7 +41336,7 @@
               }
               dispose() {}
           }
-          const UE = new Vr(-1,1,1,-1,0,1)
+          const UE = new OrthographicCamera(-1,1,1,-1,0,1)
             , zE = new BufferGeometry;
           zE.setAttribute("position", new Ui([-1, 3, 0, -1, -1, 0, 3, -1, 0],3)),
           zE.setAttribute("uv", new Ui([0, 2, 0, 0, 2, 0],2));
@@ -41436,7 +41441,7 @@
                       this._pixelRatio = t.getPixelRatio(),
                       this._width = n.width,
                       this._height = n.height,
-                      (e = new fn(this._width * this._pixelRatio,this._height * this._pixelRatio)).texture.name = "EffectComposer.rt1"
+                      (e = new WebGLRenderTarget(this._width * this._pixelRatio,this._height * this._pixelRatio)).texture.name = "EffectComposer.rt1"
                   } else
                       this._pixelRatio = 1,
                       this._width = e.width,
@@ -41611,15 +41616,15 @@
                   this.nMips = 5;
                   let r = Math.round(this.resolution.x / 2)
                     , s = Math.round(this.resolution.y / 2);
-                  this.renderTargetBright = new fn(r,s),
+                  this.renderTargetBright = new WebGLRenderTarget(r,s),
                   this.renderTargetBright.texture.name = "UnrealBloomPass.bright",
                   this.renderTargetBright.texture.generateMipmaps = !1;
                   for (let t = 0; t < this.nMips; t++) {
-                      const e = new fn(r,s);
+                      const e = new WebGLRenderTarget(r,s);
                       e.texture.name = "UnrealBloomPass.h" + t,
                       e.texture.generateMipmaps = !1,
                       this.renderTargetsHorizontal.push(e);
-                      const n = new fn(r,s);
+                      const n = new WebGLRenderTarget(r,s);
                       n.texture.name = "UnrealBloomPass.v" + t,
                       n.texture.generateMipmaps = !1,
                       this.renderTargetsVertical.push(n),
@@ -41858,7 +41863,7 @@
               }) : t[e] = n,
               t
           }
-          class $E extends ShaderMaterial {
+          class BridgesMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -41902,12 +41907,12 @@
                       fragmentShader: "#define GLSLIFY 1\nfloat blendLighten(float base, float blend) {\n\treturn max(blend,base);\n}\n\nvec3 blendLighten(vec3 base, vec3 blend) {\n\treturn vec3(blendLighten(base.r,blend.r),blendLighten(base.g,blend.g),blendLighten(base.b,blend.b));\n}\n\nvec3 blendLighten(vec3 base, vec3 blend, float opacity) {\n\treturn (blendLighten(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nvec3 blendMultiply(vec3 base, vec3 blend) {\n\treturn base*blend;\n}\n\nvec3 blendMultiply(vec3 base, vec3 blend, float opacity) {\n\treturn (blendMultiply(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nfloat blendOverlay(float base, float blend) {\n\treturn base<0.5?(2.0*base*blend):(1.0-2.0*(1.0-base)*(1.0-blend));\n}\n\nvec3 blendOverlay(vec3 base, vec3 blend) {\n\treturn vec3(blendOverlay(base.r,blend.r),blendOverlay(base.g,blend.g),blendOverlay(base.b,blend.b));\n}\n\nvec3 blendOverlay(vec3 base, vec3 blend, float opacity) {\n\treturn (blendOverlay(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nfloat blendSoftLight(float base, float blend) {\n\treturn (blend<0.5)?(2.0*base*blend+base*base*(1.0-2.0*blend)):(sqrt(base)*(2.0*blend-1.0)+2.0*base*(1.0-blend));\n}\n\nvec3 blendSoftLight(vec3 base, vec3 blend) {\n\treturn vec3(blendSoftLight(base.r,blend.r),blendSoftLight(base.g,blend.g),blendSoftLight(base.b,blend.b));\n}\n\nvec3 blendSoftLight(vec3 base, vec3 blend, float opacity) {\n\treturn (blendSoftLight(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nfloat blendColorDodge(float base, float blend) {\n\treturn (blend==1.0)?blend:min(base/(1.0-blend),1.0);\n}\n\nvec3 blendColorDodge(vec3 base, vec3 blend) {\n\treturn vec3(blendColorDodge(base.r,blend.r),blendColorDodge(base.g,blend.g),blendColorDodge(base.b,blend.b));\n}\n\nvec3 blendColorDodge(vec3 base, vec3 blend, float opacity) {\n\treturn (blendColorDodge(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nfloat blendScreen(float base, float blend) {\n\treturn 1.0-((1.0-base)*(1.0-blend));\n}\n\nvec3 blendScreen(vec3 base, vec3 blend) {\n\treturn vec3(blendScreen(base.r,blend.r),blendScreen(base.g,blend.g),blendScreen(base.b,blend.b));\n}\n\nvec3 blendScreen(vec3 base, vec3 blend, float opacity) {\n\treturn (blendScreen(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nfloat blendLinearDodge(float base, float blend) {\n\t// Note : Same implementation as BlendAddf\n\treturn min(base+blend,1.0);\n}\n\nvec3 blendLinearDodge(vec3 base, vec3 blend) {\n\t// Note : Same implementation as BlendAdd\n\treturn min(base+blend,vec3(1.0));\n}\n\nvec3 blendLinearDodge(vec3 base, vec3 blend, float opacity) {\n\treturn (blendLinearDodge(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nfloat blendLinearBurn(float base, float blend) {\n\t// Note : Same implementation as BlendSubtractf\n\treturn max(base+blend-1.0,0.0);\n}\n\nvec3 blendLinearBurn(vec3 base, vec3 blend) {\n\t// Note : Same implementation as BlendSubtract\n\treturn max(base+blend-vec3(1.0),vec3(0.0));\n}\n\nvec3 blendLinearBurn(vec3 base, vec3 blend, float opacity) {\n\treturn (blendLinearBurn(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nfloat blendLinearLight(float base, float blend) {\n\treturn blend<0.5?blendLinearBurn(base,(2.0*blend)):blendLinearDodge(base,(2.0*(blend-0.5)));\n}\n\nvec3 blendLinearLight(vec3 base, vec3 blend) {\n\treturn vec3(blendLinearLight(base.r,blend.r),blendLinearLight(base.g,blend.g),blendLinearLight(base.b,blend.b));\n}\n\nvec3 blendLinearLight(vec3 base, vec3 blend, float opacity) {\n\treturn (blendLinearLight(base, blend) * opacity + base * (1.0 - opacity));\n}\n\nvarying vec3 vThreshold;\n\nvarying vec2 vUv;\nvarying vec3 vNormal;\nvarying vec3 vViewPosition;\nvarying vec3 vWorldPos;\nvarying vec3 vLocalPos;\n\nuniform float uProgress;\nuniform float uTime;\nuniform float uFloorIndex;\nuniform float uGradientSpread;\nuniform vec3 uColor1;\nuniform vec3 uColor2;\nuniform sampler2D uTexture;\nuniform sampler2D uTextureGradient;\nuniform sampler2D uTextureRecursive;\nuniform vec2 uUvScale; \nuniform float uBlendAlpha;\nuniform float uAlphaMin;\nuniform float uAlphaMax;\nuniform float uBakeBlend;\n\n#include <fogParamsFrag>\n\nfloat map(float value, float min1, float max1, float min2, float max2) {\n  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);\n}\n\nfloat random(float val) {\n    return fract(sin(val)*1.0);\n}\n\nvoid main() {\n\n    // Reveal\n    float objectSize = 130.0;\n    float urand = random(vWorldPos.y);\n    float mappedY = map(vWorldPos.y, 0.0, objectSize, 0.0, 1.0);\n\n    float threshold = clamp(vThreshold.r, 0.0, 1.0);\n    // float bottomEdge = threshold - uProgress;\n    float bottomEdge = mappedY - uProgress;\n    bottomEdge /= 0.5;\n    bottomEdge = clamp(bottomEdge, 0.0, 1.0);\n    bottomEdge = 1.0 - bottomEdge;\n\n    float sideRevealMix = mix(-2.0, 2.0, bottomEdge);\n    \n    float sideReveal = vUv.x - sideRevealMix;\n    sideReveal /= 0.08;\n    sideReveal = clamp(sideReveal, 0.0, 1.0);\n    sideReveal = 1.0 - sideReveal;\n\n    // Colours\n    vec3 color1 = uColor1;\n    vec3 color2 = uColor2;\n\n    // Animated gradient to mix between the colours + Remap so we don't get negative values\n    float sinMix = 0.5 + 0.5 * sin(vUv.x * 30.0 + uTime + urand * 0.65);\n    float clampSin = clamp(sinMix, 0.65, 1.0);\n\n    // Colours\n    vec3 diffuseCol = texture2D(uTexture, vUv).rgb; // Texture bake\n\n    float rimMask = texture2D(uTextureGradient, vUv).r;\n    float maskAnimate = rimMask*clampSin;\n    // float recursiveMask = texture2D(uTextureRecursive, vUv * uUvScale).r;\n    // float blendMask = blendLinearLight(vec3(rimMask), vec3(recursiveMask), uBlendAlpha).r;\n    // float blendMask = blendLighten(vec3(rimMask), vec3(recursiveMask), uBlendAlpha).r;\n    \n    // float blendMask = blendSoftLight(vec3(rimMask), vec3(recursiveMask), uBlendAlpha).r;\n    // float blendMask = blendColorDodge(vec3(rimMask), vec3(recursiveMask), uBlendAlpha).r;\n    vec3 baseColor = mix(uColor1, uColor2, maskAnimate);\n    baseColor = blendColorDodge(baseColor, diffuseCol, uBakeBlend);\n    float alphaMask = clamp(rimMask, uAlphaMin, uAlphaMax);\n\n    if (bottomEdge * alphaMask < 0.1) {\n      discard;\n    }\n    gl_FragColor = vec4(baseColor.rgb, sideReveal * alphaMask);\n\n    // gl_FragColor = vec4(vec3(sideReveal), 1.0);\n\n    #include <tonemapping_fragment>\n    \n    // Add fog\n    #include <fogOutputFrag>\n}",
                       uniforms: t.uniforms,
                       defines: t.defines,
-                      side: m,
+                      side: DoubleSide,
                       transparent: !1,
-                      blending: _,
-                      blendEquation: w,
-                      blendSrc: B,
-                      blendDst: L
+                      blending: CustomBlending,
+                      blendEquation: AddEquation,
+                      blendSrc: SrcAlphaFactor,
+                      blendDst: OneMinusSrcAlphaFactor
                   }),
                   this.globalUniforms = t.globalUniforms,
                   this.uniforms = Object.assign(this.uniforms, this.globalUniforms)
@@ -41943,7 +41948,7 @@
               }
               build(t) {
                   this.meshes = {};
-                  const e = new Mesh(this.assets.models.bridges.geometry.clone(),new $E({
+                  const e = new Mesh(this.assets.models.bridges.geometry.clone(),new BridgesMaterial({
                       uniforms: {
                           uTexture: {
                               value: this.assets.textures.bridgesDiffuse
@@ -42044,7 +42049,7 @@
               }) : t[e] = n,
               t
           }
-          class rC extends ShaderMaterial {
+          class CityPipeMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -42107,10 +42112,10 @@
                       uniforms: t.uniforms,
                       defines: t.defines,
                       transparent: !1,
-                      blending: _,
-                      blendEquation: w,
-                      blendSrc: B,
-                      blendDst: L
+                      blending: CustomBlending,
+                      blendEquation: AddEquation,
+                      blendSrc: SrcAlphaFactor,
+                      blendDst: OneMinusSrcAlphaFactor
                   }),
                   this.globalUniforms = t.globalUniforms,
                   this.uniforms = Object.assign(this.uniforms, this.globalUniforms)
@@ -42146,47 +42151,47 @@
                   },
                   this.load()
               }
-              build(t) {
+              build(objectData) {
                   this.paths = {
                       vectors: {},
                       pipes: {}
                   };
-                  const e = Object.keys(t.paths).filter((t=>t.startsWith("pip-city"))).sort(((t,e)=>t.replace("pip", "") - e.replace("pip", ""))).reduce(((e,n)=>(e[n] = t.paths[n],
-                  e)), {});
-                  for (const t in e) {
-                      this.paths.vectors[t.replace("pip-", "").concat("-temp")] = [];
-                      for (let n = 0; n < e[t].length - 1; n++) {
-                          const i = [];
-                          for (let r = 0; r < e[t][n].length; r++) {
-                              const s = e[t][n][r];
-                              i.push(new Vector3(s[0],s[1],s[2]))
+                  const paths = Object.keys(objectData.paths).filter((t=>t.startsWith("pip-city"))).sort(((path,nextPath)=>path.replace("pip", "") - nextPath.replace("pip", ""))).reduce(((prevPath,path)=>(prevPath[path] = objectData.paths[path],
+                  prevPath)), {});
+                  for (const path in paths) {
+                      this.paths.vectors[path.replace("pip-", "").concat("-temp")] = [];
+                      for (let index = 0; index < paths[path].length - 1; index++) {
+                          const vec = [];
+                          for (let subIndex = 0; subIndex < paths[path][index].length; subIndex++) {
+                              const s = paths[path][index][subIndex];
+                              vec.push(new Vector3(s[0],s[1],s[2]))
                           }
-                          this.paths.vectors[t.replace("pip-", "").concat("-temp")].push(i)
+                          this.paths.vectors[path.replace("pip-", "").concat("-temp")].push(vec)
                       }
                   }
-                  for (const e in t)
-                      if (e.startsWith("city")) {
-                          const n = Object.keys(t[e]).length;
-                          this.paths.pipes[e] = [];
-                          for (let i = 0; i < n; i++) {
-                              applyObjectDataToObjectProps(this.instanceDummy, t[e][i]);
-                              const n = t[e][i][3].section;
+                  for (const dataKey in objectData)
+                      if (dataKey.startsWith("city")) {
+                          const cityDataLength = Object.keys(objectData[dataKey]).length;
+                          this.paths.pipes[dataKey] = [];
+                          for (let index = 0; index < cityDataLength; index++) {
+                              applyObjectDataToObjectProps(this.instanceDummy, objectData[dataKey][index]);
+                              const section = objectData[dataKey][index][3].section;
                               this.instanceDummy.updateMatrix();
-                              const r = .2 * MathUtils.seededRandom(n)
-                                , s = .5 * (MathUtils.seededRandom(n) + 1);
-                              for (let t = 0; t < this.paths.vectors[e.concat("-temp")].length; t++) {
-                                  const i = [];
-                                  this.paths.vectors[e.concat("-temp")][t].forEach((t=>{
-                                      const e = t.clone();
-                                      e.applyMatrix4(this.instanceDummy.matrix),
-                                      i.push(e.x, e.y, e.z)
+                              const startOffset = .2 * MathUtils.seededRandom(section)
+                                , speed = .5 * (MathUtils.seededRandom(section) + 1);
+                              for (let vIndex = 0; vIndex < this.paths.vectors[dataKey.concat("-temp")].length; vIndex++) {
+                                  const geoBuffer = [];
+                                  this.paths.vectors[dataKey.concat("-temp")][vIndex].forEach((vec3=>{
+                                      const v3 = vec3.clone();
+                                      v3.applyMatrix4(this.instanceDummy.matrix),
+                                      geoBuffer.push(v3.x, v3.y, v3.z)
                                   }
                                   ));
-                                  const o = new Tw;
-                                  o.setPositions(i);
-                                  const a = new Vector2;
-                                  GLOBAL_VARS.WebGL.renderer.getSize(a);
-                                  const l = new Line2(o,new rC({
+                                  const lineGeo = new LineGeometry;
+                                  lineGeo.setPositions(geoBuffer);
+                                  const vec2 = new Vector2;
+                                  GLOBAL_VARS.WebGL.renderer.getSize(vec2);
+                                  const line = new Line2(lineGeo,new CityPipeMaterial({
                                       uniforms: {
                                           uColor1: GLOBAL_VARS.MainScene.options.pipes.uColor1,
                                           uColor2: GLOBAL_VARS.MainScene.options.pipes.uColor2,
@@ -42194,16 +42199,16 @@
                                               value: 1
                                           },
                                           resolution: {
-                                              value: a
+                                              value: vec2
                                           },
                                           uSpeed: {
-                                              value: s
+                                              value: speed
                                           },
                                           uStartOffset: {
-                                              value: r
+                                              value: startOffset
                                           },
                                           uSection: {
-                                              value: n
+                                              value: section
                                           }
                                       },
                                       globalUniforms: this.globalUniforms,
@@ -42211,8 +42216,8 @@
                                           WORLD_UNITS: ""
                                       }
                                   }));
-                                  this.add(l),
-                                  this.paths.pipes[e].push(l)
+                                  this.add(line),
+                                  this.paths.pipes[dataKey].push(line)
                               }
                           }
                       }
@@ -42727,7 +42732,7 @@
               }) : t[e] = n,
               t
           }
-          class bC extends ShaderMaterial {
+          class ParticlesMaterial extends ShaderMaterial {
               constructor() {
                   let t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                   t = ew({
@@ -42756,30 +42761,30 @@
                   e
               }
           }
-          class Particles extends Xa {
+          class Particles extends Points {
               constructor() {
                   super();
-                  const t = 3e3;
+                  const count = 3000;
                   this.bounds = new Vector3(60,40,20);
-                  const e = new Float32Array(9e3)
-                    , n = new Float32Array(t)
-                    , i = new Float32Array(t)
-                    , r = new Vector3;
-                  for (let s = 0; s < t; s++)
-                      r.x = MathUtils.randFloat(.5 * -this.bounds.x, .5 * this.bounds.x),
-                      r.y = MathUtils.randFloat(.5 * -this.bounds.y, .5 * this.bounds.y),
-                      r.z = MathUtils.randFloat(.5 * -this.bounds.z, .5 * this.bounds.z),
-                      r.toArray(e, 3 * s),
-                      n[s] = .35,
-                      i[s] = Math.random();
-                  this.geometry.setAttribute("position", new BufferAttribute(e,3)),
-                  this.geometry.setAttribute("size", new BufferAttribute(n,1)),
-                  this.geometry.setAttribute("random", new BufferAttribute(i,1)),
+                  const positions = new Float32Array(count*3)
+                    , size = new Float32Array(count)
+                    , randoms = new Float32Array(count)
+                    , v3 = new Vector3;
+                  for (let index = 0; index < count; index++)
+                      v3.x = MathUtils.randFloat(.5 * -this.bounds.x, .5 * this.bounds.x),
+                      v3.y = MathUtils.randFloat(.5 * -this.bounds.y, .5 * this.bounds.y),
+                      v3.z = MathUtils.randFloat(.5 * -this.bounds.z, .5 * this.bounds.z),
+                      v3.toArray(positions, 3 * index),
+                      size[index] = .35,
+                      randoms[index] = Math.random();
+                  this.geometry.setAttribute("position", new BufferAttribute(positions,3)),
+                  this.geometry.setAttribute("size", new BufferAttribute(size,1)),
+                  this.geometry.setAttribute("random", new BufferAttribute(randoms,1)),
                   this.frustumCulled = !1,
                   this.renderOrder = 100
               }
               build() {
-                  this.material = new bC({
+                  this.material = new ParticlesMaterial({
                       uniforms: {
                           uBounds: {
                               value: this.bounds
@@ -42966,20 +42971,20 @@
                   this.brownianMotion.rotationFrequency = this.options.cameraMotionRotFrequency,
                   this.composer = new EffectComposer(GLOBAL_VARS.WebGL.renderer),
                   this.components = {
-                      fog: new Fog,
-                      worldFloor: new WorldFloor,
-                      mainTower: new MainTower,
-                      pipes: new Pipes,
-                      people: new People,
-                      logo: new Logo,
-                      shape: new Shape,
-                      towers: new Towers,
-                      cityPipes: new CityPipes,
-                      cars: new Cars,
-                      reflectiveFloors: new ReflectiveFloors,
-                      signs: new Signs,
-                      bridges: new Bridges,
-                      particles: new Particles
+                      fog: new Fog, // DONE (re)
+                      worldFloor: new WorldFloor, // DONE
+                      mainTower: new MainTower, // DONE
+                      pipes: new Pipes, // DONE
+                      people: new People, // DONE
+                      logo: new Logo, // TODO
+                      shape: new Shape, // TODO
+                      towers: new Towers, // DONE
+                      cityPipes: new CityPipes, // DONE
+                      cars: new Cars, // DONE
+                      reflectiveFloors: new ReflectiveFloors, // TODO
+                      signs: new Signs, // DONE
+                      bridges: new Bridges, // DONE
+                      particles: new Particles // DONE
                   },
                   this.load()
               }
@@ -43019,7 +43024,7 @@
                                   const r = this.objectData.paths[t][e][i];
                                   n.push(new Vector3(r[0],r[1],r[2]))
                               }
-                              this.paths.c["c" + e] = new sl(n)
+                              this.paths.c["c" + e] = new CatmullRomCurve3(n)
                           }
                       else {
                           const e = [];
@@ -43027,7 +43032,7 @@
                               const i = this.objectData.paths[t][0][n];
                               e.push(new Vector3(i[0],i[1],i[2]))
                           }
-                          t.startsWith("car") ? this.paths.cars[t] = new sl(e) : this.paths[t] = new sl(e)
+                          t.startsWith("car") ? this.paths.cars[t] = new CatmullRomCurve3(e) : this.paths[t] = new CatmullRomCurve3(e)
                       }
               }
               buildPathTween() {
@@ -43210,19 +43215,19 @@
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/faces_2.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.recursiveMask2 = t
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/faces_3.ktx2", {
-                      wrapping: at
+                      wrapping: RepeatWrapping
                   }).then((t=>{
                       this.assets.textures.recursiveMask3 = t
                   }
                   )),
                   GLOBAL_VARS.AssetLoader.loadKtxTexture(GLOBAL_VARS.publicUrl + "webgl/images/hex.ktx2", {
-                      wrapping: at,
+                      wrapping: RepeatWrapping,
                       encoding: be
                   }).then((t=>{
                       this.assets.textures.hexTexture = t

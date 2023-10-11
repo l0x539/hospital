@@ -53,10 +53,10 @@ const initialState: GlState = {
     html: null,
     body: null,
     window: {
-        w: window.innerWidth,
-        h: window.innerHeight,
-        dpr: window.devicePixelRatio,
-        fullHeight: window.innerHeight
+        w: 0,
+        h: 0,
+        dpr: 0,
+        fullHeight: 0
     },
     keys: {
         UP: 38,

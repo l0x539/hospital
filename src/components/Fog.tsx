@@ -1,13 +1,14 @@
 import { fogFragmentShader } from "@/shaders/fragmantShaders";
 import { fogVertexShader } from "@/shaders/vertexShaders";
 import { useFrame } from "@react-three/fiber";
+import { useControls } from "leva";
 import { FC, useMemo, useRef } from "react";
-import { BackSide, Color, FrontSide, Mesh, MeshBasicMaterial, SphereGeometry, Vector3 } from "three";
+import { BackSide, BoxGeometry, Color, FrontSide, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry, Vector3 } from "three";
 
 // TODO: add fog tween tansition (buildFogTween & buildInsideFogTween)
 
 const Fog: FC<{
-  options: any
+  options: any;
 }> = ({options}) => {
 
 
@@ -161,11 +162,9 @@ const Fog: FC<{
         value: !1
     }
   }), [fogTweenValues, options.fogEnabled]);
-
-  return <group > {/** visible={options.lightHelpersEnabled} */}
-    <LightsHelper globalUniforms={globalUniforms} />
-    <Sky globalUniforms={globalUniforms} />
-  </group>;
+/** visible={options.lightHelpersEnabled} */
+  return <group ><LightsHelper globalUniforms={globalUniforms} />
+    <Sky globalUniforms={globalUniforms} /></group>;
 }
 
 const Sky: FC<{
@@ -173,18 +172,19 @@ const Sky: FC<{
     [value: string]: any;
   }
 }> = ({globalUniforms}) => {
+  const ref = useRef<Mesh<BoxGeometry, ShaderMaterial>>(null);
   const lightCount = globalUniforms.volumetricLights.value.length;
   const fogDefines = {
     NUM_V_LIGHTS: lightCount
   }
 
-  return <mesh scale={500} renderOrder={-1} position={[0, 249, 0]} >
+  return <mesh ref={ref} scale={500} renderOrder={-1} position={[0, 249, 0]} >
     <boxGeometry />
     <shaderMaterial
       uniforms={{
         ...globalUniforms,
         uProgress: {
-            value: null
+          value: 0
         },
         uColor: {
             value: new Color(0)
@@ -215,8 +215,7 @@ const LightsHelper: FC<{
 }> = ({globalUniforms}) => {
   const lightCount = globalUniforms.volumetricLights.value.length;
 
-  return <group>
-    {Array.from({length: lightCount}).map((_, index) => {
+  return <group>{lightCount > 0 ? Array.from({length: lightCount}).map((_, index) => {
       return <mesh key={index} position={globalUniforms.volumetricLights.value[index].position} >
         <sphereGeometry args={[5, 6, 6]} />
         <meshBasicMaterial wireframe color={globalUniforms.volumetricLights.value[index].color} />
@@ -225,8 +224,7 @@ const LightsHelper: FC<{
           <meshBasicMaterial wireframe color={globalUniforms.volumetricLights.value[index].color} />
         </mesh>
       </mesh>
-    })}
-  </group>;
+    }) : <></>}</group>;
 }
 
 export default Fog;
