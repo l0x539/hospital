@@ -125,7 +125,7 @@ const ReflectiveFloor = () => {
     progress
   } = useControls('ReflectFloor', {
     progress: {
-      value: 0,
+      value: 0.1,
       min: 0,
       max: 1,
       step: 0.01
@@ -180,8 +180,7 @@ const ReflectiveFloor = () => {
           0
         ]}
       />
-      <mesh ref={baseTopRef} geometry={(baseTop as Mesh).geometry}></mesh>
-      <mesh ref={mb0Ref} geometry={(buildingFloor as Mesh).geometry}>
+      {/* <mesh ref={mb0Ref} geometry={(buildingFloor as Mesh).geometry}>
         <MeshReflectorMaterial
           blur={[512, 512]} // Blur ground reflections (width, heigt), 0 skips blur
           mixBlur={0.75} // How much blur mixes with surface roughness
@@ -216,7 +215,7 @@ const ReflectiveFloor = () => {
           maxDepthThreshold={1}
           depthScale={50}
         />
-      </mesh>
+      </mesh> */}
     </group>
   );
 };

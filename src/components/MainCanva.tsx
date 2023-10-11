@@ -2,7 +2,7 @@
 import { selectGl, selectGlobalVars, updateGlobalUniforms } from "@/features/gl/glSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useEffect, useMemo, useState } from "react";
-import { Color, ShaderChunk, Uniform, Vector2 } from "three";
+import { Color, PerspectiveCamera, ShaderChunk, Uniform, Vector2 } from "three";
 import { useSearchParams } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
 import MainTower from "./MainTower";
@@ -87,6 +87,7 @@ const MainCanva = () => {
   useEffect(() => {
     setReady(true);
   }, [])
+  new PerspectiveCamera()
   return (
     <Canvas
       gl={{
@@ -94,10 +95,14 @@ const MainCanva = () => {
         antialias: false,
         powerPreference: "high-performance",
         stencil: false,
-        pixelRatio: window.devicePixelRatio >= 2 ? 2 : window.devicePixelRatio, // TODO: mq sm match should be >= 1.5
       }}
       camera={{
-        position: [0, 100, 100]
+        position: [0, 4, 13.752254],
+        fov: 45,
+        near: 1,
+        far: 500,
+        filmGauge: 100,
+        
       }}
     >
       <Fog options={options} />
@@ -111,7 +116,7 @@ const MainCanva = () => {
       <Cars />
       <Signs options={options} />
       <Bridges />
-      <ReflectiveFloor />
+      {ready ? <ReflectiveFloor /> : <></>}
       <OrbitControls />
     </Canvas>
   );

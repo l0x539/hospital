@@ -24,8 +24,6 @@ interface GlState {
       END: number;
     },
     isTouch: boolean;
-    isIOS: boolean;
-    urlParams: URLSearchParams;
     pointer: {
         x: number;
         y: number;
@@ -67,8 +65,6 @@ const initialState: GlState = {
         END: 35
     },
     isTouch: !1,
-    isIOS: ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(navigator.platform) || navigator.userAgent.includes("Mac") && "ontouchend"in document,
-    urlParams: new URLSearchParams(window.location.search),
     pointer: {
         x: 0,
         y: 0,
