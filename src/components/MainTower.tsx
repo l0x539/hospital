@@ -1,3 +1,5 @@
+import { selectGl } from "@/features/gl/glSlice";
+import { useAppSelector } from "@/hooks";
 import { fogDefines } from "@/shaders/defines";
 import { fogFragmentShader, towerFragmentShader } from "@/shaders/fragmantShaders";
 import { fogVertexShader, towerVertexShader } from "@/shaders/vertexShaders";
@@ -5,7 +7,9 @@ import { globalLights, objectData } from "@/utils/constants";
 import { useGLTF, useKTX2 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
+import { useSearchParams } from "next/navigation";
 import { FC, ReactNode, useEffect, useMemo, useRef } from "react";
+import { config, useSpring, easings } from "@react-spring/three";
 import {
   BackSide,
   BufferGeometry,
@@ -1147,10 +1151,22 @@ const Wall: FC<{
       step: 0.01
     }
   })
+  const searchParams = useSearchParams();
+  const {progress: scrollProgress} = useAppSelector(selectGl);
+
+  const props = useSpring({
+    springProgress: scrollProgress,
+    config: {
+      easing: easings.easeInBack,
+    },
+  });;
 
   useFrame(({clock}) => {
     if (!ref.current) return;
-    ref.current.material.uniforms.uProgress.value = progress;
+    if (searchParams.has('controls'))
+      ref.current.material.uniforms.uProgress.value = progress;
+    else
+      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
     ref.current.material.uniforms.uTime.value = clock.elapsedTime;
   })
   

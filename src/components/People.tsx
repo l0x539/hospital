@@ -1,12 +1,16 @@
+import { selectGl } from "@/features/gl/glSlice";
+import { useAppSelector } from "@/hooks";
 import { personFragmentShader } from "@/shaders/fragmantShaders";
 import { personVertexShader } from "@/shaders/vertexShaders";
 import { globalLights, objectData } from "@/utils/constants";
 import { useGLTF, useKTX2 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
+import { useSearchParams } from "next/navigation";
 import { FC, useMemo, useRef } from "react";
 import { BufferGeometry, Mesh, Quaternion, RepeatWrapping, ShaderMaterial, Texture } from "three";
 import { Geometry, mergeBufferGeometries } from "three-stdlib";
+import { config, useSpring, easings } from "@react-spring/three";
 
 const applyObjectDataToObjectProps = (mesh: BufferGeometry, personIndex: string, index: number) => {
   mesh?.applyQuaternion(
@@ -224,6 +228,15 @@ const PersonMaterial: FC<{
     }
   }), [textures.hexTexture, textures.recursiveMask2, textures.repeatTexture])
 
+  const searchParams = useSearchParams();
+  const {progress: scrollProgress} = useAppSelector(selectGl);
+  const props = useSpring({
+    springProgress: scrollProgress,
+    config: {
+      easing: easings.easeInBack,
+    },
+  });;
+
   const {
     progress
   } = useControls('People', {
@@ -237,7 +250,10 @@ const PersonMaterial: FC<{
 
   useFrame(({clock}) => {
     if (!ref.current) return;
-    ref.current.uniforms.uProgress.value = progress;
+    if (searchParams.has('controls'))
+      ref.current.uniforms.uProgress.value = progress;
+    else
+      ref.current.uniforms.uProgress.value = props.springProgress.get();
   })
 
   return <shaderMaterial

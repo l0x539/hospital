@@ -1,3 +1,5 @@
+import { selectGl } from "@/features/gl/glSlice";
+import { useAppSelector } from "@/hooks";
 import { fogDefines } from "@/shaders/defines";
 import { bridgesFragmentShader } from "@/shaders/fragmantShaders";
 import { bridgesVertexShade } from "@/shaders/vertexShaders";
@@ -5,7 +7,9 @@ import { objectData } from "@/utils/constants";
 import { useGLTF, useKTX2 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
+import { config, useSpring, easings } from "@react-spring/three";
 import {
   AddEquation,
   BufferGeometry,
@@ -63,6 +67,8 @@ const Bridges = () => {
       },
     },
   ] = useGLTF(["/models/bridges.glb"]);
+
+  const searchParams = useSearchParams();
 
   const [bridgesGradient, bridgesDiffuse, recursiveMask3] = useKTX2([
     "/images/bridges-rim.ktx2",
@@ -136,6 +142,13 @@ const Bridges = () => {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const {progress: scrollProgress} = useAppSelector(selectGl);
+  const props = useSpring({
+    springProgress: scrollProgress,
+    config: {
+      easing: easings.easeInBack,
+    },
+  });;
 
   useEffect(() => {
     if (!ref.current) return;
@@ -155,7 +168,11 @@ const Bridges = () => {
 
   useFrame(({clock}) => {
     if (!ref.current) return;
-    ref.current.material.uniforms.uProgress.value = progress;
+    if (searchParams.has('controls'))
+      ref.current.material.uniforms.uProgress.value = progress;
+    else
+      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
+
     ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
   });
 

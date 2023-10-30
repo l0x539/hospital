@@ -1,9 +1,14 @@
+import { selectGl } from "@/features/gl/glSlice";
+import { useAppSelector } from "@/hooks";
 import { fogFragmentShader } from "@/shaders/fragmantShaders";
 import { fogVertexShader } from "@/shaders/vertexShaders";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
 import { FC, useMemo, useRef } from "react";
 import { BackSide, BoxGeometry, Color, FrontSide, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry, Vector3 } from "three";
+import { config, useSpring, easings } from "@react-spring/three";
+import gsap from "gsap";
+import { fogValues } from "@/utils/constants";
 
 // TODO: add fog tween tansition (buildFogTween & buildInsideFogTween)
 
@@ -14,7 +19,8 @@ const Fog: FC<{
 
 
   const {
-    fogTweenValues
+    fogTweenValues,
+    insideFogTweenPoints
   } = useMemo(() => {
     const fogValues = {
       start: {
@@ -111,7 +117,7 @@ const Fog: FC<{
 
     return ({
     fogTweenEndPoint: .12,
-    activeInsideFogTween: 1,
+    activeInsideFogTween: true,
     allowInvalidate: false,
     fogValues,
     fogTweenValues: {
@@ -162,6 +168,168 @@ const Fog: FC<{
         value: !1
     }
   }), [fogTweenValues, options.fogEnabled]);
+
+  const {
+    insideFogTween,
+    fogTweenEndPoint,
+    fogTween,
+    activeInsideFogTween
+  } = useMemo(() => {
+    const insideFogTween = gsap.timeline({
+      paused: !0,
+      defaults: {
+          duration: .5,
+          ease: "sine.inOut"
+      }
+    }).to(globalUniforms.uWorldFogColor.value, {
+        r: fogValues.insideBuilding.uWorldFogColor.r,
+        g: fogValues.insideBuilding.uWorldFogColor.g,
+        b: fogValues.insideBuilding.uWorldFogColor.b
+    }, 0).to(globalUniforms.uFogNear_D, {
+        value: fogValues.insideBuilding.uFogNear_D
+    }, 0).to(globalUniforms.uFogFar_D, {
+        value: fogValues.insideBuilding.uFogFar_D
+    }, 0).to(globalUniforms.uFogStrength_D, {
+        value: fogValues.insideBuilding.uFogStrength_D
+    }, 0).to(globalUniforms.uFogNear_H, {
+        value: fogValues.insideBuilding.uFogNear_H
+    }, 0).to(globalUniforms.uFogFar_H, {
+        value: fogValues.insideBuilding.uFogFar_H
+    }, 0).to(globalUniforms.uFogStrength_H, {
+        value: fogValues.insideBuilding.uFogStrength_H
+    }, 0).to(globalUniforms.uFogStrength, {
+        value: fogValues.insideBuilding.uFogStrength
+    }, 0).to(globalUniforms.uWorldFogColorMix, {
+        value: fogValues.insideBuilding.uWorldFogColorMix
+    }, 0).to(globalUniforms.uWorldFogColor.value, {
+        r: fogValues.outsideBuilding.uWorldFogColor.r,
+        g: fogValues.outsideBuilding.uWorldFogColor.g,
+        b: fogValues.outsideBuilding.uWorldFogColor.b
+    }, .5).to(globalUniforms.uFogNear_D, {
+        value: fogValues.outsideBuilding.uFogNear_D
+    }, .5).to(globalUniforms.uFogFar_D, {
+        value: fogValues.outsideBuilding.uFogFar_D
+    }, .5).to(globalUniforms.uFogStrength_D, {
+        value: fogValues.outsideBuilding.uFogStrength_D
+    }, .5).to(globalUniforms.uFogNear_H, {
+        value: fogValues.outsideBuilding.uFogNear_H
+    }, .5).to(globalUniforms.uFogFar_H, {
+        value: fogValues.outsideBuilding.uFogFar_H
+    }, .5).to(globalUniforms.uFogStrength_H, {
+        value: fogValues.outsideBuilding.uFogStrength_H
+    }, .5).to(globalUniforms.uFogStrength, {
+        value: fogValues.outsideBuilding.uFogStrength
+    }, .5).to(globalUniforms.uWorldFogColorMix, {
+        value: fogValues.outsideBuilding.uWorldFogColorMix
+    }, .5);
+
+    const fogTweenEndPoint = .12;
+    const activeInsideFogTween = 1;
+    const fogTween = gsap.timeline({
+      paused: !0,
+      defaults: {
+          duration: 1,
+          ease: "sine.inOut"
+      }
+    }).fromTo(globalUniforms.uWorldFogColor.value, {
+        r: fogTweenValues[0].uWorldFogColor.r,
+        g: fogTweenValues[0].uWorldFogColor.g,
+        b: fogTweenValues[0].uWorldFogColor.b
+    }, {
+        r: fogTweenValues[fogTweenEndPoint].uWorldFogColor.r,
+        g: fogTweenValues[fogTweenEndPoint].uWorldFogColor.g,
+        b: fogTweenValues[fogTweenEndPoint].uWorldFogColor.b
+    }, 0).fromTo(globalUniforms.uFogNear_D, {
+        value: fogTweenValues[0].uFogNear_D
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uFogNear_D
+    }, 0).fromTo(globalUniforms.uFogFar_D, {
+        value: fogTweenValues[0].uFogFar_D
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uFogFar_D
+    }, 0).fromTo(globalUniforms.uFogStrength_D, {
+        value: fogTweenValues[0].uFogStrength_D
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uFogStrength_D
+    }, 0).fromTo(globalUniforms.uFogNear_H, {
+        value: fogTweenValues[0].uFogNear_H
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uFogNear_H
+    }, 0).fromTo(globalUniforms.uFogFar_H, {
+        value: fogTweenValues[0].uFogFar_H
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uFogFar_H
+    }, 0).fromTo(globalUniforms.uFogStrength_H, {
+        value: fogTweenValues[0].uFogStrength_H
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uFogStrength_H
+    }, 0).fromTo(globalUniforms.uFogStrength, {
+        value: fogTweenValues[0].uFogStrength
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uFogStrength
+    }, 0).fromTo(globalUniforms.uWorldFogColorMix, {
+        value: fogTweenValues[0].uWorldFogColorMix
+    }, {
+        value: fogTweenValues[fogTweenEndPoint].uWorldFogColorMix
+    }, 0);
+    for (let t = 0; t < fogTweenValues[0].lights.length; t++) {
+      const e = fogTweenValues[0].lights[t]
+        , n = fogTweenValues[fogTweenEndPoint].lights[t];
+      fogTween.fromTo(globalUniforms.volumetricLights.value[t], {
+          near: e.near,
+          far: e.far,
+          strength: e.strength
+      }, {
+          near: n.near,
+          far: n.far,
+          strength: n.strength
+      }, 0),
+      fogTween.fromTo(globalUniforms.volumetricLights.value[t].color, {
+          r: e.color.r,
+          g: e.color.g,
+          b: e.color.b
+      }, {
+          r: n.color.r,
+          g: n.color.g,
+          b: n.color.b
+      }, 0),
+      fogTween.fromTo(globalUniforms.volumetricLights.value[t].position, {
+          x: e.position.x,
+          y: e.position.y,
+          z: e.position.z
+      }, {
+          x: n.position.x,
+          y: n.position.y,
+          z: n.position.z
+      }, 0)
+    }
+
+    return {
+      insideFogTween,
+      fogTweenEndPoint,
+      fogTween,
+      activeInsideFogTween
+    }
+  }, []);
+
+  const {progress: scrollProgress} = useAppSelector(selectGl);
+  const props = useSpring({
+    springProgress: scrollProgress,
+    config: {
+      easing: easings.easeInBack,
+    },
+  });
+
+  useFrame(() => {
+    fogTween.progress(props.springProgress.get() / fogTweenEndPoint);
+    let activeInsideFogTweenUpdated = activeInsideFogTween;
+    props.springProgress.get() >= insideFogTweenPoints[0][0] - .05 && props.springProgress.get() <= insideFogTweenPoints[0][1] + .05 ? (activeInsideFogTweenUpdated = 0,
+    insideFogTween.progress((props.springProgress.get() - insideFogTweenPoints[0][0]) / (insideFogTweenPoints[0][1] - insideFogTweenPoints[0][0]))) : props.springProgress.get() >= insideFogTweenPoints[1][0] - .05 && props.springProgress.get() <= insideFogTweenPoints[1][1] + .05 ? (activeInsideFogTweenUpdated = 1,
+    insideFogTween.progress((props.springProgress.get() - insideFogTweenPoints[1][0]) / (insideFogTweenPoints[1][1] - insideFogTweenPoints[1][0]))) : props.springProgress.get() >= insideFogTweenPoints[2][0] - .05 && props.springProgress.get() <= insideFogTweenPoints[2][1] + .05 ? (activeInsideFogTweenUpdated = 2,
+    insideFogTween.progress((props.springProgress.get() - insideFogTweenPoints[2][0]) / (insideFogTweenPoints[2][1] - insideFogTweenPoints[2][0]))) : activeInsideFogTweenUpdated = 0,
+    activeInsideFogTweenUpdated !== activeInsideFogTweenUpdated && insideFogTween.invalidate()
+  })
+
 /** visible={options.lightHelpersEnabled} */
   return <group ><LightsHelper globalUniforms={globalUniforms} />
     <Sky globalUniforms={globalUniforms} /></group>;

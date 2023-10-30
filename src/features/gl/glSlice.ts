@@ -6,6 +6,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { Uniform, Vector2 } from "three";
 
 interface GlState {
+  progress: number;
   GLOBAL_VARS: {
     html: HTMLElement | null;
     body: HTMLElement | null;
@@ -47,6 +48,7 @@ interface GlState {
 }
 
 const initialState: GlState = {
+  progress: 0,
   GLOBAL_VARS: {
     html: null,
     body: null,
@@ -98,12 +100,16 @@ const glSlice = createSlice({
   reducers: {
     updateGlobalUniforms: (state, action: Action<GlState['globalUniforms']>) => {
       state.globalUniforms = action.payload;
+    },
+    setProgress: (state, action: Action<number>) => {
+      state.progress = action.payload;
     }
   }
 });
 
 export const {
   updateGlobalUniforms,
+  setProgress
 } = glSlice.actions;
 
 export const selectGl = (state: AppState) => state.gl;

@@ -5,6 +5,7 @@ import { reflectiveVertexShader } from "@/shaders/vertexShaders";
 import { objectData } from "@/utils/constants";
 import { MeshReflectorMaterial, useGLTF, useKTX2 } from "@react-three/drei";
 import { FC, ReactNode, useEffect, useMemo, useRef } from "react";
+import { config, useSpring, easings } from "@react-spring/three";
 import {
   BufferGeometry,
   LinearFilter,
@@ -24,6 +25,9 @@ import { fogDefines } from "@/shaders/defines";
 import ReflectiveSurface from "@/utils/ReflectiveSurface";
 import { Object3DNode, extend, useFrame, useThree } from "@react-three/fiber";
 import { useControls } from "leva";
+import { useSearchParams } from "next/navigation";
+import { useAppSelector } from "@/hooks";
+import { selectGl } from "@/features/gl/glSlice";
 
 extend({ ReflectiveSurface });
 
@@ -121,6 +125,9 @@ const ReflectiveFloor = () => {
 
   const {camera, scene, gl} = useThree();
   
+  const searchParams = useSearchParams();
+  const {progress: scrollProgress} = useAppSelector(selectGl);
+
   const {
     progress
   } = useControls('ReflectFloor', {
@@ -132,9 +139,19 @@ const ReflectiveFloor = () => {
     }
   })
 
+  const props = useSpring({
+    springProgress: scrollProgress,
+    config: {
+      easing: easings.easeInBack,
+    },
+  });;
+
   useFrame(({clock}) => {
     if (!baseTopRef.current || !baseTopRef.current.updateScroll) return;
-    baseTopRef.current.updateScroll(progress, gl)
+    if (searchParams.has('controls'))
+      baseTopRef.current.updateScroll(progress, gl)
+    else
+      baseTopRef.current.updateScroll(props.springProgress.get(), gl)
   })
 
   return (

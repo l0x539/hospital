@@ -20,6 +20,7 @@ import Cars from "./Cars";
 import Signs from "./Signs";
 import Bridges from "./Bridges";
 import ReflectiveFloor from "./ReflectiveFloor";
+import NavigationControls from "./layout/NavigationControls";
 
 (ShaderChunk as any).defaultVert = glslifyStrip(defaultVertDef);
 (ShaderChunk as any).defaultFrag = glslifyStrip(defaultFragDef);
@@ -44,6 +45,7 @@ const MainCanva = () => {
       uPixelRatio: new Uniform(dpr / window.devicePixelRatio)
     }))
   }, [dispach]);
+
   const {options} = useMemo(() => ({
     options: {
       cameraTargetPathProgress: 0,
@@ -87,7 +89,7 @@ const MainCanva = () => {
   useEffect(() => {
     setReady(true);
   }, [])
-  new PerspectiveCamera()
+  
   return (
     <Canvas
       gl={{
@@ -117,7 +119,8 @@ const MainCanva = () => {
       <Signs options={options} />
       <Bridges />
       {ready ? <ReflectiveFloor /> : <></>}
-      <OrbitControls />
+      {/* <OrbitControls /> */}
+      <NavigationControls options={options} />
     </Canvas>
   );
 };
