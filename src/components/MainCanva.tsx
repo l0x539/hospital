@@ -31,6 +31,30 @@ import NavigationControls from "./layout/NavigationControls";
 (ShaderChunk as any).fogOutputFrag = glslifyStrip(fogOutputFragDef);
 
 const MainCanva = () => {
+   
+  return (
+    <Canvas
+      gl={{
+        alpha: false,
+        antialias: false,
+        powerPreference: "high-performance",
+        stencil: false,
+      }}
+      camera={{
+        position: [0, 4, 13.752254],
+        fov: 45,
+        near: 1,
+        far: 500,
+        filmGauge: 100,
+        
+      }}
+    >
+      <MainScene />
+    </Canvas>
+  );
+};
+
+const MainScene = () => {
   const searchParams = useSearchParams();
   const dispach = useAppDispatch();
   const {
@@ -88,41 +112,24 @@ const MainCanva = () => {
   const [ready, setReady] = useState(false);
   useEffect(() => {
     setReady(true);
-  }, [])
-  
-  return (
-    <Canvas
-      gl={{
-        alpha: false,
-        antialias: false,
-        powerPreference: "high-performance",
-        stencil: false,
-      }}
-      camera={{
-        position: [0, 4, 13.752254],
-        fov: 45,
-        near: 1,
-        far: 500,
-        filmGauge: 100,
-        
-      }}
-    >
-      <Fog options={options} />
-      <WorldFloor options={options} />
-      {ready ? <MainTower options={options} /> : <></>}
-      <Pipes options={options} />
-      <People />
-      <Towers />
-      <Particles options={options} />
-      <CityPipes options={options} />
-      <Cars />
-      <Signs options={options} />
-      <Bridges />
-      {ready ? <ReflectiveFloor /> : <></>}
-      {/* <OrbitControls /> */}
-      <NavigationControls options={options} />
-    </Canvas>
-  );
-};
+  }, []);
+
+  return <>
+    <Fog options={options} />
+    <WorldFloor options={options} />
+    {ready ? <MainTower options={options} /> : <></>}
+    <Pipes options={options} />
+    <People />
+    <Towers />
+    <Particles options={options} />
+    <CityPipes options={options} />
+    <Cars />
+    <Signs options={options} />
+    <Bridges />
+    {ready ? <ReflectiveFloor /> : <></>}
+    {/* <OrbitControls /> */}
+    <NavigationControls options={options} />
+  </>
+}
 
 export default MainCanva;
