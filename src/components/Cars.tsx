@@ -351,7 +351,7 @@ const Car: FC<{
     uTrailLength,
   ]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!carRef.current || !trailRef.current) return;
     trailRef.current.geometry.rotateX(MathUtils.degToRad(90));
     carRef.current.geometry.rotateZ(MathUtils.degToRad(-180));
