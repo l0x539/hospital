@@ -2,7 +2,7 @@
 import { selectGl, selectGlobalVars, updateGlobalUniforms } from "@/features/gl/glSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useEffect, useMemo, useState } from "react";
-import { Color, PerspectiveCamera, ShaderChunk, Uniform, Vector2 } from "three";
+import { Color, LinearSRGBColorSpace, PerspectiveCamera, SRGBColorSpace, ShaderChunk, Uniform, Vector2 } from "three";
 import { useSearchParams } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
 import MainTower from "./MainTower";
@@ -21,6 +21,7 @@ import Signs from "./Signs";
 import Bridges from "./Bridges";
 import ReflectiveFloor from "./ReflectiveFloor";
 import NavigationControls from "./layout/NavigationControls";
+import MainEffects from "./effects/MainEffects";
 
 (ShaderChunk as any).defaultVert = glslifyStrip(defaultVertDef);
 (ShaderChunk as any).defaultFrag = glslifyStrip(defaultFragDef);
@@ -39,6 +40,7 @@ const MainCanva = () => {
         antialias: false,
         powerPreference: "high-performance",
         stencil: false,
+        outputColorSpace: LinearSRGBColorSpace
       }}
       camera={{
         fov: 45,
@@ -80,8 +82,8 @@ const MainScene = () => {
       cameraMotionPosFrequency: .21,
       cameraMotionRotFrequency: .59,
       cameraZOffset: 0,
-      cameraYTranslate: 5,
-      cameraZTranslate: 15,
+      cameraYTranslate: 0, // 5
+      cameraZTranslate: 0, // 15
       revealProgress: 0,
       mainBuildingReveal: 0,
       signs: {
@@ -128,6 +130,7 @@ const MainScene = () => {
     {ready ? <ReflectiveFloor options={options} /> : <></>}
     {/* <OrbitControls /> */}
     <NavigationControls options={options} />
+    <MainEffects />
     {/* <ScrollControls pages={4} damping={0.1}>
       <Scroll html>
         <div className="h-screen js-section-0"></div>

@@ -41603,13 +41603,13 @@
               vertexShader: "\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
               fragmentShader: "\n\n\t\tuniform sampler2D tDiffuse;\n\t\tuniform vec3 defaultColor;\n\t\tuniform float defaultOpacity;\n\t\tuniform float luminosityThreshold;\n\t\tuniform float smoothWidth;\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvec4 texel = texture2D( tDiffuse, vUv );\n\n\t\t\tvec3 luma = vec3( 0.299, 0.587, 0.114 );\n\n\t\t\tfloat v = dot( texel.xyz, luma );\n\n\t\t\tvec4 outputColor = vec4( defaultColor.rgb, defaultOpacity );\n\n\t\t\tfloat alpha = smoothstep( luminosityThreshold, luminosityThreshold + smoothWidth, v );\n\n\t\t\tgl_FragColor = mix( outputColor, texel, alpha );\n\n\t\t}"
           };
-          class XE extends NE {
-              constructor(t, e, n, i) {
+          class BloomPass extends NE {
+              constructor(res, strength, radius, threshold) {
                   super(),
-                  this.strength = void 0 !== e ? e : 1,
-                  this.radius = n,
-                  this.threshold = i,
-                  this.resolution = void 0 !== t ? new Vector2(t.x,t.y) : new Vector2(256,256),
+                  this.strength = void 0 !== strength ? strength : 1,
+                  this.radius = radius,
+                  this.threshold = threshold,
+                  this.resolution = void 0 !== res ? new Vector2(res.x,res.y) : new Vector2(256,256),
                   this.clearColor = new Color(0,0,0),
                   this.renderTargetsHorizontal = [],
                   this.renderTargetsVertical = [],
@@ -41633,7 +41633,7 @@
                   }
                   const o = YE;
                   this.highPassUniforms = pr.clone(o.uniforms),
-                  this.highPassUniforms.luminosityThreshold.value = i,
+                  this.highPassUniforms.luminosityThreshold.value = threshold,
                   this.highPassUniforms.smoothWidth.value = .01,
                   this.materialHighPassFilter = new ShaderMaterial({
                       uniforms: this.highPassUniforms,
@@ -41656,7 +41656,7 @@
                   this.compositeMaterial.uniforms.blurTexture3.value = this.renderTargetsVertical[2].texture,
                   this.compositeMaterial.uniforms.blurTexture4.value = this.renderTargetsVertical[3].texture,
                   this.compositeMaterial.uniforms.blurTexture5.value = this.renderTargetsVertical[4].texture,
-                  this.compositeMaterial.uniforms.bloomStrength.value = e,
+                  this.compositeMaterial.uniforms.bloomStrength.value = strength,
                   this.compositeMaterial.uniforms.bloomRadius.value = .1,
                   this.compositeMaterial.needsUpdate = !0;
                   this.compositeMaterial.uniforms.bloomFactors.value = [1, .8, .6, .4, .2],
@@ -41727,12 +41727,12 @@
                   for (let e = 0; e < this.nMips; e++)
                       this.fsQuad.material = this.separableBlurMaterials[e],
                       this.separableBlurMaterials[e].uniforms.colorTexture.value = o.texture,
-                      this.separableBlurMaterials[e].uniforms.direction.value = XE.BlurDirectionX,
+                      this.separableBlurMaterials[e].uniforms.direction.value = BloomPass.BlurDirectionX,
                       t.setRenderTarget(this.renderTargetsHorizontal[e]),
                       t.clear(),
                       this.fsQuad.render(t),
                       this.separableBlurMaterials[e].uniforms.colorTexture.value = this.renderTargetsHorizontal[e].texture,
-                      this.separableBlurMaterials[e].uniforms.direction.value = XE.BlurDirectionY,
+                      this.separableBlurMaterials[e].uniforms.direction.value = BloomPass.BlurDirectionY,
                       t.setRenderTarget(this.renderTargetsVertical[e]),
                       t.clear(),
                       this.fsQuad.render(t),
@@ -41813,8 +41813,8 @@
                   })
               }
           }
-          XE.BlurDirectionX = new Vector2(1,0),
-          XE.BlurDirectionY = new Vector2(0,1);
+          BloomPass.BlurDirectionX = new Vector2(1,0),
+          BloomPass.BlurDirectionY = new Vector2(0,1);
           function KE(t, e) {
               var n = Object.keys(t);
               if (Object.getOwnPropertySymbols) {
@@ -43083,29 +43083,29 @@
                   }];
                   this.options.cameraZOffset = triggers[0].pivotDistance,
                   this.sectionScrollTriggers = [];
-                  for (let t = 0; t < 4; t++) {
-                      const n = gsap.timeline({
+                  for (let index = 0; index < 4; index++) {
+                      const timeline = gsap.timeline({
                           paused: !0
                       }).fromTo(this.options, {
-                          scrollPosition: .01 * this.objectData.paths.cam[1].stops[t],
-                          cameraZOffset: triggers[t].pivotDistance
+                          scrollPosition: .01 * this.objectData.paths.cam[1].stops[index],
+                          cameraZOffset: triggers[index].pivotDistance
                       }, {
-                          scrollPosition: .01 * this.objectData.paths.cam[1].stops[t + 1],
-                          cameraZOffset: triggers[t + 1].pivotDistance,
-                          ease: triggers[t].ease,
+                          scrollPosition: .01 * this.objectData.paths.cam[1].stops[index + 1],
+                          cameraZOffset: triggers[index + 1].pivotDistance,
+                          ease: triggers[index].ease,
                           immediateRender: !1
-                      })
-                        , i = ScrollTrigger.create({
-                          trigger: `.js-section-${t}`,
-                          endTrigger: `.js-section-${t + 1}`,
-                          start: triggers[t].start,
-                          end: triggers[t].end,
+                      });
+                      const trigger = ScrollTrigger.create({
+                          trigger: `.js-section-${index}`,
+                          endTrigger: `.js-section-${index + 1}`,
+                          start: triggers[index].start,
+                          end: triggers[index].end,
                           refreshPriority: -1,
                           onUpdate: t=>{
-                              n.progress(t.progress)
+                              timeline.progress(t.progress)
                           }
                       });
-                      this.sectionScrollTriggers.push(n, i)
+                      this.sectionScrollTriggers.push(timeline, trigger)
                   }
               }
               buildPasses() {
@@ -43113,7 +43113,7 @@
                   this.fxaaPass = new QE(qE),
                   this.fxaaPass.material.uniforms.resolution.value.x = 1 / (GLOBAL_VARS.window.w * GLOBAL_VARS.WebGL.renderer.getPixelRatio()),
                   this.fxaaPass.material.uniforms.resolution.value.y = 1 / (GLOBAL_VARS.window.fullHeight * GLOBAL_VARS.WebGL.renderer.getPixelRatio()),
-                  this.bloomPass = new XE(new Vector2(GLOBAL_VARS.window.w,GLOBAL_VARS.window.fullHeight),2.12,1,.717),
+                  this.bloomPass = new BloomPass(new Vector2(GLOBAL_VARS.window.w,GLOBAL_VARS.window.fullHeight),2.12,1,.717),
                   this.bloomPass.enabled = this.options.bloomEnabled,
                   this.screenFxPass = new QE(new ShaderMaterial({
                       vertexShader: "#define GLSLIFY 1\nvarying vec2 vUv;\n\nvoid main()\t{\n    vec4 mvPosition = vec4( position, 1.0 );\n    #ifdef USE_INSTANCING\n        mvPosition = instanceMatrix * mvPosition;\n    #endif\n    vUv = uv;\n    mvPosition = modelViewMatrix * mvPosition;\n    gl_Position = projectionMatrix * mvPosition;\n}",
