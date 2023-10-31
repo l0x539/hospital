@@ -873,6 +873,83 @@ const BaseSide: FC<{
     );
   }, []);
 
+  const { 
+    fogColor,
+    uWorldFogColor,
+    lights1,
+    lights2,
+    lights3
+  } = useControls("Fog", {
+    fogColor: {
+      r: 255,
+      g: 255,
+      b: 255,
+    },
+    uWorldFogColor: {
+      r: 0x4e,
+      g: 0,
+      b: 0,
+    },
+    lights1: {
+      r: 0x5e,
+      g: 0x4c,
+      b: 0x3a
+    },
+    lights2: {
+      r: 0xba,
+      g: 0x01,
+      b: 0x01
+    },
+    lights3: {
+      r: 0x10,
+      g: 0x10,
+      b: 0x18
+    }
+  });
+  const searchParams = useSearchParams();
+
+  useFrame(() => {
+    if (!ref.current) return;
+
+    if (searchParams.has("controls")) {
+      ref.current.material.uniforms.uColor.value = {
+        r: fogColor.r / 255,
+        g: fogColor.g / 255,
+        b: fogColor.b / 255,
+      };
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[0].color = {
+        r: lights1.r / 255,
+        g: lights1.g / 255,
+        b: lights1.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[1].color = {
+        r: lights2.r / 255,
+        g: lights2.g / 255,
+        b: lights2.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[2].color = {
+        r: lights3.r / 255,
+        g: lights3.g / 255,
+        b: lights3.b / 255,
+      };
+
+    }
+  });
+
   return <mesh geometry={baseSides.geometry}>
     <shaderMaterial
       vertexShader={fogVertexShader}
@@ -1212,6 +1289,82 @@ const Pilars: FC<{
       objectData.objects.pilars[0][2][2]
     );
   }, []);
+  const searchParams = useSearchParams();
+
+  const { 
+    fogColor,
+    uWorldFogColor,
+    lights1,
+    lights2,
+    lights3
+  } = useControls("Fog", {
+    fogColor: {
+      r: 255,
+      g: 255,
+      b: 255,
+    },
+    uWorldFogColor: {
+      r: 0x4e,
+      g: 0,
+      b: 0,
+    },
+    lights1: {
+      r: 0x5e,
+      g: 0x4c,
+      b: 0x3a
+    },
+    lights2: {
+      r: 0xba,
+      g: 0x01,
+      b: 0x01
+    },
+    lights3: {
+      r: 0x10,
+      g: 0x10,
+      b: 0x18
+    }
+  });
+
+  useFrame(() => {
+    if (searchParams.has('controls') && ref.current) {
+
+      ref.current.material.uniforms.uColor.value = {
+        r: fogColor.r/256,
+        g: fogColor.g/256,
+        b: fogColor.b/256,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[0].color = {
+        r: lights1.r / 255,
+        g: lights1.g / 255,
+        b: lights1.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[1].color = {
+        r: lights2.r / 255,
+        g: lights2.g / 255,
+        b: lights2.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[2].color = {
+        r: lights3.r / 255,
+        g: lights3.g / 255,
+        b: lights3.b / 255,
+      };
+    }
+  });
 
   return <mesh ref={ref} geometry={pilars.geometry}>
     <shaderMaterial

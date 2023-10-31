@@ -32,6 +32,7 @@ import MainEffects from "./effects/MainEffects";
 (ShaderChunk as any).fogOutputFrag = glslifyStrip(fogOutputFragDef);
 
 const MainCanva = () => {
+  const searchParams = useSearchParams();
    
   return (
     <Canvas
@@ -43,6 +44,9 @@ const MainCanva = () => {
         outputColorSpace: LinearSRGBColorSpace
       }}
       camera={{
+        ...(searchParams.has('controls') ? {
+          position: [0, 5, 15]
+        } : {}),
         fov: 45,
         near: 1,
         far: 500,

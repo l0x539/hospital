@@ -450,7 +450,57 @@ const PipeLine: FC<{
     config: {
       easing: easings.easeInBack,
     },
-  });;
+  });
+
+  const { 
+    uColor1,
+    uColor2,
+  } = useControls("Pipes", {
+    uColor1: {
+      r: 0,
+      g: 0,
+      b: 100,
+    },
+    uColor2: {
+      r: 0,
+      g: 100,
+      b: 0,
+    },
+  });
+
+  const { 
+    fogColor,
+    uWorldFogColor,
+    lights1,
+    lights2,
+    lights3
+  } = useControls("Fog", {
+    fogColor: {
+      r: 255,
+      g: 255,
+      b: 255,
+    },
+    uWorldFogColor: {
+      r: 0x4e,
+      g: 0,
+      b: 0,
+    },
+    lights1: {
+      r: 0x5e,
+      g: 0x4c,
+      b: 0x3a
+    },
+    lights2: {
+      r: 0xba,
+      g: 0x01,
+      b: 0x01
+    },
+    lights3: {
+      r: 0x10,
+      g: 0x10,
+      b: 0x18
+    }
+  });
 
   useFrame(({clock}) => {
     if (!ref.current) return;
@@ -459,6 +509,55 @@ const PipeLine: FC<{
       ref.current.material.uniforms.uProgress.value = progress;
     else
       ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal;// props.springProgress.get();
+
+    if (searchParams.has("controls")) {
+      ref.current.material.uniforms.uColor1.value = {
+        r: uColor1.r / 255,
+        g: uColor1.g / 255,
+        b: uColor1.b / 255,
+      };
+      ref.current.material.uniforms.uColor2.value = {
+        r: uColor2.r / 255,
+        g: uColor2.g / 255,
+        b: uColor2.b / 255,
+      };
+
+      ref.current.material.uniforms.uColor.value = {
+        r: fogColor.r / 255,
+        g: fogColor.g / 255,
+        b: fogColor.b / 255,
+      };
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[0].color = {
+        r: lights1.r / 255,
+        g: lights1.g / 255,
+        b: lights1.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[1].color = {
+        r: lights2.r / 255,
+        g: lights2.g / 255,
+        b: lights2.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[2].color = {
+        r: lights3.r / 255,
+        g: lights3.g / 255,
+        b: lights3.b / 255,
+      };
+    }
+    
   })
 
   return <></>

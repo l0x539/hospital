@@ -2,6 +2,9 @@ import { fogFragmentShader } from "@/shaders/fragmantShaders";
 import { fogVertexShader } from "@/shaders/vertexShaders";
 import { objectData } from "@/utils/constants";
 import { useGLTF, useKTX2 } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { useControls } from "leva";
+import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useMemo, useRef } from "react";
 import { BufferGeometry, Color, FrontSide, Mesh, MeshBasicMaterial, Quaternion, ShaderMaterial, Vector3 } from "three";
 
@@ -161,6 +164,41 @@ const WorldFloor: FC<{
 
   const mesh = useRef<Mesh<BufferGeometry, ShaderMaterial>>(null);
 
+  const { 
+    fogColor,
+    uWorldFogColor,
+    lights1,
+    lights2,
+    lights3
+  } = useControls("Fog", {
+    fogColor: {
+      r: 255,
+      g: 255,
+      b: 255,
+    },
+    uWorldFogColor: {
+      r: 0x4e,
+      g: 0,
+      b: 0,
+    },
+    lights1: {
+      r: 0x5e,
+      g: 0x4c,
+      b: 0x3a
+    },
+    lights2: {
+      r: 0xba,
+      g: 0x01,
+      b: 0x01
+    },
+    lights3: {
+      r: 0x10,
+      g: 0x10,
+      b: 0x18
+    }
+  });
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     mesh.current?.translateX(objectData.objects.floor[0][0][0])
     mesh.current?.translateY(objectData.objects.floor[0][0][1])
@@ -168,7 +206,50 @@ const WorldFloor: FC<{
     new Object({...mesh.current}).hasOwnProperty('isBufferGeometry') && mesh.current?.applyQuaternion(new Quaternion(objectData.objects.floor[0][1][0], objectData.objects.floor[0][1][1], objectData.objects.floor[0][1][2], objectData.objects.floor[0][1][3]))
     mesh.current?.rotation.setFromQuaternion(new Quaternion(objectData.objects.floor[0][1][0], objectData.objects.floor[0][1][1], objectData.objects.floor[0][1][2], objectData.objects.floor[0][1][3]))
     mesh.current?.scale.set(objectData.objects.floor[0][2][0], objectData.objects.floor[0][2][1], objectData.objects.floor[0][2][2])
-  }, [])
+  }, []);
+
+  useFrame(() => {
+    if (!mesh.current) return;
+
+    if (searchParams.has("controls")) {
+      mesh.current.material.uniforms.uColor.value = {
+        r: fogColor.r / 255,
+        g: fogColor.g / 255,
+        b: fogColor.b / 255,
+      };
+      mesh.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      mesh.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      mesh.current.material.uniforms.volumetricLights.value[0].color = {
+        r: lights1.r / 255,
+        g: lights1.g / 255,
+        b: lights1.b / 255,
+      };
+
+      mesh.current.material.uniforms.volumetricLights.value[1].color = {
+        r: lights2.r / 255,
+        g: lights2.g / 255,
+        b: lights2.b / 255,
+      };
+
+      mesh.current.material.uniforms.volumetricLights.value[2].color = {
+        r: lights3.r / 255,
+        g: lights3.g / 255,
+        b: lights3.b / 255,
+      };
+
+    }
+  });
+
   return <mesh
     ref={mesh}
     geometry={(floor.scene.children[0] as Mesh<BufferGeometry, MeshBasicMaterial>).geometry}>
