@@ -349,9 +349,8 @@ const Sign: FC<{
 
 
   const searchParams = useSearchParams();
-  const {progress: scrollProgress} = useAppSelector(selectGl);
   const props = useSpring({
-    springProgress: scrollProgress,
+    springProgress: options.scrollPosition,
     config: {
       easing: easings.easeInBack,
     },

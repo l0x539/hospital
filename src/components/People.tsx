@@ -239,9 +239,8 @@ const PersonMaterial: FC<{
   }), [textures.hexTexture, textures.recursiveMask2, textures.repeatTexture])
 
   const searchParams = useSearchParams();
-  const {progress: scrollProgress} = useAppSelector(selectGl);
   const props = useSpring({
-    springProgress: scrollProgress,
+    springProgress: options.scrollPosition,
     config: {
       easing: easings.easeInBack,
     },

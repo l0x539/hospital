@@ -445,9 +445,8 @@ const PipeLine: FC<{
   }, [bufferArray, globalUniforms, globalUniforms1, options.pipes.uColor1, options.pipes.uColor2, pathIndex, scene, uniforms, v2]);
 
   const searchParams = useSearchParams();
-  const {progress: scrollProgress} = useAppSelector(selectGl);
   const props = useSpring({
-    springProgress: scrollProgress,
+    springProgress: options.scrollPosition,
     config: {
       easing: easings.easeInBack,
     },

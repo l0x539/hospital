@@ -9,20 +9,20 @@ import { useMediaQuery } from "react-responsive";
 import gsap from "gsap";
 import { CatmullRomCurve3, Euler, Quaternion, Vector2, Vector3 } from "three";
 import { config, useSpring, easings } from "@react-spring/three";
-import { BrownianMotion } from "@/utils/funcs";
+import { BrownianMotion, range } from "@/utils/funcs";
+import { CustomEase } from "gsap/all";
+
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const NavigationControls: FC<{
   options: {
     [value: string]: any;
   };
 }> = ({ options }) => {
-  const pathname = usePathname();
-  const router = useRouter();
-  const mainRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
 
-  const { progress } = useAppSelector(selectGl);
   const dispatch = useAppDispatch();
 
   const {
@@ -34,6 +34,7 @@ const NavigationControls: FC<{
     _quaternion,
     brownianMotion,
     smoothMouse,
+    timelines
   } = useMemo(() => {
     const brownianMotion = new BrownianMotion();
     const pathTween = gsap.timeline({
@@ -76,8 +77,7 @@ const NavigationControls: FC<{
       c: {},
       cam: new CatmullRomCurve3(),
     };
-    console.log(objectData.paths);
-    
+
     for (const key in objectData.paths)
       if ("c" === key)
         for (let index = 0; index < objectData.paths[key].length; index++) {
@@ -99,6 +99,47 @@ const NavigationControls: FC<{
           ? (paths.cars[key] = new CatmullRomCurve3(points))
           : (paths[key as "cam"] = new CatmullRomCurve3(points));
       }
+
+    
+    const customEase = CustomEase.create("custom", "M0,0,C0.4,0.018,0.398,0.3,0.507,0.512,0.6,0.693,0.6,0.984,1,1")
+    const triggers = [{
+      start: "top top",
+      end: "top+=50% top",
+      ease: customEase,
+      pivotDistance: 15
+    }, {
+      start: "top+=50% top",
+      end: "top+=50% top",
+      ease: customEase,
+      pivotDistance: 10
+    }, {
+      start: "top+=50% top",
+      end: "top+=50% top",
+      ease: customEase,
+      pivotDistance: 12
+    }, {
+      start: "top+=50% top",
+      end: "bottom top",
+      ease: customEase,
+      pivotDistance: 12
+    }, {
+      pivotDistance: 100
+    }];
+    options.cameraZOffset = triggers[0].pivotDistance;
+    let timelines = [];
+    for (let index = 0; index < 4; index++) {
+      timelines[index] = gsap.timeline({
+        paused: !0
+      }).fromTo(options, {
+        scrollPosition: .01 * objectData.paths.cam[1].stops[index],
+        cameraZOffset: triggers[index].pivotDistance
+      }, {
+        scrollPosition: .01 * objectData.paths.cam[1].stops[index + 1],
+        cameraZOffset: triggers[index + 1].pivotDistance,
+        ease: triggers[index].ease,
+        immediateRender: !1
+      });
+    }
     
     return {
       pathTween,
@@ -109,8 +150,9 @@ const NavigationControls: FC<{
       _quaternion: new Quaternion(),
       brownianMotion,
       smoothMouse: [new Vector2(), new Vector2()],
+      timelines
     };
-  }, []);
+  }, [options]);
 
   const handleScroll: Handler<"scroll" | "wheel" | "drag", UIEvent> = ({
     direction: [_, y],
@@ -122,16 +164,18 @@ const NavigationControls: FC<{
   }) => {
     if (y !== 0) {
       const newVal =
-        progress +
+        options.scrollPosition +
         deltaY *
           (type.startsWith("pointer")
             ? progressSpeed.pointer
             : progressSpeed.wheel);
+      options.scrollPosition = Math.min(Math.max(newVal, 0), 1);
       dispatch(setProgress(Math.min(Math.max(newVal, 0), 1)));
     }
   };
 
   useEffect(() => {
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const searchParams = useSearchParams();
@@ -151,12 +195,18 @@ const NavigationControls: FC<{
     }
   );
   const props = useSpring({
-    springProgress: progress,
+    springProgress: options.scrollPosition,
     config: {
       easing: easings.easeInBack,
     },
   });
+
   useFrame(({ camera, mouse }) => {
+    // const index = options.scrollPosition/4 < 1/4 ? 0 : options.scrollPosition/4 < 1/2 ? 1 : options.scrollPosition/4 < 3/4 ? 2 : 3;
+    // const start = options.scrollPosition/4 < 1/4 ? 0 : options.scrollPosition/4 < 1/2 ? 1/4 : options.scrollPosition/4 < 3/4 ? 1/2 : 3/4;
+    // const end = options.scrollPosition/4 < 1/4 ? 1/4 : options.scrollPosition/4 < 1/2 ? 1/2 : options.scrollPosition/4 < 3/4 ? 3/4 : 1;
+    // const progress = range(options.scrollPosition, start, end)
+    // timelines[index].progress(progress)
     pathTween.progress(props.springProgress.get());
     smoothMouse[0].lerp(mouse, 0.03);
     smoothMouse[0].lerp(mouse, 0.04);

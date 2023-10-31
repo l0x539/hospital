@@ -310,11 +310,10 @@ const Fog: FC<{
       fogTween,
       activeInsideFogTween
     }
-  }, []);
+  }, [fogTweenValues, globalUniforms.uFogFar_D, globalUniforms.uFogFar_H, globalUniforms.uFogNear_D, globalUniforms.uFogNear_H, globalUniforms.uFogStrength, globalUniforms.uFogStrength_D, globalUniforms.uFogStrength_H, globalUniforms.uWorldFogColor.value, globalUniforms.uWorldFogColorMix, globalUniforms.volumetricLights.value]);
 
-  const {progress: scrollProgress} = useAppSelector(selectGl);
   const props = useSpring({
-    springProgress: scrollProgress,
+    springProgress: options.scrollPosition,
     config: {
       easing: easings.easeInBack,
     },

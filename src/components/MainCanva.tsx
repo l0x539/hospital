@@ -10,7 +10,7 @@ import glslifyStrip from "@/utils/funcs";
 import { defaultFragDef, defaultVertDef, fogOutputFragDef, fogOutputVertDef, fogParamsFragDef, fogParamsVertDef, normalsVertDef } from "@/shaders/defines";
 import Fog from "./Fog";
 import WorldFloor from "./WorldFloor";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Scroll, ScrollControls } from "@react-three/drei";
 import Pipes from "./Pipes";
 import People from "./People";
 import Towers from "./Towers";
@@ -125,9 +125,17 @@ const MainScene = () => {
     <Cars />
     <Signs options={options} />
     <Bridges options={options} />
-    {ready ? <ReflectiveFloor /> : <></>}
+    {ready ? <ReflectiveFloor options={options} /> : <></>}
     {/* <OrbitControls /> */}
     <NavigationControls options={options} />
+    {/* <ScrollControls pages={4} damping={0.1}>
+      <Scroll html>
+        <div className="h-screen js-section-0"></div>
+        <div className="h-screen js-section-1"></div>
+        <div className="h-screen js-section-2"></div>
+        <div className="h-screen js-section-3"></div>
+      </Scroll>
+    </ScrollControls> */}
   </>
 }
 

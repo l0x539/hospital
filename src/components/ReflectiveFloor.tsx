@@ -73,7 +73,11 @@ const applyObjectDataToObjectProps = (
   return mesh;
 };
 
-const ReflectiveFloor = () => {
+const ReflectiveFloor: FC<{
+  options: {
+    [value: string]: any;
+  };
+}> = ({ options }) => {
   const [
     baseLightmap,
     wallsRoughness,
@@ -126,7 +130,6 @@ const ReflectiveFloor = () => {
   const {camera, scene, gl} = useThree();
   
   const searchParams = useSearchParams();
-  const {progress: scrollProgress} = useAppSelector(selectGl);
 
   const {
     progress
@@ -140,7 +143,7 @@ const ReflectiveFloor = () => {
   })
 
   const props = useSpring({
-    springProgress: scrollProgress,
+    springProgress: options.scrollPosition,
     config: {
       easing: easings.easeInBack,
     },

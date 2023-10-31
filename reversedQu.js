@@ -42588,12 +42588,12 @@
               }
               update() {
                   this.fogTween.progress(GLOBAL_VARS.MainScene.options.scrollPosition / this.fogTweenEndPoint);
-                  const t = this.activeInsideFogTween;
+                  const activeInsideFogTween = this.activeInsideFogTween;
                   GLOBAL_VARS.MainScene.options.scrollPosition >= this.insideFogTweenPoints[0][0] - .05 && GLOBAL_VARS.MainScene.options.scrollPosition <= this.insideFogTweenPoints[0][1] + .05 ? (this.activeInsideFogTween = 0,
                   this.insideFogTween.progress((GLOBAL_VARS.MainScene.options.scrollPosition - this.insideFogTweenPoints[0][0]) / (this.insideFogTweenPoints[0][1] - this.insideFogTweenPoints[0][0]))) : GLOBAL_VARS.MainScene.options.scrollPosition >= this.insideFogTweenPoints[1][0] - .05 && GLOBAL_VARS.MainScene.options.scrollPosition <= this.insideFogTweenPoints[1][1] + .05 ? (this.activeInsideFogTween = 1,
                   this.insideFogTween.progress((GLOBAL_VARS.MainScene.options.scrollPosition - this.insideFogTweenPoints[1][0]) / (this.insideFogTweenPoints[1][1] - this.insideFogTweenPoints[1][0]))) : GLOBAL_VARS.MainScene.options.scrollPosition >= this.insideFogTweenPoints[2][0] - .05 && GLOBAL_VARS.MainScene.options.scrollPosition <= this.insideFogTweenPoints[2][1] + .05 ? (this.activeInsideFogTween = 2,
                   this.insideFogTween.progress((GLOBAL_VARS.MainScene.options.scrollPosition - this.insideFogTweenPoints[2][0]) / (this.insideFogTweenPoints[2][1] - this.insideFogTweenPoints[2][0]))) : this.activeInsideFogTween = !1,
-                  this.allowInvalidate && t !== this.activeInsideFogTween && this.insideFogTween.invalidate()
+                  this.allowInvalidate && activeInsideFogTween !== this.activeInsideFogTween && this.insideFogTween.invalidate()
               }
           }
           function BrownianMotion() {
@@ -43014,25 +43014,25 @@
                       cars: {},
                       c: {}
                   };
-                  for (const t in this.objectData.paths)
-                      if ("c" === t)
-                          for (let e = 0; e < this.objectData.paths[t].length; e++) {
-                              if (!this.objectData.paths[t][e].length)
+                  for (const key in this.objectData.paths)
+                      if ("c" === key)
+                          for (let index = 0; index < this.objectData.paths[key].length; index++) {
+                              if (!this.objectData.paths[key][index].length)
                                   continue;
-                              const n = [];
-                              for (let i = 0; i < this.objectData.paths[t][e].length; i++) {
-                                  const r = this.objectData.paths[t][e][i];
-                                  n.push(new Vector3(r[0],r[1],r[2]))
+                              const points = [];
+                              for (let i = 0; i < this.objectData.paths[key][index].length; i++) {
+                                  const arrayVec = this.objectData.paths[key][index][i];
+                                  points.push(new Vector3(arrayVec[0],arrayVec[1],arrayVec[2]))
                               }
-                              this.paths.c["c" + e] = new CatmullRomCurve3(n)
+                              this.paths.c["c" + index] = new CatmullRomCurve3(points)
                           }
                       else {
-                          const e = [];
-                          for (let n = 0; n < this.objectData.paths[t][0].length; n++) {
-                              const i = this.objectData.paths[t][0][n];
-                              e.push(new Vector3(i[0],i[1],i[2]))
+                          const points = [];
+                          for (let n = 0; n < this.objectData.paths[key][0].length; n++) {
+                              const i = this.objectData.paths[key][0][n];
+                              points.push(new Vector3(i[0],i[1],i[2]))
                           }
-                          t.startsWith("car") ? this.paths.cars[t] = new CatmullRomCurve3(e) : this.paths[t] = new CatmullRomCurve3(e)
+                          key.startsWith("car") ? this.paths.cars[key] = new CatmullRomCurve3(points) : this.paths[key] = new CatmullRomCurve3(points)
                       }
               }
               buildPathTween() {
@@ -43042,64 +43042,64 @@
                           ease: "none"
                       }
                   });
-                  for (let t = 0; t < this.objectData.paths.cam[1].stops.length - 1; t++) {
-                      const e = .01 * this.objectData.paths.tgt[1].stops[t + 1]
-                        , n = .01 * this.objectData.paths.cam[1].stops[t + 1]
-                        , i = .01 * this.objectData.paths.cam[1].stops[t]
-                        , r = .01 * this.objectData.paths.reveal[1].stops[t + 1]
-                        , s = .01 * (this.objectData.paths.reveal[1].stops[t + 1] + 5);
+                  for (let index = 0; index < this.objectData.paths.cam[1].stops.length - 1; index++) {
+                      const cameraTargetPathProgress = .01 * this.objectData.paths.tgt[1].stops[index + 1];
+                      const nextStop = .01 * this.objectData.paths.cam[1].stops[index + 1];
+                      const curStop = .01 * this.objectData.paths.cam[1].stops[index];
+                      const revealProgress = .01 * this.objectData.paths.reveal[1].stops[index + 1];
+                      const mainBuildingReveal = .01 * (this.objectData.paths.reveal[1].stops[index + 1] + 5);
                       this.pathTween.to(this.options, {
-                          cameraTargetPathProgress: e,
-                          duration: n - i,
-                          revealProgress: r,
-                          mainBuildingReveal: s
+                          cameraTargetPathProgress: cameraTargetPathProgress,
+                          duration: nextStop - curStop,
+                          revealProgress: revealProgress,
+                          mainBuildingReveal: mainBuildingReveal
                       })
                   }
               }
               setupSectionScrollTriggers() {
-                  const t = CustomEase.create("custom", "M0,0,C0.4,0.018,0.398,0.3,0.507,0.512,0.6,0.693,0.6,0.984,1,1")
-                    , e = [{
+                  const customEase = CustomEase.create("custom", "M0,0,C0.4,0.018,0.398,0.3,0.507,0.512,0.6,0.693,0.6,0.984,1,1")
+                    , triggers = [{
                       start: "top top",
                       end: "top+=50% top",
-                      ease: t,
+                      ease: customEase,
                       pivotDistance: 15
                   }, {
                       start: "top+=50% top",
                       end: "top+=50% top",
-                      ease: t,
+                      ease: customEase,
                       pivotDistance: 10
                   }, {
                       start: "top+=50% top",
                       end: "top+=50% top",
-                      ease: t,
+                      ease: customEase,
                       pivotDistance: 12
                   }, {
                       start: "top+=50% top",
                       end: "bottom top",
-                      ease: t,
+                      ease: customEase,
                       pivotDistance: 12
                   }, {
                       pivotDistance: 100
                   }];
-                  this.options.cameraZOffset = e[0].pivotDistance,
+                  this.options.cameraZOffset = triggers[0].pivotDistance,
                   this.sectionScrollTriggers = [];
                   for (let t = 0; t < 4; t++) {
                       const n = gsap.timeline({
                           paused: !0
                       }).fromTo(this.options, {
                           scrollPosition: .01 * this.objectData.paths.cam[1].stops[t],
-                          cameraZOffset: e[t].pivotDistance
+                          cameraZOffset: triggers[t].pivotDistance
                       }, {
                           scrollPosition: .01 * this.objectData.paths.cam[1].stops[t + 1],
-                          cameraZOffset: e[t + 1].pivotDistance,
-                          ease: e[t].ease,
+                          cameraZOffset: triggers[t + 1].pivotDistance,
+                          ease: triggers[t].ease,
                           immediateRender: !1
                       })
                         , i = ScrollTrigger.create({
                           trigger: `.js-section-${t}`,
                           endTrigger: `.js-section-${t + 1}`,
-                          start: e[t].start,
-                          end: e[t].end,
+                          start: triggers[t].start,
+                          end: triggers[t].end,
                           refreshPriority: -1,
                           onUpdate: t=>{
                               n.progress(t.progress)
@@ -43175,29 +43175,29 @@
                   GLOBAL_VARS.urlParams.has("noui") && ec.off("wheel", window, this.onWheel),
                   GLOBAL_VARS.RAFCollection.remove(this.onRaf)
               }
-              animateTowers(t) {
+              animateTowers(revealProgress) {
                   const e = gsap.timeline();
-                  for (const t in this.components.towers.meshes) {
-                      const n = MathUtils.randFloat(8, 12);
-                      e.to(this.components.towers.meshes[t].material.uniforms.uProgress, {
+                  for (const meshIndex in this.components.towers.meshes) {
+                      const randN = MathUtils.randFloat(8, 12);
+                      e.to(this.components.towers.meshes[meshIndex].material.uniforms.uProgress, {
                           value: 2,
-                          duration: n,
+                          duration: randN,
                           ease: "sine.inOut",
                           delay: 0
                       }, 0),
-                      this.components.cityPipes.paths.pipes[t].forEach((t=>{
-                          e.to(t.material.uniforms.uProgress, {
+                      this.components.cityPipes.paths.pipes[meshIndex].forEach((mesh=>{
+                          e.to(mesh.material.uniforms.uProgress, {
                               value: 2,
-                              duration: n,
+                              duration: randN,
                               ease: "sine.inOut",
                               delay: 0
                           }, 0)
                       }
                       )),
-                      this.components.signs.meshes.city[t].forEach((t=>{
-                          e.to(t.material.uniforms.uCityProgress, {
+                      this.components.signs.meshes.city[meshIndex].forEach((mesh=>{
+                          e.to(mesh.material.uniforms.uCityProgress, {
                               value: 2,
-                              duration: n,
+                              duration: randN,
                               ease: "sine.inOut",
                               delay: 0
                           }, 0)

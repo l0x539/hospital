@@ -148,9 +148,8 @@ const Bridges: FC<{
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const {progress: scrollProgress} = useAppSelector(selectGl);
   const props = useSpring({
-    springProgress: scrollProgress,
+    springProgress: options.scrollPosition,
     config: {
       easing: easings.easeInBack,
     },

@@ -515,17 +515,6 @@ const TowerInstancedMesh: FC<{
   })
 
   const searchParams = useSearchParams();
-  const {progress: scrollProgress} = useAppSelector(selectGl);
-  const props = useSpring({
-    springProgress: scrollProgress,
-    config: {
-      easing: easings.easeInBack,
-    },
-  });
-
-  const animateTowers = () => {
-
-  }
 
 
   const randN = useMemo(() => MathUtils.randFloat(8, 12), []);
@@ -536,7 +525,7 @@ const TowerInstancedMesh: FC<{
     ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
     if (searchParams.has('controls'))
       ref.current.material.uniforms.uProgress.value = progress;
-    else if (scrollProgress >= .008) {
+    else if (options.scrollPosition >= .008) {
       // ref.current.material.uniforms.uProgress.value = props.springProgress.get();
 
       timeline.to(ref.current.material.uniforms.uProgress, {
