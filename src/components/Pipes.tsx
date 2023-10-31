@@ -459,7 +459,7 @@ const PipeLine: FC<{
     if (searchParams.has('controls'))
       ref.current.material.uniforms.uProgress.value = progress;
     else
-      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
+      ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal;// props.springProgress.get();
   })
 
   return <></>

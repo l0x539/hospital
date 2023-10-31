@@ -76,6 +76,8 @@ const NavigationControls: FC<{
       c: {},
       cam: new CatmullRomCurve3(),
     };
+    console.log(objectData.paths);
+    
     for (const key in objectData.paths)
       if ("c" === key)
         for (let index = 0; index < objectData.paths[key].length; index++) {
@@ -97,7 +99,7 @@ const NavigationControls: FC<{
           ? (paths.cars[key] = new CatmullRomCurve3(points))
           : (paths[key as "cam"] = new CatmullRomCurve3(points));
       }
-
+    
     return {
       pathTween,
       paths,

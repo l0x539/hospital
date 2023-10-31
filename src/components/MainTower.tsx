@@ -343,10 +343,14 @@ const MainTower: FC<{
       step: 0.01
     }
   })
+  const searchParams = useSearchParams();
 
   useFrame(({clock}) => {
     if (!ref.current) return;
-    ref.current.material.uniforms.uProgress.value = progress;
+    if (searchParams.has('controls'))
+      ref.current.material.uniforms.uProgress.value = progress;
+    else
+      ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal ;// props.springProgress.get();
     ref.current.material.uniforms.uTime.value = clock.elapsedTime;
   })
 
@@ -358,6 +362,7 @@ const MainTower: FC<{
           return (
             <Wall
               key={index}
+              options={options}
               name={key.replace("mb", "")}
               index={index}
               mesh={(buildingWalls.scene.children[0] as Mesh).clone()}
@@ -1105,12 +1110,14 @@ const Wall: FC<{
   name: string;
   renderOrder: number;
   children: ReactNode;
+  options: any;
 }> = ({
   children,
   index,
   mesh,
   name,
   renderOrder,
+  options
 }) => {
   const ref = useRef<Mesh<BufferGeometry, ShaderMaterial>>(null);
   useEffect(() => {
@@ -1166,7 +1173,7 @@ const Wall: FC<{
     if (searchParams.has('controls'))
       ref.current.material.uniforms.uProgress.value = progress;
     else
-      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
+      ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal ;// props.springProgress.get();
     ref.current.material.uniforms.uTime.value = clock.elapsedTime;
   })
   

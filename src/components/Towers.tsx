@@ -28,8 +28,13 @@ import {
   Texture,
   Vector3,
 } from "three";
+import gsap from "gsap";
 
-const Towers = () => {
+const Towers: FC<{
+  options: {
+    [value: string]: any;
+  }
+}> = ({options}) => {
   const [
     {scene: {children: [city0]}},
     {scene: {children: [city1]}},
@@ -279,6 +284,7 @@ const Towers = () => {
         .filter((d) => d.startsWith("city"))
         .map((dataKey, index) => <TowerInstancedMesh
           key={index}
+          options={options}
           dataKey={dataKey}
           geometry={(models[dataKey as 'city0' | 'city1' | 'city2'] as Mesh).geometry.clone()}
           globalUniforms={globalUniforms}
@@ -328,8 +334,11 @@ const TowerInstancedMesh: FC<{
     [value: string]: {
       value: any;
     }
+  };
+  options: {
+    [value: string]: any;
   }
-}> = ({ dataKey, geometry, textures, globalUniforms }) => {
+}> = ({ dataKey, geometry, textures, globalUniforms, options }) => {
   const ref = useRef<InstancedMesh<BufferGeometry, ShaderMaterial>>(null);
   const { v3, dataLength, instanceDummy, towerData } = useMemo(() => {
     const v3 = new Vector3();
@@ -512,16 +521,31 @@ const TowerInstancedMesh: FC<{
     config: {
       easing: easings.easeInBack,
     },
-  });;
+  });
+
+  const animateTowers = () => {
+
+  }
+
+
+  const randN = useMemo(() => MathUtils.randFloat(8, 12), []);
+  const timeline = useMemo(() => gsap.timeline(), []);
 
   useFrame(({clock}) => {
     if (!ref.current) return;
+    ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
     if (searchParams.has('controls'))
       ref.current.material.uniforms.uProgress.value = progress;
-    else
-      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
-    ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
+    else if (scrollProgress >= .008) {
+      // ref.current.material.uniforms.uProgress.value = props.springProgress.get();
 
+      timeline.to(ref.current.material.uniforms.uProgress, {
+          value: 2,
+          duration: randN,
+          ease: "sine.inOut",
+          delay: 0
+      }, 0);
+    }
   })
 
   return (<primitive ref={ref} object={iMesh} />

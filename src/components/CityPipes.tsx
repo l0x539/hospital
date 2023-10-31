@@ -11,6 +11,7 @@ import { FC, ReactNode, useEffect, useMemo, useRef } from "react"
 import { Color, MathUtils, Object3D, Quaternion, ShaderMaterial, Vector2, Vector3 } from "three";
 import { Line2, LineGeometry, LineMaterial } from "three-stdlib";
 import { config, useSpring, easings } from "@react-spring/three";
+import gsap from "gsap";
 
 const applyObjectDataToObjectProps = (
   mesh: Object3D,
@@ -537,11 +538,14 @@ const PipeLine: FC<{
 
   useFrame(({clock}) => {
     if (!ref.current) return;
-    ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
+      ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
     if (searchParams.has('controls'))
-    ref.current.material.uniforms.uProgress.value = progress;
-  else
-    ref.current.material.uniforms.uProgress.value = props.springProgress.get();
+      ref.current.material.uniforms.uProgress.value = progress;
+    else {
+      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
+    }
+
+    
   })
 
   return <></>

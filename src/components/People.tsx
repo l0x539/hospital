@@ -34,7 +34,13 @@ const applyObjectDataToObjectProps = (mesh: BufferGeometry, personIndex: string,
   return mesh;
 }
 
-const People = () => {
+const People: FC<{
+  options: {
+    [value: string]: any;
+  }
+}> = ({
+  options
+}) => {
   const [
     peopleLightmap0,
     peopleLightmap1,
@@ -179,7 +185,7 @@ const People = () => {
 
   return <>
     {geometries.map((geometry, index) => <mesh key={index} geometry={geometry ?? undefined}>
-      <PersonMaterial index={index} textures={textures} />
+      <PersonMaterial options={options} index={index} textures={textures} />
     </mesh>)}
   </>;
 };
@@ -188,10 +194,14 @@ const PersonMaterial: FC<{
   index: number;
   textures: {
     [value: string]: Texture;
+  };
+  options: {
+    [value: string]: any;
   }
 }> = ({
   index,
-  textures
+  textures,
+  options
 }) => {
   const ref = useRef<ShaderMaterial>(null);
   const lightCount = globalLights.length;
@@ -253,7 +263,7 @@ const PersonMaterial: FC<{
     if (searchParams.has('controls'))
       ref.current.uniforms.uProgress.value = progress;
     else
-      ref.current.uniforms.uProgress.value = props.springProgress.get();
+      ref.current.uniforms.uProgress.value = options.revealProgress; // props.springProgress.get();
   })
 
   return <shaderMaterial

@@ -305,6 +305,7 @@ const Signs: FC<{
           path={path}
           index={index}
           signsData={signsData}
+          options={options}
         />
       ))}
     </group>
@@ -322,7 +323,10 @@ const Sign: FC<{
   signsData: {
     [value: string]: any;
   };
-}> = ({ type, geometry, uniforms, path, index, signsData }) => {
+  options: {
+    [value: string]: any;
+  };
+}> = ({ options, type, geometry, uniforms, path, index, signsData }) => {
   const ref = useRef<Mesh<BufferGeometry, ShaderMaterial>>(null);
 
   const { progress } = useControls("MainTower", {
@@ -361,14 +365,13 @@ const Sign: FC<{
   useFrame(({clock}) => {
     if (!ref.current) return;
     if (type === "city-sign")
-    
-    if (searchParams.has('controls')) {
-      ref.current.material.uniforms.uProgress.value = progress;
-      ref.current.material.uniforms.uCityProgress.value = cityProgress;
-    } else {
-      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
-      ref.current.material.uniforms.uCityProgress.value = props.springProgress.get();
-    }
+      if (searchParams.has('controls')) {
+        ref.current.material.uniforms.uProgress.value = progress;
+        ref.current.material.uniforms.uCityProgress.value = cityProgress;
+      } else {
+        ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal; //props.springProgress.get();
+        ref.current.material.uniforms.uCityProgress.value = options.mainBuildingReveal; // props.springProgress.get();
+      }
     ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
   
   });

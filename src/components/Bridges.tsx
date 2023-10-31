@@ -8,7 +8,7 @@ import { useGLTF, useKTX2 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { FC, useEffect, useMemo, useRef } from "react";
 import { config, useSpring, easings } from "@react-spring/three";
 import {
   AddEquation,
@@ -58,7 +58,13 @@ const applyObjectDataToObjectProps = (
   return mesh;
 };
 
-const Bridges = () => {
+const Bridges: FC<{
+  options: {
+    [value: string]: any;
+  }
+}> = ({
+  options
+}) => {
   const ref = useRef<Mesh<BufferGeometry, ShaderMaterial>>(null);
   const [
     {
@@ -148,7 +154,7 @@ const Bridges = () => {
     config: {
       easing: easings.easeInBack,
     },
-  });;
+  });
 
   useEffect(() => {
     if (!ref.current) return;
@@ -171,7 +177,7 @@ const Bridges = () => {
     if (searchParams.has('controls'))
       ref.current.material.uniforms.uProgress.value = progress;
     else
-      ref.current.material.uniforms.uProgress.value = props.springProgress.get();
+      ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal; //props.springProgress.get();
 
     ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
   });

@@ -41,7 +41,6 @@ const MainCanva = () => {
         stencil: false,
       }}
       camera={{
-        position: [0, 4, 13.752254],
         fov: 45,
         near: 1,
         far: 500,
@@ -119,13 +118,13 @@ const MainScene = () => {
     <WorldFloor options={options} />
     {ready ? <MainTower options={options} /> : <></>}
     <Pipes options={options} />
-    <People />
-    <Towers />
+    <People options={options} />
+    <Towers options={options} />
     <Particles options={options} />
     <CityPipes options={options} />
     <Cars />
     <Signs options={options} />
-    <Bridges />
+    <Bridges options={options} />
     {ready ? <ReflectiveFloor /> : <></>}
     {/* <OrbitControls /> */}
     <NavigationControls options={options} />
