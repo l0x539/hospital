@@ -128,8 +128,8 @@ const MainScene = () => {
     <Signs options={options} />
     <Bridges options={options} />
     {ready ? <ReflectiveFloor options={options} /> : <></>}
-    {/* <OrbitControls /> */}
-    <NavigationControls options={options} />
+    {searchParams.has('controls') ? <OrbitControls /> : <NavigationControls options={options} />}
+    
     <MainEffects />
     {/* <ScrollControls pages={4} damping={0.1}>
       <Scroll html>

@@ -4,6 +4,8 @@ import { carVertexShader, trailVertexShader } from "@/shaders/vertexShaders";
 import { objectData } from "@/utils/constants";
 import { useGLTF, useKTX2 } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { useControls } from "leva";
+import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import {
   BufferGeometry,
@@ -191,13 +193,13 @@ const setTextureValue = (dataTexture: DataTexture, idx: number, x: number, y: nu
 }
 
 const Car: FC<{
-  trailColorBegin: { value: number };
-  trailColorEnd: { value: number };
+  trailColorBegin: { value: Color };
+  trailColorEnd: { value: Color };
   carMeshColor: Color;
   uTrailLength: { value: number };
   uTrailFallOffEnd: { value: number };
-  uColorFallOff: { value: number };
-  uColorOffset: { value: number };
+  uColorFallOff: { value: Color };
+  uColorOffset: { value: Color };
   uJitterAmplitude: { value: number };
   uJitterFrequency: { value: number };
   uJitterFollow: { value: number };
@@ -381,6 +383,73 @@ const Car: FC<{
     carRef.current.material.uniforms.spineTexture.value = dataTexture;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // uniform vec3 uColorBegin;
+  // uniform vec3 uColorEnd;
+  // uniform float uColorFallOff;
+  // uniform float uColorOffset;
+  const {
+    uColorBegin,
+    uColorEnd,
+    colorFallOff,
+    colorOffset
+  } = useControls('Car Colors', {
+    uColorBegin: {
+      r: trailUniforms.uColorBegin.value.r*256,
+      g: trailUniforms.uColorBegin.value.g*256,
+      b: trailUniforms.uColorBegin.value.b*256,
+    },
+    uColorEnd: {
+      r: trailUniforms.uColorEnd.value.r*256,
+      g: trailUniforms.uColorEnd.value.g*256,
+      b: trailUniforms.uColorEnd.value.b*256,
+    },
+    colorFallOff: {
+      r: trailUniforms.uColorFallOff.value.r*256,
+      g: trailUniforms.uColorFallOff.value.g*256,
+      b: trailUniforms.uColorFallOff.value.b*256,
+    },
+    colorOffset: {
+      r: trailUniforms.uColorOffset.value.r*256,
+      g: trailUniforms.uColorOffset.value.g*256,
+      b: trailUniforms.uColorOffset.value.b*256,
+    }
+  });
+
+  const { 
+    fogColor,
+    uWorldFogColor,
+    lights1,
+    lights2,
+    lights3
+  } = useControls("Fog Colors", {
+    fogColor: {
+      r: 255,
+      g: 255,
+      b: 255,
+    },
+    uWorldFogColor: {
+      r: 0x4e,
+      g: 0,
+      b: 0,
+    },
+    lights1: {
+      r: 0x5e,
+      g: 0x4c,
+      b: 0x3a
+    },
+    lights2: {
+      r: 0xba,
+      g: 0x01,
+      b: 0x01
+    },
+    lights3: {
+      r: 0x10,
+      g: 0x10,
+      b: 0x18
+    }
+  });
+
+  const searchParams = useSearchParams();
 
   useFrame(({clock}) => {
     if (!carRef.current || !trailRef.current) return;
@@ -388,6 +457,32 @@ const Car: FC<{
     trailRef.current.material.uniforms.uTime.value = clock.getElapsedTime();
     trailRef.current.material.uniforms.pathOffset.value + 1e-4 >= .97 - startOffset - carMeshOffset && (trailRef.current.material.uniforms.pathOffset.value = -startOffset);
     trailRef.current.material.uniforms.pathOffset.value += (speed*2 + clock.getDelta());
+
+    if (searchParams.has('controls')) {
+      trailRef.current.material.uniforms.uColorBegin.value = {
+        r: uColorBegin.r/256,
+        g: uColorBegin.g/256,
+        b: uColorBegin.b/256,
+      };
+
+      trailRef.current.material.uniforms.uColorEnd.value = {
+        r: uColorEnd.r/256,
+        g: uColorEnd.g/256,
+        b: uColorEnd.b/256,
+      };
+
+      trailRef.current.material.uniforms.uColorFallOff.value = {
+        r: colorFallOff.r/256,
+        g: colorFallOff.g/256,
+        b: colorFallOff.b/256,
+      };
+
+      trailRef.current.material.uniforms.uColorOffset.value = {
+        r: colorOffset.r/256,
+        g: colorOffset.g/256,
+        b: colorOffset.b/256,
+      };
+    }
   })
 
   return (<group>

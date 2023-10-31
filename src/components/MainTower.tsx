@@ -343,6 +343,69 @@ const MainTower: FC<{
       step: 0.01
     }
   })
+
+  const {
+    uFlameTopColor,
+    uFlameBottomColor,
+    uBalconyBaseColorTop,
+    uBalconyBaseColorBottom
+  } = useControls('MainTower', {
+    uFlameTopColor: {
+      r: globalUniforms.uFlameTopColor.value.r*256,
+      g: globalUniforms.uFlameTopColor.value.g*256,
+      b: globalUniforms.uFlameTopColor.value.b*256,
+    },
+    uFlameBottomColor: {
+      r: globalUniforms.uFlameBottomColor.value.r*256,
+      g: globalUniforms.uFlameBottomColor.value.g*256,
+      b: globalUniforms.uFlameBottomColor.value.b*256,
+    },
+    uBalconyBaseColorTop: {
+      r: globalUniforms.uBalconyBaseColorTop.value.r*256,
+      g: globalUniforms.uBalconyBaseColorTop.value.g*256,
+      b: globalUniforms.uBalconyBaseColorTop.value.b*256,
+    },
+    uBalconyBaseColorBottom: {
+      r: globalUniforms.uBalconyBaseColorBottom.value.r*256,
+      g: globalUniforms.uBalconyBaseColorBottom.value.g*256,
+      b: globalUniforms.uBalconyBaseColorBottom.value.b*256,
+    }
+  });
+
+  const { 
+    fogColor,
+    uWorldFogColor,
+    lights1,
+    lights2,
+    lights3
+  } = useControls("Fog", {
+    fogColor: {
+      r: 255,
+      g: 255,
+      b: 255,
+    },
+    uWorldFogColor: {
+      r: 0x4e,
+      g: 0,
+      b: 0,
+    },
+    lights1: {
+      r: 0x5e,
+      g: 0x4c,
+      b: 0x3a
+    },
+    lights2: {
+      r: 0xba,
+      g: 0x01,
+      b: 0x01
+    },
+    lights3: {
+      r: 0x10,
+      g: 0x10,
+      b: 0x18
+    }
+  });
+
   const searchParams = useSearchParams();
 
   useFrame(({clock}) => {
@@ -352,6 +415,62 @@ const MainTower: FC<{
     else
       ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal ;// props.springProgress.get();
     ref.current.material.uniforms.uTime.value = clock.elapsedTime;
+
+    if (searchParams.has('controls')) {
+      ref.current.material.uniforms.uFlameTopColor.value = {
+        r: uFlameTopColor.r/256,
+        g: uFlameTopColor.g/256,
+        b: uFlameTopColor.b/256,
+      };
+
+      ref.current.material.uniforms.uFlameBottomColor.value = {
+        r: uFlameBottomColor.r/256,
+        g: uFlameBottomColor.g/256,
+        b: uFlameBottomColor.b/256,
+      };
+
+      ref.current.material.uniforms.uBalconyBaseColorTop.value = {
+        r: uBalconyBaseColorTop.r/256,
+        g: uBalconyBaseColorTop.g/256,
+        b: uBalconyBaseColorTop.b/256,
+      };
+
+      ref.current.material.uniforms.uBalconyBaseColorBottom.value = {
+        r: uBalconyBaseColorBottom.r/256,
+        g: uBalconyBaseColorBottom.g/256,
+        b: uBalconyBaseColorBottom.b/256,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[0].color = {
+        r: lights1.r / 255,
+        g: lights1.g / 255,
+        b: lights1.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[1].color = {
+        r: lights2.r / 255,
+        g: lights2.g / 255,
+        b: lights2.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[2].color = {
+        r: lights3.r / 255,
+        g: lights3.g / 255,
+        b: lights3.b / 255,
+      };
+    }
   })
 
   return (
@@ -367,6 +486,7 @@ const MainTower: FC<{
               index={index}
               mesh={(buildingWalls.scene.children[0] as Mesh).clone()}
               renderOrder={4 - index}
+              globalUniforms={globalUniforms}
             >
               <WallMaterial
                 meshType="walls"
@@ -1111,13 +1231,19 @@ const Wall: FC<{
   renderOrder: number;
   children: ReactNode;
   options: any;
+  globalUniforms: {
+    [value: string]: {
+      value: any
+    }
+  };
 }> = ({
   children,
   index,
   mesh,
   name,
   renderOrder,
-  options
+  options,
+  globalUniforms
 }) => {
   const ref = useRef<Mesh<BufferGeometry, ShaderMaterial>>(null);
   useEffect(() => {
@@ -1165,7 +1291,69 @@ const Wall: FC<{
     config: {
       easing: easings.easeInBack,
     },
-  });;
+  });
+
+  const {
+    uFlameTopColor,
+    uFlameBottomColor,
+    uBalconyBaseColorTop,
+    uBalconyBaseColorBottom
+  } = useControls('MainTower', {
+    uFlameTopColor: {
+      r: globalUniforms.uFlameTopColor.value.r*256,
+      g: globalUniforms.uFlameTopColor.value.g*256,
+      b: globalUniforms.uFlameTopColor.value.b*256,
+    },
+    uFlameBottomColor: {
+      r: globalUniforms.uFlameBottomColor.value.r*256,
+      g: globalUniforms.uFlameBottomColor.value.g*256,
+      b: globalUniforms.uFlameBottomColor.value.b*256,
+    },
+    uBalconyBaseColorTop: {
+      r: globalUniforms.uBalconyBaseColorTop.value.r*256,
+      g: globalUniforms.uBalconyBaseColorTop.value.g*256,
+      b: globalUniforms.uBalconyBaseColorTop.value.b*256,
+    },
+    uBalconyBaseColorBottom: {
+      r: globalUniforms.uBalconyBaseColorBottom.value.r*256,
+      g: globalUniforms.uBalconyBaseColorBottom.value.g*256,
+      b: globalUniforms.uBalconyBaseColorBottom.value.b*256,
+    }
+  });
+
+  const { 
+    fogColor,
+    uWorldFogColor,
+    lights1,
+    lights2,
+    lights3
+  } = useControls("Fog", {
+    fogColor: {
+      r: 255,
+      g: 255,
+      b: 255,
+    },
+    uWorldFogColor: {
+      r: 0x4e,
+      g: 0,
+      b: 0,
+    },
+    lights1: {
+      r: 0x5e,
+      g: 0x4c,
+      b: 0x3a
+    },
+    lights2: {
+      r: 0xba,
+      g: 0x01,
+      b: 0x01
+    },
+    lights3: {
+      r: 0x10,
+      g: 0x10,
+      b: 0x18
+    }
+  });
 
   useFrame(({clock}) => {
     if (!ref.current) return;
@@ -1174,6 +1362,62 @@ const Wall: FC<{
     else
       ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal ;// props.springProgress.get();
     ref.current.material.uniforms.uTime.value = clock.elapsedTime;
+
+    if (searchParams.has('controls')) {
+      ref.current.material.uniforms.uFlameTopColor.value = {
+        r: uFlameTopColor.r/256,
+        g: uFlameTopColor.g/256,
+        b: uFlameTopColor.b/256,
+      };
+
+      ref.current.material.uniforms.uFlameBottomColor.value = {
+        r: uFlameBottomColor.r/256,
+        g: uFlameBottomColor.g/256,
+        b: uFlameBottomColor.b/256,
+      };
+
+      ref.current.material.uniforms.uBalconyBaseColorTop.value = {
+        r: uBalconyBaseColorTop.r/256,
+        g: uBalconyBaseColorTop.g/256,
+        b: uBalconyBaseColorTop.b/256,
+      };
+
+      ref.current.material.uniforms.uBalconyBaseColorBottom.value = {
+        r: uBalconyBaseColorBottom.r/256,
+        g: uBalconyBaseColorBottom.g/256,
+        b: uBalconyBaseColorBottom.b/256,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.uWorldFogColor.value = {
+        r: uWorldFogColor.r / 255,
+        g: uWorldFogColor.g / 255,
+        b: uWorldFogColor.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[0].color = {
+        r: lights1.r / 255,
+        g: lights1.g / 255,
+        b: lights1.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[1].color = {
+        r: lights2.r / 255,
+        g: lights2.g / 255,
+        b: lights2.b / 255,
+      };
+
+      ref.current.material.uniforms.volumetricLights.value[2].color = {
+        r: lights3.r / 255,
+        g: lights3.g / 255,
+        b: lights3.b / 255,
+      };
+    }
   })
   
   return (

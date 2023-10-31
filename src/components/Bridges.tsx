@@ -98,10 +98,10 @@ const Bridges: FC<{
         value: 0,
       },
       uColor1: {
-        value: new Color(7603456),
+        value: new Color("#740500"),
       },
       uColor2: {
-        value: new Color(16761996),
+        value: new Color("#ffc48c"),
       },
       uGradientSpread: {
         value: 0.0182,
@@ -171,6 +171,22 @@ const Bridges: FC<{
     }
   })
 
+  const {
+    bridgeColor1,
+    bridgeColor2,
+  } = useControls('Bridges', {
+    bridgeColor1: {
+      r: uniforms.uColor1.value.r*256,
+      g: uniforms.uColor1.value.g*256,
+      b: uniforms.uColor1.value.b*256,
+    },
+    bridgeColor2: {
+      r: uniforms.uColor2.value.r*256,
+      g: uniforms.uColor2.value.g*256,
+      b: uniforms.uColor2.value.b*256,
+    }
+  })
+
   useFrame(({clock}) => {
     if (!ref.current) return;
     if (searchParams.has('controls'))
@@ -179,6 +195,19 @@ const Bridges: FC<{
       ref.current.material.uniforms.uProgress.value = options.mainBuildingReveal; //props.springProgress.get();
 
     ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
+
+    if (searchParams.has('controls')) {
+      ref.current.material.uniforms.uColor1.value = {
+        r: bridgeColor1.r/256,
+        g: bridgeColor1.g/256,
+        b: bridgeColor1.b/256,
+      };
+      ref.current.material.uniforms.uColor2.value = {
+        r: bridgeColor2.r/256,
+        g: bridgeColor2.g/256,
+        b: bridgeColor2.b/256,
+      };
+    }
   });
 
   return <mesh ref={ref} geometry={(bridges as Mesh).geometry.clone()}>

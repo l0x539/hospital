@@ -94,7 +94,7 @@ class ScreenFXImpl extends Effect {
 
 // Effect component
 export const ScreenFX = forwardRef<unknown, {maxDistort: number;bendAmount: number;diffuse?: Texture}>(({ maxDistort, bendAmount, diffuse }, ref) => {
-  const effect = useMemo(() => new ScreenFXImpl({maxDistort, bendAmount}), [maxDistort, bendAmount, diffuse])
+  const effect = useMemo(() => new ScreenFXImpl({maxDistort, bendAmount}), [maxDistort, bendAmount])
   return <primitive ref={ref} object={effect} dispose={null} />
 });
 
