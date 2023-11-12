@@ -25,3 +25,18 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.button {
+  border-image-slice: 45% 40%;
+  border-image-width: 60px 80px;
+  border-width: 17px;
+  cursor: pointer;
+  border-image-source: url(../public/images/border-button.svg);
+  letter-spacing: -.02em;
+  padding: 0;
+  text-decoration: none;
+}
+
+.button:hover {
+  border-image-source: url(../public/images/border_ressource_title.svg);
+}
