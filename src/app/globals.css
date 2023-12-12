@@ -6,6 +6,9 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --dark-grey: #393939;
+  --icon-color: #646464;
+  --icon-hover: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,4 +27,12 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.footer svg{
+  fill: var(--icon-color);
+}
+
+.footer svg:hover{
+  fill: var(--icon-hover);
 }
