@@ -1,0 +1,3 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="button__icon-boxes ml-10" width="22"  height="25" ><defs><symbol preserveAspectRatio="xMidYMid" class="svg-sprite" id="tiktok" viewBox="0 0 22 25"><title>tiktok</title><path d="M15.784 0h-4.213v17.029c0 2.029-1.62 3.696-3.637 3.696s-3.637-1.667-3.637-3.696c0-1.993 1.584-3.623 3.529-3.696V9.058C3.54 9.13.083 12.645.083 17.029.083 21.449 3.613 25 7.97 25c4.357 0 7.886-3.587 7.886-7.971V8.297a9.757 9.757 0 0 0 5.582 1.884V5.906c-3.17-.109-5.654-2.718-5.654-5.906Z"></path></symbol></defs>
+<use xlink:href="#tiktok"></use>
+</svg>
